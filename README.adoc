@@ -1,0 +1,68 @@
+= Go Redfish Utility (`gru`)
+:toc:
+:toclevels: 3
+
+== Usage
+
+[source,bash]
+----
+gru help
+----
+
+.Setting Credentials
+
+* Environment Variables
++
+[source,bash]
+----
+export USERNAME=admin
+export IPMI_PASSWORD=password
+gru show bios -h myserver-bmc.local
+----
+
+* Configuration File
++
+[source,yaml]
+----
+---
+username: admin
+password: password
+----
+
+* Configuration file with a general username/password and exceptions (for `server10` use a different username and password)
++
+[source,yaml]
+----
+---
+username: admin
+password: password
+servers:
+  server10:
+      username: root
+      password: password
+----
+
+
+.Querying Servers
+
+* Using the `-h` flag to provide a list of systems.
++
+[source,bash]
+----
+gru show bios -h myserver-bmc.local,myotherserver-bmc.local
+----
+* Piping a list.
++
+[source,bash]
+----
+grep -oP pattern /etc/hosts | tr -t '\n' ',' | gru show bios -
+----
+
+== Development
+
+[source,bash]
+----
+go build -o gru cmd/gru/main.go 
+./gru
+----
+
