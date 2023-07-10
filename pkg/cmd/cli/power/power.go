@@ -24,22 +24,23 @@
 
 */
 
-package main
+package power
 
 import (
-	"github.com/Cray-HPE/gru/pkg/cmd"
-	"github.com/Cray-HPE/gru/pkg/cmd/gru"
-	"os"
-	"path/filepath"
+	"github.com/spf13/cobra"
 )
 
-func main() {
-	baseName := filepath.Base(os.Args[0])
-	err := gru.NewCommand(baseName).Execute()
-	cmd.CheckError(err)
-}
-
-func isInputFromPipe() bool {
-	fileInfo, _ := os.Stdin.Stat()
-	return fileInfo.Mode()&os.ModeCharDevice == 0
+// NewCommand creates the `power` subcommand.
+func NewCommand() *cobra.Command {
+	c := &cobra.Command{
+		Use:                   "power",
+		DisableFlagsInUseLine: true,
+		Short:                 "Power control.",
+		Long: `
+Power control; off, on, cycle, reset.`,
+		Run: func(c *cobra.Command, args []string) {
+		},
+		Hidden: true,
+	}
+	return c
 }

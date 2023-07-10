@@ -49,20 +49,19 @@ servers:
 +
 [source,bash]
 ----
-gru show bios -h myserver-bmc.local,myotherserver-bmc.local
+gru show bios myserver-bmc.local,myotherserver-bmc.local
 ----
 * Piping a list.
 +
 [source,bash]
 ----
-grep -oP pattern /etc/hosts | tr -t '\n' ',' | gru show bios -
+grep -oP pattern /etc/hosts | tr -t '\n' ',' | gru show bios
 ----
 
 == Development
 
 [source,bash]
 ----
-go build -o gru cmd/gru/main.go 
+go build -o gru cmd/gru/main.go
 ./gru
 ----
-

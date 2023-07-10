@@ -24,22 +24,7 @@
 
 */
 
-package main
+package nics
 
-import (
-	"github.com/Cray-HPE/gru/pkg/cmd"
-	"github.com/Cray-HPE/gru/pkg/cmd/gru"
-	"os"
-	"path/filepath"
-)
-
-func main() {
-	baseName := filepath.Base(os.Args[0])
-	err := gru.NewCommand(baseName).Execute()
-	cmd.CheckError(err)
-}
-
-func isInputFromPipe() bool {
-	fileInfo, _ := os.Stdin.Stat()
-	return fileInfo.Mode()&os.ModeCharDevice == 0
-}
+// NIC represents boot configuration on the BMC.
+type NIC struct {}

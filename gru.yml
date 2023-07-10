@@ -1,0 +1,7 @@
+---
+username: root
+password: initial0
+hosts:
+  surtur-ncn-m001-mgmt.hpc.amslabs.hpecorp.net:
+    username: root
+    password: initial0
