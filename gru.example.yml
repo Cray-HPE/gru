@@ -1,0 +1,11 @@
+---
+# Used for all hosts except those defined under `hosts:`
+username: admin
+password: admin
+hosts:
+  my-cool-host-name:
+    username: admin
+    password: admin!
+  10.10.0.3:
+    username: garfield
+    password: mondays

@@ -24,22 +24,12 @@
 
 */
 
-package main
+package system
 
-import (
-	"github.com/Cray-HPE/gru/pkg/cmd"
-	"github.com/Cray-HPE/gru/pkg/cmd/gru"
-	"os"
-	"path/filepath"
-)
-
-func main() {
-	baseName := filepath.Base(os.Args[0])
-	err := gru.NewCommand(baseName).Execute()
-	cmd.CheckError(err)
-}
-
-func isInputFromPipe() bool {
-	fileInfo, _ := os.Stdin.Stat()
-	return fileInfo.Mode()&os.ModeCharDevice == 0
+// System represents system meta from the BMC.
+type System struct {
+	Manufacturer    string `json:"manufacturer"`
+	Model           string `json:"model"`
+	BIOSVersion     string `json:"biosVersion"`
+	FirmwareVersion string `json:"firmwareVersion"`
 }

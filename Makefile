@@ -1,8 +1,6 @@
-#
-#
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -21,175 +19,215 @@
 # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
-#
-#
+# There is no reason GOROOT should be set anymore. Unset it so it doesn't mess
+# with our go toolchain detection/usage.
 SHELL := /bin/bash -o pipefail
-ifeq ($(VERSION),)
-VERSION := $(shell git describe --tags | tr -s '-' '~' | tr -d '^v')
+ifneq ($(GOROOT),)
+	export GOROOT=
 endif
 
-GO_FILES?=$$(find . -name '*.go' |grep -v vendor)
-TAG?=latest
-
-.GIT_COMMIT=$(shell git rev-parse HEAD)
-.GIT_BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
-.GIT_COMMIT_AND_BRANCH=$(.GIT_COMMIT)-$(subst /,-,$(.GIT_BRANCH))
-.GIT_VERSION=$(shell git describe --tags 2>/dev/null || echo "$(.GIT_COMMIT)")
-.BUILDTIME=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
-CHANGELOG_VERSION_ORIG=$(grep -m1 \## CHANGELOG.MD | sed -e "s/\].*\$//" |sed -e "s/^.*\[//")
-CHANGELOG_VERSION=$(shell grep -m1 \ \[[0-9]*.[0-9]*.[0-9]*\] CHANGELOG.MD | sed -e "s/\].*$$//" |sed -e "s/^.*\[//")
-BUILD_DIR ?= $(PWD)/dist/rpmbuild
-ifeq ($(GIT_REPO_NAME),)
-GIT_REPO_NAME := $(shell basename $(pwd))
-endif
-NAME ?= ${GIT_REPO_NAME}
-SPEC_FILE ?= ${SPEC_NAME}.spec
-SOURCE_NAME ?= ${SPEC_NAME}-${VERSION}
-SOURCE_PATH := ${BUILD_DIR}/SOURCES/${SOURCE_NAME}.tar.bz2
-TEST_OUTPUT_DIR ?= $(CURDIR)/build/results
-
-# if we're an automated build, use .GIT_COMMIT_AND_BRANCH as-is, else add -dirty
-ifneq "$(origin BUILD_NUMBER)" "environment"
-	ifneq "$(origin GITHUB_WORKSPACE)" "environment"
-	# not a github build
-	# assume non-pipeline build
-	.GIT_COMMIT_AND_BRANCH := $(.GIT_COMMIT_AND_BRANCH)-dirty
-	endif
-endif
+lc =$(subst A,a,$(subst B,b,$(subst C,c,$(subst D,d,$(subst E,e,$(subst F,f,$(subst G,g,$(subst H,h,$(subst I,i,$(subst J,j,$(subst K,k,$(subst L,l,$(subst M,m,$(subst N,n,$(subst O,o,$(subst P,p,$(subst Q,q,$(subst R,r,$(subst S,s,$(subst T,t,$(subst U,u,$(subst V,v,$(subst W,w,$(subst X,x,$(subst Y,y,$(subst Z,z,$1))))))))))))))))))))))))))
 
 .PHONY: \
-	help \
-	run \
-	help \
+	all \
+	default \
 	clean \
-	clean-artifacts \
-	clean-releases \
-	test \
-	vet \
-	lint \
-	fmt \
-	env \
-	build \
 	doc \
-	version
+	help \
+	fmt \
+	tools \
+	tidy \
+	vet
 
-all: fmt lint reset build
+default: build
 
-rpm: prepare rpm_package_source rpm_build_source rpm_build
+all: build lint test
 
 help:
 	@echo 'Usage: make <OPTIONS> ... <TARGETS>'
 	@echo ''
 	@echo 'Available targets are:'
 	@echo ''
-	@echo '    run                Run csi.'
 	@echo '    help               Show this help screen.'
+	@echo
+	@echo '    build              Build a go binary.'
+	@echo '    rpm                Build a YUM/SUSE RPM.'
+	@echo
 	@echo '    clean              Remove binaries, artifacts and releases.'
-	@echo '    clean-artifacts    Remove build artifacts only.'
-	@echo '    clean-releases     Remove releases only.'
-	@echo '    tools              Install tools needed by the project.'
 	@echo '    test               Run unit tests.'
+	@echo '    tools              Install tools needed by the project.'
 	@echo '    vet                Run go vet.'
 	@echo '    lint               Run golint.'
 	@echo '    fmt                Run go fmt.'
 	@echo '    tidy               Run go mod tidy.'
-	@echo '    env                Display Go environment.'
-	@echo '    build              Build project for current platform.'
 	@echo '    doc                Start Go documentation server on port 8080.'
-	@echo '    version            Display Go version.'
 	@echo ''
-	@echo 'Targets run by default are: fmt, lint, vet, and build.'
-	@echo ''
+# Used to force some rules to run every time
+FORCE: ;
 
-print-%:
-	@echo $* = $($*)
+############################################################################
+# Vars
+############################################################################
 
-prepare:
-	rm -rf $(BUILD_DIR)
-	mkdir -p $(BUILD_DIR)/SPECS $(BUILD_DIR)/SOURCES
-	cp $(SPEC_FILE) $(BUILD_DIR)/SPECS/
+export NAME ?= $(shell basename $(shell pwd))
+export RELEASE = 1
 
-clean: clean-artifacts clean-releases
+# RPMs don't like hyphens, might as well just be consistent everywhere; strip leading v.
+export VERSION ?= $(shell git describe --tags | tr -s '-' '~' | sed 's/^v//')
+BUILD_DIR ?= $(PWD)/dist/rpmbuild
+SPEC_FILE ?= ${NAME}.spec
+SOURCE_NAME ?= ${NAME}-${VERSION}
+RPM_NAME ?= ${SOURCE_NAME}-${RELEASE}
+RPM ?= ${RPM_NAME}.${ARCH}.rpm
+SRPM ?= ${RPM_NAME}.src.rpm
+SOURCE_PATH := ${BUILD_DIR}/SOURCES/${SOURCE_NAME}.tar.bz2
+TEST_OUTPUT_DIR ?= $(CURDIR)/build/results
+
+# There may be more than one tag. Only use one that starts with 'v' followed by
+# a number, e.g., v0.9.3.
+git_dirty := $(shell git status -s)
+
+############################################################################
+# OS/ARCH detection
+############################################################################
+
+ifeq ($(OS),)
+export OS=$(shell uname -s)
+endif
+
+# Determine what GOOS should be if the user hasn't set it.
+ifeq ($(GOOS),)
+	ifeq ($(OS),Darwin)
+		export GOOS := $(call lc,$(OS))
+	else ifeq ($(OS),Linux)
+		export GOOS := $(call lc,$(OS))
+	else ifeq (,$(findstring MYSYS_NT-10-0-, $(OS)))
+		export GOOS=windows
+	else
+		$(error unsupported OS: $(OS))
+	endif
+endif
+
+ifeq ($(ARCH),)
+	export ARCH= $(shell uname -m)
+endif
+
+# Determine what GOARCH should be if the user hasn't set it.
+ifeq ($(GOARCH),)
+	ifeq "$(ARCH)" "arm64"
+		export GOARCH=arm64
+	else ifeq "$(ARCH)" "aarch64"
+		export GOARCH=arm64
+	else ifeq "$(ARCH)" "x86_64"
+		export GOARCH=amd64
+	else
+		$(error unsupported ARCH: $(ARCH))
+	endif
+endif
+
+ifeq ($(GOOS),windows)
+	go_bin_dir = $(go_dir)/go/bin
+	exe=".exe"
+else
+	go_bin_dir = $(go_dir)/bin
+	exe=
+endif
+
+go_path := PATH="$(go_bin_dir):$(PATH)"
+
+goenv = $(shell PATH="$(go_bin_dir):$(PATH)" go env $1)
+
+############################################################################
+# Determine go flags
+############################################################################
+
+# Flags passed to all invocations of go test
+go_test_flags :=
+ifeq ($(NIGHTLY),)
+	# Cap unit-test timout to 60s unless we're running nightlies.
+	go_test_flags += -timeout=60s
+endif
+
+go_flags :=
+ifneq ($(GOPARALLEL),)
+	go_flags += -p=$(GOPARALLEL)
+endif
+
+ifneq ($(GOVERBOSE),)
+	go_flags += -v
+endif
+
+# Determine the ldflags passed to the go linker. The git tag and hash will be
+# provided to the linker unless the git status is dirty.
+go_ldflags := -s -w
+go_ldflags += -X github.com/Cray-HPE/gru/pkg/version.GitTag=$(VERSION)
+ifeq ($(git_dirty),)
+	go_ldflags += -X github.com/Cray-HPE/gru/pkg/version.GitTreeState='clean'
+else
+	go_ldflags += -X github.com/Cray-HPE/gru/pkg/version.GitTreeState='dirty'
+endif
+
+#############################################################################
+# Build Targets
+#############################################################################
+
+binaries := ${NAME}
+
+.PHONY: build
+build: tidy $(addprefix bin/,$(binaries))
+
+go_build := $(go_path) go build $(go_flags) -ldflags '$(go_ldflags)' -o
+
+bin/%: cmd/% FORCE
+	@echo Building $@…
+	$(E)$(go_build) $@$(exe) ./$<
+
+go_build := $(go_path) go build $(go_flags) -ldflags '$(go_ldflags)' -o
+
+# FIXME: Doesn't work, yet.
+rpm: $(BUILD_DIR)/${RPM} $(BUILD_DIR)/${SRPM}
+
+clean:
 	go clean -i ./...
 	rm -vf \
 	  $(CURDIR)/build/results/coverage/* \
-		$(CURDIR)/build/results/unittest/* \
+	  $(CURDIR)/build/results/unittest/*
+	rm -rf \
+	  bin \
+	  $(BUILD_DIR)
 
-clean-artifacts:
-	rm -Rf artifacts/*
-
-clean-releases:
-	rm -Rf releases/*
-
-clean-all: clean clean-artifacts
-
-# Run tests
-test: build
+test: tools
 	mkdir -pv $(TEST_OUTPUT_DIR)/unittest $(TEST_OUTPUT_DIR)/coverage
-	go test ./cmd/... ./internal/... ./pkg/... -v -coverprofile $(TEST_OUTPUT_DIR)/coverage.out -covermode count | tee "$(TEST_OUTPUT_DIR)/testing.out"
+	go test ./cmd/... ./pkg/... -v -coverprofile $(TEST_OUTPUT_DIR)/coverage.out -covermode count | tee "$(TEST_OUTPUT_DIR)/testing.out"
 	cat "$(TEST_OUTPUT_DIR)/testing.out" | go-junit-report | tee "$(TEST_OUTPUT_DIR)/unittest/testing.xml" | tee "$(TEST_OUTPUT_DIR)/unittest/testing.xml"
 	gocover-cobertura < $(TEST_OUTPUT_DIR)/coverage.out > "$(TEST_OUTPUT_DIR)/coverage/coverage.xml"
 	go tool cover -html=$(TEST_OUTPUT_DIR)/coverage.out -o "$(TEST_OUTPUT_DIR)/coverage/coverage.html"
-
-# Run integration tests
-integrate:
-	go test ./cmd/... ./internal/... ./pkg/... -tags=integration -v -coverprofile coverage.out -covermode count
-
-shcds:
-	go test ./cmd/... ./internal/... ./pkg/... -tags=integration,shcd -v
 
 tools:
 	go install golang.org/x/lint/golint@latest
 	go install github.com/t-yuki/gocover-cobertura@latest
 	go install github.com/jstemmer/go-junit-report@latest
 
-vet: version
+vet:
 	go vet -v ./...
 
-lint:
+lint: tools
 	golint -set_exit_status ./cmd/...
-	golint -set_exit_status ./internal/...
 	golint -set_exit_status ./pkg/...
 
 fmt:
 	go fmt ./...
 
-env:
-	@go env
-
-# Run against the configured Kubernetes cluster in ~/.kube/configs
-run: build
-	go run ./main.go$(TARGET) $>
-
 tidy:
 	go mod tidy
 
-reset:
-	rm go.mod go.sum
-	git checkout go.mod go.sum
-
-build: fmt
-	go build -o bin/$(SHORT_NAME) cmd/$(SHORT_NAME)/main.go -ldflags "\
-	-X github.com/Cray-HPE/$(NAME)/pkg/version.version=${.GIT_VERSION} \
-	-X github.com/Cray-HPE/$(NAME)/pkg/version.buildDate=${.BUILDTIME} \
-	-X github.com/Cray-HPE/$(NAME)/pkg/version.sha1ver=${.GIT_COMMIT_AND_BRANCH}"
-	bin/$(SHORT_NAME) version
-
-rpm_package_source:
+$(BUILD_DIR):%:%.rpm %.src.rpm
+	rm -rf $(BUILD_DIR)
+	mkdir -p $(BUILD_DIR)/SPECS $(BUILD_DIR)/SOURCES
+	cp $(SPEC_FILE) $(BUILD_DIR)/SPECS/
 	tar --transform 'flags=r;s,^,/$(SOURCE_NAME)/,' --exclude .git --exclude dist -cvjf $(SOURCE_PATH) .
-
-rpm_build_source:
-	rpmbuild --nodeps -ts $(SOURCE_PATH) --define "_topdir $(BUILD_DIR)"
-
-rpm_build:
-	rpmbuild --nodeps -ba $(SPEC_FILE) --define "_topdir $(BUILD_DIR)"
+	rpmbuild --nodeps --target $(ARCH) -ts $(SOURCE_PATH) --define "_topdir $(BUILD_DIR)"
+	rpmbuild --nodeps --target $(ARCH) -ba $(SPEC_FILE) --define "_topdir $(BUILD_DIR)"
 
 doc:
 	godoc -http=:8080 -index
-
-version:
-	@go version
-
-update-version: build
-	@echo 'Version = ${CHANGELOG_VERSION}'
-	echo ${CHANGELOG_VERSION} > .version

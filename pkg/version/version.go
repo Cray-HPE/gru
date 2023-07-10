@@ -24,22 +24,35 @@
 
 */
 
-package main
+package version
 
 import (
-	"github.com/Cray-HPE/gru/pkg/cmd"
-	"github.com/Cray-HPE/gru/pkg/cmd/gru"
-	"os"
-	"path/filepath"
+	"fmt"
 )
 
-func main() {
-	baseName := filepath.Base(os.Args[0])
-	err := gru.NewCommand(baseName).Execute()
-	cmd.CheckError(err)
+// Info is the applications version information.
+type Info struct {
+	Version   string `json:"version"`
+	GitSHA    string `json:"gitCommit"`
+	GoVersion string `json:"goVersion"`
+	Compiler  string `json:"compiler"`
+	Platform  string `json:"platform"`
 }
 
-func isInputFromPipe() bool {
-	fileInfo, _ := os.Stdin.Stat()
-	return fileInfo.Mode()&os.ModeCharDevice == 0
+var (
+
+	// GitTreeState indicates if the git tree is clean or dirty; set by the go linker's -X flag at
+	// build time.
+	GitTreeState = ""
+
+	// GitTag is the current version of gru; set by the go linker's -X flag at build time.
+	GitTag = ""
+)
+
+// Version returns the one-line version of this application.
+func Version() string {
+	if GitTreeState != "clean" {
+		return fmt.Sprintf("%s-%s", GitTag, GitTreeState)
+	}
+	return GitTag
 }

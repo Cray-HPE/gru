@@ -24,22 +24,24 @@
 
 */
 
-package main
+package nics
 
 import (
-	"github.com/Cray-HPE/gru/pkg/cmd"
-	"github.com/Cray-HPE/gru/pkg/cmd/gru"
-	"os"
-	"path/filepath"
+	"github.com/spf13/cobra"
 )
 
-func main() {
-	baseName := filepath.Base(os.Args[0])
-	err := gru.NewCommand(baseName).Execute()
-	cmd.CheckError(err)
-}
-
-func isInputFromPipe() bool {
-	fileInfo, _ := os.Stdin.Stat()
-	return fileInfo.Mode()&os.ModeCharDevice == 0
+// NewShowCommand creates the `nics` subcommand for `show`.
+func NewShowCommand() *cobra.Command {
+	c := &cobra.Command{
+		Use:   "nics [flags] host [...host]",
+		Short: "Network interface information",
+		Long: `
+Show available network interface hardware.
+`,
+		Run: func(c *cobra.Command, args []string) {
+			// TODO.
+		},
+		Hidden: true,
+	}
+	return c
 }

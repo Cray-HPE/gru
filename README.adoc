@@ -2,6 +2,11 @@
 :toc:
 :toclevels: 3
 
+image:https://github.com/Cray-HPE/gru/actions/workflows/test.yml/badge.svg[link="https://github.com/Cray-HPE/gru/actions/workflows/test.yml",title="Test status"]
+image:https://github.com/Cray-HPE/gru/actions/workflows/lint.yml/badge.svg[link="https://github.com/Cray-HPE/gru/actions/workflows/lint.yml",title="Lint status"]
+
+An asynchronous RedFish utility for interrogating and managing blade management controllers.
+
 == Usage
 
 [source,bash]
@@ -16,8 +21,8 @@ gru help
 [source,bash]
 ----
 export USERNAME=admin
-export IPMI_PASSWORD=password
-gru show bios -h myserver-bmc.local
+export PASSWORD=password
+gru show system myserver-bmc.local
 ----
 
 * Configuration File
@@ -36,7 +41,7 @@ password: password
 ---
 username: admin
 password: password
-servers:
+hosts:
   server10:
       username: root
       password: password
@@ -45,24 +50,23 @@ servers:
 
 .Querying Servers
 
-* Using the `-h` flag to provide a list of systems.
+* Pass any number of hosts, delimited by spaces.
 +
 [source,bash]
 ----
-gru show bios -h myserver-bmc.local,myotherserver-bmc.local
+gru show system myserver-bmc.local myotherserver-bmc.local
 ----
-* Piping a list.
+* Piping a list a space delimited list of hosts.
 +
 [source,bash]
 ----
-grep -oP pattern /etc/hosts | tr -t '\n' ',' | gru show bios -
+grep -oP pattern /etc/hosts | tr -s '\n' ' ' | gru show system
 ----
 
 == Development
 
 [source,bash]
 ----
-go build -o gru cmd/gru/main.go 
-./gru
+make bin/gru
+./bin/gru
 ----
-
