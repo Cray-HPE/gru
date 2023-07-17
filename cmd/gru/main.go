@@ -38,8 +38,3 @@ func main() {
 	err := gru.NewCommand(baseName).Execute()
 	cmd.CheckError(err)
 }
-
-func isInputFromPipe() bool {
-	fileInfo, _ := os.Stdin.Stat()
-	return fileInfo.Mode()&os.ModeCharDevice == 0
-}
