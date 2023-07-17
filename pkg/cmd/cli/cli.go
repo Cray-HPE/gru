@@ -33,6 +33,7 @@ import (
 	"github.com/spf13/viper"
 	"os"
 	"reflect"
+	"sort"
 	"unicode/utf8"
 )
 
@@ -131,10 +132,16 @@ func MapPrint(content map[string]interface{}) {
 		}
 		fmt.Printf("%s\n", string(JSON))
 	} else {
-		for k, s := range content {
+		keys := make([]string, 0, len(content))
+		for k := range content {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
 			fmt.Printf("%s:\n", k)
 
 			// Warning, the struct fields must be exported!
+			s := content[k]
 			v := reflect.ValueOf(s)
 			typeOfS := v.Type()
 			for i := 0; i < v.NumField(); i++ {
