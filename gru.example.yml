@@ -1,5 +1,6 @@
 ---
 # Used for all hosts except those defined under `hosts:`
+insecure: true
 username: admin
 password: admin
 hosts:

@@ -28,9 +28,9 @@ package auth
 
 import (
 	"fmt"
+	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/spf13/viper"
 	"github.com/stmcginnis/gofish"
-	"os"
 )
 
 type configuration struct {
@@ -46,7 +46,7 @@ func LoadConfig(path string) {
 	viper.SetDefault("username", "")
 	viper.SetDefault("password", "")
 	if viper.BindEnv("password", "IPMI_PASSWORD") != nil {
-		panic(fmt.Errorf("failed to bind ipmi_password environment variable"))
+		cmd.CheckError(fmt.Errorf("failed to bind ipmi_password environment variable"))
 	}
 	viper.SetConfigFile(path)
 
@@ -56,6 +56,7 @@ func LoadConfig(path string) {
 			fmt.Printf("Loading config file %s", path)
 		} else {
 			// Config file was found but another error was produced
+			// TODO: Handle all errors except if the file is missing.
 		}
 	}
 
@@ -67,10 +68,9 @@ func LoadConfig(path string) {
 }
 
 // Connection establishes a connection to an endpoint.
-func Connection(host string) *gofish.APIClient {
+func Connection(host string) (*gofish.APIClient, error) {
 	if (viper.GetString("username") == "") || (viper.GetString("password") == "") {
-		fmt.Println(fmt.Errorf("no credentials provided, please provide a config file or environment varialbes"))
-		os.Exit(1)
+		cmd.CheckError(fmt.Errorf("no credentials provided, please provide a config file or environment varialbes"))
 	}
 	hosts := viper.GetStringMap("hosts")
 	username := viper.GetString("username")
@@ -87,8 +87,5 @@ func Connection(host string) *gofish.APIClient {
 		Insecure: viper.GetBool("insecure"),
 	}
 	c, err := gofish.Connect(config)
-	if err != nil {
-		panic(err)
-	}
-	return c
+	return c, err
 }

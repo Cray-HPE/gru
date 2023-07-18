@@ -24,4 +24,22 @@
 
 */
 
-package power
+package chassis
+
+import (
+	"github.com/spf13/cobra"
+)
+
+// NewCommand creates the `chassis` subcommand.
+func NewCommand() *cobra.Command {
+	c := &cobra.Command{
+		Use:                   "chassis",
+		DisableFlagsInUseLine: true,
+		Short:                 "Chassis control.",
+		Long:                  `Interact with a host's chassis.`,
+		Run: func(c *cobra.Command, args []string) {
+		},
+		Hidden: true,
+	}
+	return c
+}

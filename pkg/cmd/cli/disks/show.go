@@ -35,9 +35,7 @@ func NewShowCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "disks [flags] host [...host]",
 		Short: "Disk device information.",
-		Long: `
-Show available disk devices.
-`,
+		Long:  `Show available disk devices.`,
 		Run: func(c *cobra.Command, args []string) {
 			// TODO.
 		},

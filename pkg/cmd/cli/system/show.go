@@ -29,7 +29,6 @@ package system
 import (
 	"fmt"
 	"github.com/Cray-HPE/gru/pkg/auth"
-	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/spf13/cobra"
 	"sync"
@@ -40,9 +39,7 @@ func NewShowCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "system [flags] host [...host]",
 		Short: "System information.",
-		Long: `
-Show the Server Manufacturer, Server Model, System Version, and Firmware Version for the given server(s).
-`,
+		Long:  `Show the Server Manufacturer, Server Model, System Version, and Firmware Version for the given server(s).`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := query(hosts)
@@ -76,23 +73,29 @@ func query(hosts []string) map[string]interface{} {
 
 // getSystemInformation gets the Manufacturer, Model, BIOSVersion, and FirmwareVersion of the host.
 func getSystemInformation(host string) System {
-	c := auth.Connection(host)
+	system := System{}
+	c, err := auth.Connection(host)
+	if err != nil {
+		system.Error = err
+		return system
+	}
 	defer c.Logout()
 
-	// Retrieve the service root
 	service := c.Service
 
-	// FIXME: Return on failure, do not halt execution.
-	// Query the systems data using the session token
 	managers, err := service.Managers()
-	cmd.CheckError(err)
-	systems, err := service.Systems()
-	cmd.CheckError(err)
-	bios := System{
-		Manufacturer:    systems[0].Manufacturer,
-		Model:           systems[0].Model,
-		BIOSVersion:     systems[0].BIOSVersion,
-		FirmwareVersion: managers[0].FirmwareVersion,
+	if err != nil {
+		system.Error = err
+	} else {
+		system.FirmwareVersion = managers[0].FirmwareVersion
 	}
-	return bios
+
+	systems, err := service.Systems()
+	if err != nil {
+		system.Error = err
+	}
+	system.Manufacturer = systems[0].Manufacturer
+	system.Model = systems[0].Model
+	system.BIOSVersion = systems[0].BIOSVersion
+	return system
 }

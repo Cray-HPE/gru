@@ -25,3 +25,21 @@
 */
 
 package power
+
+import (
+	"github.com/spf13/cobra"
+)
+
+// NewChassisCommand creates the `power` subcommand for `chassis`.
+func NewChassisCommand() *cobra.Command {
+	c := &cobra.Command{
+		Use:   "power [flags] host [...host]",
+		Short: "Power Control",
+		Long:  `Check power status, or power on, off, cycle, or reset a host.`,
+		Run: func(c *cobra.Command, args []string) {
+			// TODO.
+		},
+		Hidden: true,
+	}
+	return c
+}

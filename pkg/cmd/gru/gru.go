@@ -29,12 +29,12 @@ package gru
 import (
 	"fmt"
 	"github.com/Cray-HPE/gru/pkg/auth"
+	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/get"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/show"
 	"github.com/Cray-HPE/gru/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"log"
 )
 
 var newArgs []string
@@ -63,9 +63,7 @@ the YAML file may provide these per host.
 		PersistentPreRun: func(c *cobra.Command, args []string) {
 			v := viper.GetViper()
 			bindErr := v.BindPFlags(c.Flags())
-			if bindErr != nil {
-				log.Fatalf("Error reading command line: %s", bindErr)
-			}
+			cmd.CheckError(bindErr)
 			cfg := v.GetString("config")
 			auth.LoadConfig(cfg)
 		},

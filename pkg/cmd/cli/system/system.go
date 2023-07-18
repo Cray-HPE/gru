@@ -32,4 +32,5 @@ type System struct {
 	Model           string `json:"model"`
 	BIOSVersion     string `json:"biosVersion"`
 	FirmwareVersion string `json:"firmwareVersion"`
+	Error           error  `json:"error"`
 }

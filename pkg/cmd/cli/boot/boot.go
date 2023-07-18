@@ -30,9 +30,10 @@ import "container/list"
 
 // Boot represents boot configuration on the BMC.
 type Boot struct {
-	next              string
-	order             list.List
-	bootOrderPolicy   string
-	networkRetry      string
-	networkRetryCount int
+	Next              string    `json:"next"`
+	Order             list.List `json:"order"`
+	BootOrderPolicy   string    `json:"bootOrderPolicy"`
+	NetworkRetry      string    `json:"networkRetry"`
+	NetworkRetryCount int       `json:"networkRetryCount"`
+	Error             error     `json:"error"`
 }

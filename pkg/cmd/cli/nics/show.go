@@ -35,9 +35,7 @@ func NewShowCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "nics [flags] host [...host]",
 		Short: "Network interface information",
-		Long: `
-Show available network interface hardware.
-`,
+		Long:  `Show available network interface hardware.`,
 		Run: func(c *cobra.Command, args []string) {
 			// TODO.
 		},
