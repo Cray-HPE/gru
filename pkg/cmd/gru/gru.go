@@ -30,6 +30,7 @@ import (
 	"fmt"
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/chassis"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/get"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/show"
 	"github.com/Cray-HPE/gru/pkg/version"
@@ -89,6 +90,7 @@ the YAML file may provide these per host.
 		"Output results in JSON.",
 	)
 	c.AddCommand(
+		chassis.NewCommand(),
 		get.NewCommand(),
 		show.NewCommand(),
 	)

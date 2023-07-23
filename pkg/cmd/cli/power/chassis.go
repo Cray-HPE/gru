@@ -37,7 +37,7 @@ func NewChassisCommand() *cobra.Command {
 		Short: "Power Control",
 		Long:  `Check power status, or power on, off, cycle, or reset a host.`,
 		Run: func(c *cobra.Command, args []string) {
-			// TODO.
+			// TODO: Translate power commands to available commands, since the available commands aren't very friendly.
 		},
 		Hidden: true,
 	}

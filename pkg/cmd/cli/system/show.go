@@ -27,11 +27,10 @@
 package system
 
 import (
-	"fmt"
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
+	"github.com/Cray-HPE/gru/pkg/query"
 	"github.com/spf13/cobra"
-	"sync"
 )
 
 // NewShowCommand creates the `system` subcommand for `show`.
@@ -42,37 +41,14 @@ func NewShowCommand() *cobra.Command {
 		Long:  `Show the Server Manufacturer, Server Model, System Version, and Firmware Version for the given server(s).`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := query(hosts)
+			content := query.Async(getSystemInformation, hosts)
 			cli.MapPrint(content)
 		},
 	}
 	return c
 }
 
-// query displays some basic information about the node(s).
-// Displays the server model name, System version, and BMC firmware version.
-func query(hosts []string) map[string]interface{} {
-	var wg sync.WaitGroup
-
-	sliceLength := len(hosts)
-	wg.Add(sliceLength)
-
-	fmt.Printf("Querying BMCs for [%5d] nodes ... \n", len(hosts))
-
-	sm := make(map[string]interface{})
-
-	for _, host := range hosts {
-		go func(host string) {
-			defer wg.Done()
-			sm[host] = getSystemInformation(host)
-		}(host)
-	}
-	wg.Wait()
-	return sm
-}
-
-// getSystemInformation gets the Manufacturer, Model, BIOSVersion, and FirmwareVersion of the host.
-func getSystemInformation(host string) System {
+func getSystemInformation(host string) interface{} {
 	system := System{}
 	c, err := auth.Connection(host)
 	if err != nil {

@@ -181,8 +181,7 @@ go_build := $(go_path) go build $(go_flags) -ldflags '$(go_ldflags)' -o
 bin/%: cmd/% FORCE
 	@echo Building $@…
 	$(E)$(go_build) $@$(exe) ./$<
-
-go_build := $(go_path) go build $(go_flags) -ldflags '$(go_ldflags)' -o
+	cp $@$(exe) $@-$(GOOS)-$(GOARCH)$(exe)
 
 # FIXME: Doesn't work, yet.
 rpm: $(BUILD_DIR)/${RPM} $(BUILD_DIR)/${SRPM}

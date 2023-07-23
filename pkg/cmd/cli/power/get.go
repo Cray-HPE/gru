@@ -24,26 +24,48 @@
 
 */
 
-package get
+package power
 
 import (
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/power"
+	"github.com/Cray-HPE/gru/pkg/auth"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli"
+	"github.com/Cray-HPE/gru/pkg/query"
 	"github.com/spf13/cobra"
 )
 
-// NewCommand creates the `get` subcommand.
-func NewCommand() *cobra.Command {
+// NewGetCommand creates the `power` subcommand for `get`.
+func NewGetCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "get",
-		Short: "Shortcut for getting certain information from RedFish.",
-		Long:  `Shortcut for getting certain information from RedFish.`,
+		Use:   "power",
+		Short: "List available power actions",
+		Long:  `Gets the available power actions for a host.`,
 		Run: func(c *cobra.Command, args []string) {
+			hosts := cli.ParseHosts(args)
+			content := query.Async(getPowerActionInformation, hosts)
+			cli.MapPrint(content)
 		},
 	}
-	c.AddCommand(
-		bios.NewGetCommand(),
-		power.NewGetCommand(),
-	)
 	return c
+}
+
+func getPowerActionInformation(host string) interface{} {
+	action := Action{}
+	c, err := auth.Connection(host)
+	if err != nil {
+		action.Error = err
+		return action
+	}
+
+	defer c.Logout()
+
+	service := c.Service
+
+	systems, err := service.Systems()
+	if err != nil {
+		action.Error = err
+	}
+
+	// FIXME: Gigabyte does not return available power commands.
+	action.Actions = systems[0].SupportedResetTypes
+	return action
 }

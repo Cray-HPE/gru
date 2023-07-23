@@ -25,3 +25,13 @@
 */
 
 package power
+
+import (
+	"github.com/stmcginnis/gofish/redfish"
+)
+
+// Action represents the available actions for interacting with power state. Only Error is emitted on empty.
+type Action struct {
+	Actions []redfish.ResetType `json:"actions"`
+	Error   error               `json:"error,omitempty"`
+}

@@ -70,7 +70,7 @@ func LoadConfig(path string) {
 // Connection establishes a connection to an endpoint.
 func Connection(host string) (*gofish.APIClient, error) {
 	if (viper.GetString("username") == "") || (viper.GetString("password") == "") {
-		cmd.CheckError(fmt.Errorf("no credentials provided, please provide a config file or environment varialbes"))
+		cmd.CheckError(fmt.Errorf("no credentials provided, please provide a config file or environment variables"))
 	}
 	hosts := viper.GetStringMap("hosts")
 	username := viper.GetString("username")

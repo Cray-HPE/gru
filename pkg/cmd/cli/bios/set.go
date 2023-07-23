@@ -24,48 +24,57 @@
 
 */
 
-package boot
+package bios
 
 import (
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/Cray-HPE/gru/pkg/query"
+	"github.com/Cray-HPE/gru/pkg/set"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
-// NewShowCommand creates the `boot` subcommand for `show`.
-func NewShowCommand() *cobra.Command {
+// NewSetCommand creates the `bios` subcommand for `set`.
+func NewSetCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "boot [flags] host [...host]",
-		Short: "Boot information",
-		Long:  `Show the current BootOrder; BootNext, networkRetry, and more.`,
+		Use:   "set attribute=value[,keyN=valueN]",
+		Short: "Sets BIOS attributes.",
+		Long:  `Sets BIOS attributes if the attribute is found and the value is valid.`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := query.Async(getBootInformation, hosts)
+			a := viper.GetStringSlice("attributes")
+			attributes := makeAttributes(a)
+			content := set.Async(setBIOSSettings, hosts, attributes)
 			cli.MapPrint(content)
 		},
+		Hidden: true, // TODO: Remove or set to false once implemented.
 	}
+	c.PersistentFlags().StringSlice(
+		"attributes",
+		[]string{},
+		"Comma delimited list of attributes and values to set them to.",
+	)
 	return c
 }
 
-func getBootInformation(host string) interface{} {
-	boot := Boot{}
+// FIXME: This is a skeleton, and is neither done nor correct. It is a napkin of how this could work.
+func setBIOSSettings(host string, attributes map[string]interface{}) interface{} {
 	c, err := auth.Connection(host)
-	if err != nil {
-		boot.Error = err
-		return boot
-	}
-
 	defer c.Logout()
 
 	service := c.Service
 
 	systems, err := service.Systems()
 	if err != nil {
-		boot.Error = err
+		// TODO
 	}
-	// FIXME: HPE and GB return boot orders without any identifiers, Intel returns nothing.
-	boot.Next = systems[0].Boot.BootNext
-	boot.Order = systems[0].Boot.BootOrder
-	return boot
+	bios, err := systems[0].Bios()
+	if err != nil {
+		// TODO
+	}
+	err = bios.UpdateBiosAttributes(attributes)
+	if err != nil {
+		// TODO
+	}
+	return err
 }

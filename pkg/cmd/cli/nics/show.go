@@ -27,6 +27,9 @@
 package nics
 
 import (
+	"github.com/Cray-HPE/gru/pkg/auth"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli"
+	"github.com/Cray-HPE/gru/pkg/query"
 	"github.com/spf13/cobra"
 )
 
@@ -37,9 +40,29 @@ func NewShowCommand() *cobra.Command {
 		Short: "Network interface information",
 		Long:  `Show available network interface hardware.`,
 		Run: func(c *cobra.Command, args []string) {
-			// TODO.
+			hosts := cli.ParseHosts(args)
+			content := query.Async(getNICInformation, hosts)
+			cli.MapPrint(content)
 		},
-		Hidden: true,
+		Hidden: true, // TODO: Remove or set to false once implemented.
 	}
 	return c
+}
+
+func getNICInformation(host string) interface{} {
+	nics := NIC{}
+	c, err := auth.Connection(host)
+	if err != nil {
+		nics.Error = err
+		return nics
+	}
+
+	defer c.Logout()
+
+	//service := c.Service
+
+	if err != nil {
+		nics.Error = err
+	}
+	return nics
 }

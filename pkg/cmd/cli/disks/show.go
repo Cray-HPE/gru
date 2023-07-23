@@ -37,9 +37,8 @@ func NewShowCommand() *cobra.Command {
 		Short: "Disk device information.",
 		Long:  `Show available disk devices.`,
 		Run: func(c *cobra.Command, args []string) {
-			// TODO.
 		},
-		Hidden: true,
+		Hidden: true, // TODO: Remove or set to false once implemented.
 	}
 	return c
 }

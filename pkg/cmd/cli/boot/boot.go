@@ -26,14 +26,9 @@
 
 package boot
 
-import "container/list"
-
-// Boot represents boot configuration on the BMC.
+// Boot represents boot configuration on the BMC. Only Error is emitted on empty.
 type Boot struct {
-	Next              string    `json:"next"`
-	Order             list.List `json:"order"`
-	BootOrderPolicy   string    `json:"bootOrderPolicy"`
-	NetworkRetry      string    `json:"networkRetry"`
-	NetworkRetryCount int       `json:"networkRetryCount"`
-	Error             error     `json:"error"`
+	Order []string `json:"order"`
+	Next  string   `json:"next"`
+	Error error    `json:"error,omitempty"`
 }

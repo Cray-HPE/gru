@@ -27,6 +27,7 @@
 package chassis
 
 import (
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/power"
 	"github.com/spf13/cobra"
 )
 
@@ -39,7 +40,10 @@ func NewCommand() *cobra.Command {
 		Long:                  `Interact with a host's chassis.`,
 		Run: func(c *cobra.Command, args []string) {
 		},
-		Hidden: true,
+		Hidden: true, // TODO: Remove or set to false once implemented.
 	}
+	c.AddCommand(
+		power.NewChassisCommand(),
+	)
 	return c
 }

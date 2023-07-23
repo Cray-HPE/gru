@@ -145,11 +145,13 @@ func MapPrint(content map[string]interface{}) {
 			v := reflect.ValueOf(s)
 			typeOfS := v.Type()
 			for i := 0; i < v.NumField(); i++ {
-				fmt.Printf(
-					"\t%-20s: %-60s\n",
-					typeOfS.Field(i).Name,
-					v.Field(i).Interface(),
-				)
+				if v.Field(i).Interface() != nil {
+					fmt.Printf(
+						"\t%-20s: %-60s\n",
+						typeOfS.Field(i).Name,
+						v.Field(i).Interface(),
+					)
+				}
 			}
 
 		}

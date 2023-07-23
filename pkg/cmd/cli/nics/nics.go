@@ -26,5 +26,7 @@
 
 package nics
 
-// NIC represents boot configuration on the BMC.
-type NIC struct{}
+// NIC represents NIC devices detected by the BMC. Only Error is omitted on empty.
+type NIC struct {
+	Error error `json:"error,omitempty"`
+}

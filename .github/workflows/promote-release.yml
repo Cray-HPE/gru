@@ -1,22 +1,47 @@
 name: Build a release
+env:
+  GO_VERSION: '1.20'
 on:
   push:
     tags:
       - 'v?[0-9]+.[0-9]+.[0-9]+'
   workflow_dispatch:
 
-env:
-  STREAM: stable
 jobs:
-  Promote:
-    runs-on: ubuntu-latest
+  strategy:
+    matrix:
+      include:
+      - os: ubuntu-latest
+        hash_file_command: 'shasum -a 256'
+      - os: macos-latest
+        hash_file_command: 'shasum -a 256'
+      - os: windows-latest
+        hash_file_command: 'get-filehash -Algorithm SHA256'
+  build-and-promote:
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: lint
+        run: |
+          make bin/gru
+          echo GOOS=$(go env GOOS) >> $GITHUB_ENV
+          echo GOARCH=$(go env GOARCH) >> $GITHUB_ENV
+
+      - name: write binary checksum
+        run: |
+          ${{ matrix.hash_file_command }} bin/gru-${{ env.GOOS }}-${{ env.GOARCH }}* >> bin/gru-${{ env.GOOS }}-${{ env.GOARCH }}.sha256sum
 
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true # if the job is re-ran to catch missed artifacts, allow updates
           generateReleaseNotes: true
-#          artifacts: ${{ env.DIR_UPLOAD }}/*
+          artifacts:
+            - bin/gru-${{ env.GOOS }}-${{ env.GOARCH }}*
           prerelease: false
           makeLatest: true

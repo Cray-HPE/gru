@@ -28,6 +28,8 @@ package show
 
 import (
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/boot"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/disks"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/nics"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/system"
 	"github.com/spf13/cobra"
 )
@@ -44,6 +46,8 @@ func NewCommand() *cobra.Command {
 	}
 	c.AddCommand(
 		boot.NewShowCommand(),
+		nics.NewShowCommand(),
+		disks.NewShowCommand(),
 		system.NewShowCommand(),
 	)
 	return c

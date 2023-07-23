@@ -24,26 +24,24 @@
 
 */
 
-package get
+package set
 
 import (
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/power"
 	"github.com/spf13/cobra"
 )
 
-// NewCommand creates the `get` subcommand.
+// NewCommand creates the `set` subcommand.
 func NewCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "get",
-		Short: "Shortcut for getting certain information from RedFish.",
-		Long:  `Shortcut for getting certain information from RedFish.`,
+		Use:   "set",
+		Short: "Set new values in Redfish",
+		Long:  `Sets new values in Redfish based on subcommand.`,
 		Run: func(c *cobra.Command, args []string) {
 		},
 	}
 	c.AddCommand(
-		bios.NewGetCommand(),
-		power.NewGetCommand(),
+		bios.NewSetCommand(),
 	)
 	return c
 }

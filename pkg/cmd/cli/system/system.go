@@ -26,11 +26,11 @@
 
 package system
 
-// System represents system meta from the BMC.
+// System represents system meta from the BMC. Only Error is omitted on empty.
 type System struct {
-	Manufacturer    string `json:"manufacturer"`
-	Model           string `json:"model"`
 	BIOSVersion     string `json:"biosVersion"`
 	FirmwareVersion string `json:"firmwareVersion"`
-	Error           error  `json:"error"`
+	Manufacturer    string `json:"manufacturer"`
+	Model           string `json:"model"`
+	Error           error  `json:"error,omitempty"`
 }

@@ -24,26 +24,19 @@
 
 */
 
-package get
+package bios
 
 import (
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/power"
-	"github.com/spf13/cobra"
+	"github.com/stmcginnis/gofish/redfish"
+	"strings"
 )
 
-// NewCommand creates the `get` subcommand.
-func NewCommand() *cobra.Command {
-	c := &cobra.Command{
-		Use:   "get",
-		Short: "Shortcut for getting certain information from RedFish.",
-		Long:  `Shortcut for getting certain information from RedFish.`,
-		Run: func(c *cobra.Command, args []string) {
-		},
+func makeAttributes(args []string) redfish.BiosAttributes {
+	attributes := redfish.BiosAttributes{}
+	for _, attribute := range args {
+		if key, value, ok := strings.Cut(attribute, "="); ok {
+			attributes[key] = value
+		}
 	}
-	c.AddCommand(
-		bios.NewGetCommand(),
-		power.NewGetCommand(),
-	)
-	return c
+	return attributes
 }

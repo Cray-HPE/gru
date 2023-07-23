@@ -24,26 +24,35 @@
 
 */
 
-package get
+package query
 
 import (
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/power"
-	"github.com/spf13/cobra"
+	"fmt"
+	"sync"
 )
 
-// NewCommand creates the `get` subcommand.
-func NewCommand() *cobra.Command {
-	c := &cobra.Command{
-		Use:   "get",
-		Short: "Shortcut for getting certain information from RedFish.",
-		Long:  `Shortcut for getting certain information from RedFish.`,
-		Run: func(c *cobra.Command, args []string) {
-		},
+// Async runs an async query (fn) against a list of hosts. Returns a map of each host with their
+// respective query results.
+func Async(fn func(host string) interface{}, hosts []string) map[string]any {
+
+	var wg sync.WaitGroup
+
+	sliceLength := len(hosts)
+	wg.Add(sliceLength)
+
+	fmt.Printf("Asynchronously querying [%5d] hosts ... \n", len(hosts))
+
+	sm := make(map[string]interface{})
+
+	for _, host := range hosts {
+
+		go func(host string) {
+
+			defer wg.Done()
+			sm[host] = fn(host)
+
+		}(host)
 	}
-	c.AddCommand(
-		bios.NewGetCommand(),
-		power.NewGetCommand(),
-	)
-	return c
+	wg.Wait()
+	return sm
 }
