@@ -1,6 +1,4 @@
-name: Build a release
-env:
-  GO_VERSION: '1.20'
+name: Build and publish a release
 on:
   push:
     tags:
@@ -8,40 +6,52 @@ on:
   workflow_dispatch:
 
 jobs:
-  strategy:
-    matrix:
-      include:
-      - os: ubuntu-latest
-        hash_file_command: 'shasum -a 256'
-      - os: macos-latest
-        hash_file_command: 'shasum -a 256'
-      - os: windows-latest
-        hash_file_command: 'get-filehash -Algorithm SHA256'
-  build-and-promote:
-    runs-on: ${{ matrix.os }}
+  make-release:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: ${{ env.GO_VERSION }}
-
-      - name: lint
-        run: |
-          make bin/gru
-          echo GOOS=$(go env GOOS) >> $GITHUB_ENV
-          echo GOARCH=$(go env GOARCH) >> $GITHUB_ENV
-
-      - name: write binary checksum
-        run: |
-          ${{ matrix.hash_file_command }} bin/gru-${{ env.GOOS }}-${{ env.GOARCH }}* >> bin/gru-${{ env.GOOS }}-${{ env.GOARCH }}.sha256sum
 
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true # if the job is re-ran to catch missed artifacts, allow updates
           generateReleaseNotes: true
-          artifacts:
-            - bin/gru-${{ env.GOOS }}-${{ env.GOARCH }}*
           prerelease: false
           makeLatest: true
+
+  build-and-promote:
+    needs: make-release
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: ["386", amd64, arm64]
+        exclude:
+          - goarch: "386"
+            goos: darwin
+          - goarch: arm64
+            goos: windows
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set variables
+        run: |
+          GO_VERSION=$(grep -Eo "^go .*" go.mod | cut -d " " -f2)
+          echo $GO_VERSION
+          echo GO_VERSION=$GO_VERSION >> $GITHUB_ENV
+          TAG=${GITHUB_REF##*/}
+          echo $TAG
+          echo TAG=$TAG >> $GITHUB_ENV
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          echo $REPO_NAME
+          echo REPO_NAME=$REPO_NAME >> $GITHUB_ENV
+
+      - uses: wangyoucao577/go-release-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: ${{ matrix.goos }}
+          goarch: ${{ matrix.goarch }}
+          goversion: ${{ env.GO_VERSION }}
+          build_command: "make ${{ env.REPO_NAME }}"
+          release_tag: ${{ env.TAG }}
+          md5sum: 'FALSE'
+          sha256sum: 'TRUE'

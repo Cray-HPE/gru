@@ -178,7 +178,7 @@ build: tidy $(addprefix bin/,$(binaries))
 
 go_build := $(go_path) go build $(go_flags) -ldflags '$(go_ldflags)' -o
 
-bin/%: cmd/% FORCE
+%: cmd/% FORCE
 	@echo Building $@…
 	$(E)$(go_build) $@$(exe) ./$<
 	cp $@$(exe) $@-$(GOOS)-$(GOARCH)$(exe)
