@@ -174,7 +174,7 @@ endif
 binaries := ${NAME}
 
 .PHONY: build
-build: tidy $(addprefix bin/,$(binaries))
+build: tidy $(binaries)
 
 go_build := $(go_path) go build $(go_flags) -ldflags '$(go_ldflags)' -o
 
