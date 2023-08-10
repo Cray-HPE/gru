@@ -51,7 +51,6 @@ help:
 	@echo '    help               Show this help screen.'
 	@echo
 	@echo '    build              Build a go binary.'
-	@echo '    rpm                Build a YUM/SUSE RPM.'
 	@echo
 	@echo '    clean              Remove binaries, artifacts and releases.'
 	@echo '    test               Run unit tests.'
@@ -74,13 +73,6 @@ export RELEASE = 1
 
 # RPMs don't like hyphens, might as well just be consistent everywhere; strip leading v.
 export VERSION ?= $(shell git describe --tags | tr -s '-' '~' | sed 's/^v//')
-BUILD_DIR ?= $(PWD)/dist/rpmbuild
-SPEC_FILE ?= ${NAME}.spec
-SOURCE_NAME ?= ${NAME}-${VERSION}
-RPM_NAME ?= ${SOURCE_NAME}-${RELEASE}
-RPM ?= ${RPM_NAME}.${ARCH}.rpm
-SRPM ?= ${RPM_NAME}.src.rpm
-SOURCE_PATH := ${BUILD_DIR}/SOURCES/${SOURCE_NAME}.tar.bz2
 TEST_OUTPUT_DIR ?= $(CURDIR)/build/results
 
 # There may be more than one tag. Only use one that starts with 'v' followed by
@@ -183,9 +175,6 @@ go_build := $(go_path) go build $(go_flags) -ldflags '$(go_ldflags)' -o
 	$(E)$(go_build) $@$(exe) ./$<
 	cp $@$(exe) $@-$(GOOS)-$(GOARCH)$(exe)
 
-# FIXME: Doesn't work, yet.
-rpm: $(BUILD_DIR)/${RPM} $(BUILD_DIR)/${SRPM}
-
 clean:
 	go clean -i ./...
 	rm -vf \
@@ -219,14 +208,6 @@ fmt:
 
 tidy:
 	go mod tidy
-
-$(BUILD_DIR):%:%.rpm %.src.rpm
-	rm -rf $(BUILD_DIR)
-	mkdir -p $(BUILD_DIR)/SPECS $(BUILD_DIR)/SOURCES
-	cp $(SPEC_FILE) $(BUILD_DIR)/SPECS/
-	tar --transform 'flags=r;s,^,/$(SOURCE_NAME)/,' --exclude .git --exclude dist -cvjf $(SOURCE_PATH) .
-	rpmbuild --nodeps --target $(ARCH) -ts $(SOURCE_PATH) --define "_topdir $(BUILD_DIR)"
-	rpmbuild --nodeps --target $(ARCH) -ba $(SPEC_FILE) --define "_topdir $(BUILD_DIR)"
 
 doc:
 	godoc -http=:8080 -index
