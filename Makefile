@@ -192,8 +192,8 @@ clean:
 	  $(CURDIR)/build/results/coverage/* \
 	  $(CURDIR)/build/results/unittest/*
 	rm -rf \
-	  bin \
-	  $(BUILD_DIR)
+	  $(binaries) \
+	  $(NAME)-$(GOOS)-$(GOARCH)$(exe)
 
 test: tools
 	mkdir -pv $(TEST_OUTPUT_DIR)/unittest $(TEST_OUTPUT_DIR)/coverage
