@@ -67,6 +67,6 @@ grep -oP pattern /etc/hosts | tr -s '\n' ' ' | gru show system
 
 [source,bash]
 ----
-make bin/gru
-./bin/gru
+make gru
+./gru
 ----
