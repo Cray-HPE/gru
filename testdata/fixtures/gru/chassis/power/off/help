@@ -1,0 +1,17 @@
+Power off a node.
+
+Usage:
+  gru chassis power off [flags]
+
+Flags:
+      --button    Power off a node by pushing the power button
+      --force     Force power off a node
+  -h, --help      help for off
+      --nmi       Power off a node to trigger a crash/core dump
+      --restart   Restart a node
+
+Global Flags:
+  -c, --config string   Configuration file containing BMC credentials, necessary if USERNAME and PASSWORD are not defined in the environment. gru
+                         (default "./gru.yml")
+      --insecure        Ignore untrusted or insecure certificates.
+  -j, --json            Output results in JSON.

@@ -1,0 +1,15 @@
+---
+insecure: true
+# Used for all hosts except those defined under `hosts:`
+username: root
+password: root_password
+hosts:
+ 127.0.0.1:5000:
+   username: root
+   password: root_password
+ 127.0.0.1:5001:
+   username: root
+   password: root_password
+ 127.0.0.1:5002:
+   username: root
+   password: root_password

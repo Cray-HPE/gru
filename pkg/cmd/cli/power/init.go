@@ -26,33 +26,10 @@
 
 package power
 
-import (
-	"github.com/spf13/cobra"
-)
-
-var powerOnCmd *cobra.Command
-var powerOffCmd *cobra.Command
-var powerStatusCmd *cobra.Command
-
-// NewChassisCommand creates the `power` subcommand for `chassis`.
-func NewChassisCommand() *cobra.Command {
-	c := &cobra.Command{
-		Use:   "power [flags] host [...host]",
-		Short: "Power Control",
-		Long:  `Check power status, or power on, off, cycle, or reset a host.`,
-		Run: func(c *cobra.Command, args []string) {
-			// TODO: Translate power commands to available commands, since the available commands aren't very friendly.
-		},
-		Hidden: false,
-	}
-	c.AddCommand(powerStatusCmd)
-	c.AddCommand(powerOffCmd)
-	c.AddCommand(powerOnCmd)
-	return c
-}
-
 func init() {
-	powerOnCmd = NewPowerOnCommand()
-	powerOffCmd = NewPowerOffCommand()
-	powerStatusCmd = NewPowerStatusCommand()
+	powerOffCmd.Flags().Bool("force", false, "Force power off a node")                        // ForceOff
+	powerOffCmd.Flags().Bool("button", false, "Power off a node by pushing the power button") // PushPowerButton
+	powerOffCmd.Flags().Bool("nmi", false, "Power off a node to trigger a crash/core dump")   // Nmi
+	powerOffCmd.Flags().Bool("restart", false, "Restart a node")                              // ForceRestart
+	powerOnCmd.Flags().Bool("force", false, "Force power on a node")                          // ForceOn
 }

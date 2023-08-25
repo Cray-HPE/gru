@@ -30,11 +30,12 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/spf13/viper"
 	"os"
 	"reflect"
 	"sort"
 	"unicode/utf8"
+
+	"github.com/spf13/viper"
 )
 
 func isInputFromPipe() bool {

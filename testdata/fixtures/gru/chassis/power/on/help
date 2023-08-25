@@ -1,0 +1,14 @@
+Power on a node.
+
+Usage:
+  gru chassis power on [flags]
+
+Flags:
+      --force   Force power on a node
+  -h, --help    help for on
+
+Global Flags:
+  -c, --config string   Configuration file containing BMC credentials, necessary if USERNAME and PASSWORD are not defined in the environment. gru
+                         (default "./gru.yml")
+      --insecure        Ignore untrusted or insecure certificates.
+  -j, --json            Output results in JSON.

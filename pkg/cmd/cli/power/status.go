@@ -27,32 +27,42 @@
 package power
 
 import (
+	"github.com/Cray-HPE/gru/pkg/action"
+	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/spf13/cobra"
 )
 
-var powerOnCmd *cobra.Command
-var powerOffCmd *cobra.Command
-var powerStatusCmd *cobra.Command
-
-// NewChassisCommand creates the `power` subcommand for `chassis`.
-func NewChassisCommand() *cobra.Command {
+// NewPowerStatusCommand creates the `status` subcommand for `power`.
+func NewPowerStatusCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "power [flags] host [...host]",
-		Short: "Power Control",
-		Long:  `Check power status, or power on, off, cycle, or reset a host.`,
-		Run: func(c *cobra.Command, args []string) {
-			// TODO: Translate power commands to available commands, since the available commands aren't very friendly.
-		},
+		Use:    "status",
+		Short:  "Power status",
+		Long:   `Check power status.`,
+		Run:    powerStatus,
 		Hidden: false,
 	}
-	c.AddCommand(powerStatusCmd)
-	c.AddCommand(powerOffCmd)
-	c.AddCommand(powerOnCmd)
 	return c
 }
 
-func init() {
-	powerOnCmd = NewPowerOnCommand()
-	powerOffCmd = NewPowerOffCommand()
-	powerStatusCmd = NewPowerStatusCommand()
+// powerStatus represents the cobra command that queries the power status of nodes
+func powerStatus(cmd *cobra.Command, args []string) {
+	action.Get(args, getPowerStatus)
+}
+
+// getPowerStatus gets the power state for a given host
+func getPowerStatus(host string) (string, error) {
+	c, err := auth.Connection(host)
+	if err != nil {
+		return "", err
+	}
+	defer c.Logout()
+
+	service := c.Service
+
+	systems, err := service.Systems()
+	if err != nil {
+		return "", err
+	}
+
+	return string(systems[0].PowerState), nil
 }

@@ -27,32 +27,54 @@
 package power
 
 import (
+	"github.com/Cray-HPE/gru/pkg/action"
+	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/spf13/cobra"
+	"github.com/stmcginnis/gofish/redfish"
 )
 
-var powerOnCmd *cobra.Command
-var powerOffCmd *cobra.Command
-var powerStatusCmd *cobra.Command
-
-// NewChassisCommand creates the `power` subcommand for `chassis`.
-func NewChassisCommand() *cobra.Command {
+// NewPowerOnCommand creates the `on` subcommand for `power`.
+func NewPowerOnCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "power [flags] host [...host]",
-		Short: "Power Control",
-		Long:  `Check power status, or power on, off, cycle, or reset a host.`,
-		Run: func(c *cobra.Command, args []string) {
-			// TODO: Translate power commands to available commands, since the available commands aren't very friendly.
-		},
+		Use:    "on",
+		Short:  "Power on",
+		Long:   `Power on a node.`,
+		Run:    powerOn,
 		Hidden: false,
 	}
-	c.AddCommand(powerStatusCmd)
-	c.AddCommand(powerOffCmd)
-	c.AddCommand(powerOnCmd)
 	return c
 }
 
-func init() {
-	powerOnCmd = NewPowerOnCommand()
-	powerOffCmd = NewPowerOffCommand()
-	powerStatusCmd = NewPowerStatusCommand()
+// powerOn represents the cobra command that powers on nodes
+func powerOn(cmd *cobra.Command, args []string) {
+	action.Send(args, setPowerOn)
+}
+
+// setPowerOn gets the power state for a given host
+func setPowerOn(host string) error {
+	c, err := auth.Connection(host)
+	if err != nil {
+		return err
+	}
+	defer c.Logout()
+
+	service := c.Service
+
+	systems, err := service.Systems()
+	if err != nil {
+		return err
+	}
+
+	var resetType redfish.ResetType = redfish.OnResetType
+	if powerOnCmd.Flags().Changed("force") {
+		resetType = redfish.ForceOnResetType
+	}
+
+	err = systems[0].Reset(resetType)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
