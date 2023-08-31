@@ -4,7 +4,7 @@ Usage:
   gru chassis power off [flags]
 
 Flags:
-      --button    Power off a node by pushing the power button
+      --button    Power off a node with an ACPI shutdown (e.g. power button push)
       --force     Force power off a node
   -h, --help      help for off
       --nmi       Power off a node to trigger a crash/core dump

@@ -28,7 +28,7 @@ package power
 
 func init() {
 	powerOffCmd.Flags().Bool("force", false, "Force power off a node")                        // ForceOff
-	powerOffCmd.Flags().Bool("button", false, "Power off a node by pushing the power button") // PushPowerButton
+	powerOffCmd.Flags().Bool("button", false, "Power off a node with an ACPI shutdown (e.g. power button push)") // PushPowerButton
 	powerOffCmd.Flags().Bool("nmi", false, "Power off a node to trigger a crash/core dump")   // Nmi
 	powerOffCmd.Flags().Bool("restart", false, "Restart a node")                              // ForceRestart
 	powerOnCmd.Flags().Bool("force", false, "Force power on a node")                          // ForceOn
