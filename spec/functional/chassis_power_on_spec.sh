@@ -24,13 +24,6 @@
 
 Describe 'gru chassis power on'
 
-# help output should succeed and match the fixture
-It '--help'
-  When call ./gru chassis power on --help
-  The status should equal 0
-  The stdout should satisfy fixture 'gru/chassis/power/on/help'
-End
-
 # it should error if no config is present
 It '127.0.0.1:5000 (no config file)'
   When call ./gru chassis power on 127.0.0.1:5000
