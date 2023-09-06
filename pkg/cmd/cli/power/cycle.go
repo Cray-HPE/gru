@@ -27,23 +27,48 @@
 package power
 
 import (
+	"fmt"
+	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/Cray-HPE/gru/pkg/query"
+	"github.com/Cray-HPE/gru/pkg/set"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"github.com/stmcginnis/gofish/redfish"
 )
 
-// NewPowerStatusCommand creates the `status` subcommand for `power`.
-func NewPowerStatusCommand() *cobra.Command {
+// NewPowerCycleCommand creates the `cycle` subcommand for `power`.
+func NewPowerCycleCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "status",
-		Short: "Power status for the target machine(s).",
-		Long:  `Prints the current power status reported by the blade management controller for the target machine(s).`,
+		Use:   "cycle",
+		Short: "Power cycle the target machine(s).",
+		Long: `Performs an ACPI shutdown and startup to power cycle the target machine(s).
+Also allows bypassing the OS shutdown, forcing a warm boot.`,
 		Run: func(c *cobra.Command, args []string) {
+			var resetType redfish.ResetType
+
 			hosts := cli.ParseHosts(args)
-			content := query.Async(status, hosts)
+
+			v := viper.GetViper()
+			bindErr := v.BindPFlags(c.Flags())
+			cmd.CheckError(bindErr)
+
+			resetType = redfish.GracefulRestartResetType
+			if v.GetBool("force") {
+				resetType = redfish.ForceRestartResetType
+			}
+
+			content := set.Async(issue, hosts, resetType)
 			cli.MapPrint(content)
 		},
 		Hidden: false,
 	}
+	c.PersistentFlags().BoolP(
+		"force",
+		"f",
+		false,
+		fmt.Sprintln(
+			"Immediately restart waiting for the OS (warm boot).",
+		),
+	)
 	return c
 }

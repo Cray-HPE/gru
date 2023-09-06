@@ -27,66 +27,58 @@
 package power
 
 import (
-	"github.com/Cray-HPE/gru/pkg/action"
-	"github.com/Cray-HPE/gru/pkg/auth"
+	"fmt"
+	"github.com/Cray-HPE/gru/pkg/cmd"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli"
+	"github.com/Cray-HPE/gru/pkg/set"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"github.com/stmcginnis/gofish/redfish"
 )
 
 // NewPowerOffCommand creates the `off` subcommand for `power`.
 func NewPowerOffCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:    "off",
-		Short:  "Power off",
-		Long:   `Power off a node.`,
-		Run:    powerOff,
-		Hidden: false,
+		Use:   "off",
+		Short: "Power off the target machine(s).",
+		Long: `Powers off the target machine(s) with an ACPI shutdown.
+Permits forcing a shutdown (without waiting for the OS),
+as well as a power-button emulated shutdown.`,
+		Run: func(c *cobra.Command, args []string) {
+			var resetType redfish.ResetType
+
+			hosts := cli.ParseHosts(args)
+
+			v := viper.GetViper()
+			bindErr := v.BindPFlags(c.Flags())
+			cmd.CheckError(bindErr)
+
+			resetType = redfish.GracefulShutdownResetType
+			if v.GetBool("force") {
+				resetType = redfish.ForceOffResetType
+			}
+			if v.GetBool("button") {
+				resetType = redfish.PushPowerButtonResetType
+			}
+
+			content := set.Async(issue, hosts, resetType)
+			cli.MapPrint(content)
+		},
 	}
+	c.PersistentFlags().BoolP(
+		"force",
+		"f",
+		false,
+		fmt.Sprintln(
+			"Immediately power off without waiting for the OS.",
+		),
+	)
+	c.PersistentFlags().BoolP(
+		"button",
+		"b",
+		false,
+		"Emulate a power-button press.",
+	)
+	c.MarkFlagsMutuallyExclusive("button", "force")
 	return c
-}
-
-// powerOff represents the cobra command that powers off nodes
-func powerOff(cmd *cobra.Command, args []string) {
-	action.Send(args, setPowerOff)
-}
-
-// setPowerOff gets the power state for a given host
-func setPowerOff(host string) error {
-	c, err := auth.Connection(host)
-	if err != nil {
-		return err
-	}
-	defer c.Logout()
-
-	service := c.Service
-
-	systems, err := service.Systems()
-	if err != nil {
-		return err
-	}
-
-	var resetType redfish.ResetType = redfish.GracefulShutdownResetType
-	if powerOffCmd.Flags().Changed("force") {
-		resetType = redfish.ForceOffResetType
-	}
-	if powerOffCmd.Flags().Changed("button") {
-		resetType = redfish.PushPowerButtonResetType
-	}
-	if powerOffCmd.Flags().Changed("restart") {
-		resetType = redfish.GracefulRestartResetType
-	}
-	if powerOffCmd.Flags().Changed("nmi") {
-		resetType = redfish.NmiResetType
-	}
-	if powerOffCmd.Flags().Changed("restart") && powerOffCmd.Flags().Changed("force") {
-		resetType = redfish.ForceRestartResetType
-	}
-
-	err = systems[0].Reset(resetType)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

@@ -44,7 +44,7 @@ func NewSetCommand() *cobra.Command {
 			hosts := cli.ParseHosts(args)
 			a := viper.GetStringSlice("attributes")
 			attributes := makeAttributes(a)
-			content := set.Async(setBIOSSettings, hosts, attributes)
+			content := set.AsyncMap(setBIOSSettings, hosts, attributes)
 			cli.MapPrint(content)
 		},
 		Hidden: true, // TODO: Remove or set to false once implemented.

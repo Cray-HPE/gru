@@ -27,45 +27,24 @@
 package power
 
 import (
-	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/Cray-HPE/gru/pkg/query"
+	"github.com/Cray-HPE/gru/pkg/set"
 	"github.com/spf13/cobra"
+	"github.com/stmcginnis/gofish/redfish"
 )
 
-// NewGetCommand creates the `power` subcommand for `get`.
-func NewGetCommand() *cobra.Command {
+// NewPowerNMICommand creates the `nmi` subcommand for `power`.
+func NewPowerNMICommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "power",
-		Short: "List available power actions",
-		Long:  `Gets the available power actions for a host.`,
+		Use:   "nmi",
+		Short: "Issue an NMI to the target machine(s).",
+		Long:  `Issue a non-maskable interrupt, triggering a crash/core dump.`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := query.Async(getPowerActionInformation, hosts)
+			content := set.Async(issue, hosts, redfish.NmiResetType)
 			cli.MapPrint(content)
 		},
+		Hidden: false,
 	}
 	return c
-}
-
-func getPowerActionInformation(host string) interface{} {
-	action := Action{}
-	c, err := auth.Connection(host)
-	if err != nil {
-		action.Error = err
-		return action
-	}
-
-	defer c.Logout()
-
-	service := c.Service
-
-	systems, err := service.Systems()
-	if err != nil {
-		action.Error = err
-	}
-
-	// FIXME: Gigabyte does not return available power commands.
-	action.Actions = systems[0].SupportedResetTypes
-	return action
 }

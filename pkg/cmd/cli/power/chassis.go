@@ -30,10 +30,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var powerOnCmd *cobra.Command
-var powerOffCmd *cobra.Command
-var powerStatusCmd *cobra.Command
-
 // NewChassisCommand creates the `power` subcommand for `chassis`.
 func NewChassisCommand() *cobra.Command {
 	c := &cobra.Command{
@@ -45,14 +41,13 @@ func NewChassisCommand() *cobra.Command {
 		},
 		Hidden: false,
 	}
-	c.AddCommand(powerStatusCmd)
-	c.AddCommand(powerOffCmd)
-	c.AddCommand(powerOnCmd)
+	c.AddCommand(
+		NewPowerOffCommand(),
+		NewPowerResetCommand(),
+		NewPowerOnCommand(),
+		NewPowerCycleCommand(),
+		NewPowerStatusCommand(),
+		NewPowerNMICommand(),
+	)
 	return c
-}
-
-func init() {
-	powerOnCmd = NewPowerOnCommand()
-	powerOffCmd = NewPowerOffCommand()
-	powerStatusCmd = NewPowerStatusCommand()
 }

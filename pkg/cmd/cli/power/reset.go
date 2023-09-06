@@ -26,10 +26,25 @@
 
 package power
 
-func init() {
-	powerOffCmd.Flags().Bool("force", false, "Force power off a node")                        // ForceOff
-	powerOffCmd.Flags().Bool("button", false, "Power off a node with an ACPI shutdown (e.g. power button push)") // PushPowerButton
-	powerOffCmd.Flags().Bool("nmi", false, "Power off a node to trigger a crash/core dump")   // Nmi
-	powerOffCmd.Flags().Bool("restart", false, "Restart a node")                              // ForceRestart
-	powerOnCmd.Flags().Bool("force", false, "Force power on a node")                          // ForceOn
+import (
+	"github.com/Cray-HPE/gru/pkg/cmd/cli"
+	"github.com/Cray-HPE/gru/pkg/set"
+	"github.com/spf13/cobra"
+	"github.com/stmcginnis/gofish/redfish"
+)
+
+// NewPowerResetCommand creates the `reset` subcommand for `power`.
+func NewPowerResetCommand() *cobra.Command {
+	c := &cobra.Command{
+		Use:   "reset",
+		Short: "Power reset the target machine(s).",
+		Long:  `Forcefully restart the target machine(s) without a graceful shutdown.`,
+		Run: func(c *cobra.Command, args []string) {
+			hosts := cli.ParseHosts(args)
+			content := set.Async(issue, hosts, redfish.ForceRestartResetType)
+			cli.MapPrint(content)
+		},
+		Hidden: false,
+	}
+	return c
 }

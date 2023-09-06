@@ -28,7 +28,6 @@ package get
 
 import (
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/power"
 	"github.com/spf13/cobra"
 )
 
@@ -43,7 +42,6 @@ func NewCommand() *cobra.Command {
 	}
 	c.AddCommand(
 		bios.NewGetCommand(),
-		power.NewGetCommand(),
 	)
 	return c
 }

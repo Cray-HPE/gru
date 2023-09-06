@@ -31,10 +31,10 @@ import (
 	"sync"
 )
 
-// Async runs an async setting (fn) against a list of hosts. Returns a map of each host with their
+// AsyncMap runs an async function (fn) against a list of hosts. Returns a map of each host with their
 // respective set results.
-func Async(
-	fn func(host string, settings map[string]interface{}) interface{},
+func AsyncMap(
+	fn func(host string, actions map[string]interface{}) interface{},
 	hosts []string,
 	data map[string]interface{},
 ) map[string]any {
@@ -44,7 +44,38 @@ func Async(
 	sliceLength := len(hosts)
 	wg.Add(sliceLength)
 
-	fmt.Printf("Asynchronously querying [%5d] hosts ... \n", len(hosts))
+	fmt.Printf("Asynchronously updating [%5d] hosts ... \n", len(hosts))
+
+	sm := make(map[string]interface{})
+
+	for _, host := range hosts {
+
+		go func(host string) {
+
+			defer wg.Done()
+			sm[host] = fn(host, data)
+
+		}(host)
+	}
+	wg.Wait()
+	return sm
+}
+
+// Async runs an async loop against a list of hosts, applying the given function to each. The given function
+// is provided a value to apply to the target host. Returns a map of each host with their
+// respective set results.
+func Async(
+	fn func(host string, action any) interface{},
+	hosts []string,
+	data any,
+) map[string]any {
+
+	var wg sync.WaitGroup
+
+	sliceLength := len(hosts)
+	wg.Add(sliceLength)
+
+	fmt.Printf("Asynchronously updating [%5d] hosts ... \n", len(hosts))
 
 	sm := make(map[string]interface{})
 

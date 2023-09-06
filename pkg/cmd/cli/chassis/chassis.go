@@ -40,7 +40,7 @@ func NewCommand() *cobra.Command {
 		Long:                  `Interact with a host's chassis.`,
 		Run: func(c *cobra.Command, args []string) {
 		},
-		Hidden: false, // TODO: Remove or set to false once implemented.
+		Hidden: false,
 	}
 	c.AddCommand(
 		power.NewChassisCommand(),

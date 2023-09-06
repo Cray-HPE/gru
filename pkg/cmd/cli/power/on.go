@@ -27,8 +27,8 @@
 package power
 
 import (
-	"github.com/Cray-HPE/gru/pkg/action"
-	"github.com/Cray-HPE/gru/pkg/auth"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli"
+	"github.com/Cray-HPE/gru/pkg/set"
 	"github.com/spf13/cobra"
 	"github.com/stmcginnis/gofish/redfish"
 )
@@ -36,45 +36,14 @@ import (
 // NewPowerOnCommand creates the `on` subcommand for `power`.
 func NewPowerOnCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:    "on",
-		Short:  "Power on",
-		Long:   `Power on a node.`,
-		Run:    powerOn,
-		Hidden: false,
+		Use:   "on",
+		Short: "Power on the target machine(s).",
+		Long:  `Powers on the target machines (cold boot).`,
+		Run: func(c *cobra.Command, args []string) {
+			hosts := cli.ParseHosts(args)
+			content := set.Async(issue, hosts, redfish.OnResetType)
+			cli.MapPrint(content)
+		},
 	}
 	return c
-}
-
-// powerOn represents the cobra command that powers on nodes
-func powerOn(cmd *cobra.Command, args []string) {
-	action.Send(args, setPowerOn)
-}
-
-// setPowerOn gets the power state for a given host
-func setPowerOn(host string) error {
-	c, err := auth.Connection(host)
-	if err != nil {
-		return err
-	}
-	defer c.Logout()
-
-	service := c.Service
-
-	systems, err := service.Systems()
-	if err != nil {
-		return err
-	}
-
-	var resetType redfish.ResetType = redfish.OnResetType
-	if powerOnCmd.Flags().Changed("force") {
-		resetType = redfish.ForceOnResetType
-	}
-
-	err = systems[0].Reset(resetType)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
