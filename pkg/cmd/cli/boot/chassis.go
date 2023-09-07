@@ -24,27 +24,44 @@
 
 */
 
-package power
+package boot
 
 import (
+	"fmt"
+	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
-// NewChassisCommand creates the `power` subcommand for `chassis`.
+// NewChassisCommand creates the `boot` subcommand for `chassis`.
 func NewChassisCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:    "power [flags] host [...host]",
-		Short:  "Power Control",
-		Long:   `Check power status, or power on, off, cycle, or reset a host.`,
+		Use:   "boot [flags] host [...host]",
+		Short: "Set next boot device.",
+		Long:  `Overrides the next boot device for a one-time override. Only sets UEFI boot modes.`,
+		Run: func(c *cobra.Command, args []string) {
+			v := viper.GetViper()
+			bindErr := v.BindPFlags(c.Flags())
+			cmd.CheckError(bindErr)
+		},
 		Hidden: false,
 	}
 	c.AddCommand(
-		NewPowerOffCommand(),
-		NewPowerResetCommand(),
-		NewPowerOnCommand(),
-		NewPowerCycleCommand(),
-		NewPowerStatusCommand(),
-		NewPowerNMICommand(),
+		NewBootBiosOverrideCommand(),
+		NewBootHddOverrideCommand(),
+		NewBootPxeOverrideCommand(),
+		NewBootUEFIHttpOverrideCommand(),
+		NewBootNoneOverrideCommand(),
 	)
+
+	c.PersistentFlags().BoolP(
+		"persist",
+		"p",
+		false,
+		fmt.Sprintln(
+			"Override continuously instead of onetime; persistent override.",
+		),
+	)
+
 	return c
 }

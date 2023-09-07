@@ -26,9 +26,62 @@
 
 package boot
 
+import (
+	"github.com/Cray-HPE/gru/pkg/auth"
+	"github.com/spf13/viper"
+	"github.com/stmcginnis/gofish/redfish"
+)
+
 // Boot represents boot configuration on the BMC. Only Error is emitted on empty.
 type Boot struct {
 	Order []string `json:"order"`
 	Next  string   `json:"next"`
 	Error error    `json:"error,omitempty"`
+}
+
+// Override represents the result of the boot override.
+type Override struct {
+	Target redfish.BootSourceOverrideTarget `json:"target"`
+	Error  error                            `json:"error,omitempty"`
+}
+
+// issueOverride issues a boot override action against a host.
+func issueOverride(host string, override interface{}) interface{} {
+	o := Override{}
+	v := viper.GetViper()
+
+	c, err := auth.Connection(host)
+	if err != nil {
+		o.Error = err
+		return o
+	}
+
+	defer c.Logout()
+
+	service := c.Service
+
+	systems, err := service.Systems()
+	if err != nil {
+		o.Error = err
+		return o
+	}
+
+	boot := redfish.Boot{
+		BootSourceOverrideTarget: override.(redfish.BootSourceOverrideTarget),
+		BootSourceOverrideMode:   redfish.UEFIBootSourceOverrideMode,
+	}
+
+	if v.GetBool("persist") {
+		boot.BootSourceOverrideEnabled = redfish.ContinuousBootSourceOverrideEnabled
+	} else {
+		boot.BootSourceOverrideEnabled = redfish.OnceBootSourceOverrideEnabled
+	}
+
+	err = systems[0].SetBoot(boot)
+	o.Target = override.(redfish.BootSourceOverrideTarget)
+	if err != nil {
+		o.Error = err
+	}
+
+	return o
 }

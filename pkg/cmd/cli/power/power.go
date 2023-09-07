@@ -31,8 +31,6 @@ import (
 	"github.com/stmcginnis/gofish/redfish"
 )
 
-const noState redfish.PowerState = ""
-
 // StateChange represents a change in power states.
 type StateChange struct {
 	PreviousPowerState redfish.PowerState `json:"previousPowerState,omitempty"`
