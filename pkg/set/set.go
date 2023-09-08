@@ -28,6 +28,7 @@ package set
 
 import (
 	"fmt"
+	"github.com/spf13/viper"
 	"sync"
 )
 
@@ -44,7 +45,10 @@ func AsyncMap(
 	sliceLength := len(hosts)
 	wg.Add(sliceLength)
 
-	fmt.Printf("Asynchronously updating [%5d] hosts ... \n", len(hosts))
+	v := viper.GetViper()
+	if !v.GetBool("json") {
+		fmt.Printf("Asynchronously updating [%5d] hosts ... \n", len(hosts))
+	}
 
 	sm := make(map[string]interface{})
 
@@ -75,7 +79,10 @@ func Async(
 	sliceLength := len(hosts)
 	wg.Add(sliceLength)
 
-	fmt.Printf("Asynchronously updating [%5d] hosts ... \n", len(hosts))
+	v := viper.GetViper()
+	if !v.GetBool("json") {
+		fmt.Printf("Asynchronously updating [%5d] hosts ... \n", len(hosts))
+	}
 
 	sm := make(map[string]interface{})
 
