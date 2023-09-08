@@ -28,6 +28,8 @@ Describe 'gru chassis power off'
 It '127.0.0.1:5000 (no config file)'
   When call ./gru chassis power off 127.0.0.1:5000
   The status should equal 1
+  The line 1 of stdout should include 'Asynchronously updating'
+  The stderr should equal "An error occurred: no credentials provided, please provide a config file or environment variables"
 End
 
 # Running against an active host with good credentials should succeed and show output
@@ -35,8 +37,13 @@ It "--config ${GRU_CONF} 127.0.0.1:5000"
   BeforeCall use_valid_config
   When call ./gru chassis power off --config "${GRU_CONF}" 127.0.0.1:5000
   The status should equal 0
-  The stdout should include 'PreviousPowerState: On'
-  The stdout should include 'ResetType: GracefulShutdownResetType'
+  The line 1 of stdout should include 'Asynchronously updating'
+  The line 2 of stdout should equal '127.0.0.1:5000:'
+  The line 3 of stdout should include 'PreviousPowerState'
+  # powerstate can vary depending when test runs so more logic needed
+  # The line 3 of stdout should include 'Off' 
+  The line 4 of stdout should include 'ResetType'
+  The line 4 of stdout should include 'GracefulShutdown'
 End
 
 # immediately check the status of the same node, which should now be off
@@ -44,7 +51,10 @@ It "--config ${GRU_CONF} 127.0.0.1:5000"
   BeforeCall use_valid_config
   When call ./gru chassis power status --config "${GRU_CONF}" 127.0.0.1:5000
   The status should equal 0
-  The stdout should include 'PowerState: Off'
+  The line 1 of stdout should include 'Asynchronously querying'
+  The line 2 of stdout should equal '127.0.0.1:5000:'
+  The line 3 of stdout should include 'PowerState'
+  The line 3 of stdout should include 'Off'
 End
 
 End
