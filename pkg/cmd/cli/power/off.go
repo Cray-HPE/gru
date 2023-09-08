@@ -24,57 +24,61 @@
 
 */
 
-package bios
+package power
 
 import (
-	"github.com/Cray-HPE/gru/pkg/auth"
+	"fmt"
+	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/Cray-HPE/gru/pkg/set"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/stmcginnis/gofish/redfish"
 )
 
-// NewSetCommand creates the `bios` subcommand for `set`.
-func NewSetCommand() *cobra.Command {
+// NewPowerOffCommand creates the `off` subcommand for `power`.
+func NewPowerOffCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "set attribute=value[,keyN=valueN]",
-		Short: "Sets BIOS attributes.",
-		Long:  `Sets BIOS attributes if the attribute is found and the value is valid.`,
+		Use:   "off",
+		Short: "Power off the target machine(s).",
+		Long: `Powers off the target machine(s) with an ACPI shutdown.
+Permits forcing a shutdown (without waiting for the OS),
+as well as a power-button emulated shutdown.`,
 		Run: func(c *cobra.Command, args []string) {
+			var resetType redfish.ResetType
+
 			hosts := cli.ParseHosts(args)
-			a := viper.GetStringSlice("attributes")
-			attributes := makeAttributes(a)
-			content := set.AsyncMap(setBIOSSettings, hosts, attributes)
+
+			v := viper.GetViper()
+			bindErr := v.BindPFlags(c.Flags())
+			cmd.CheckError(bindErr)
+
+			resetType = redfish.GracefulShutdownResetType
+			if v.GetBool("force") {
+				resetType = redfish.ForceOffResetType
+			}
+			if v.GetBool("button") {
+				resetType = redfish.PushPowerButtonResetType
+			}
+
+			content := set.Async(issue, hosts, resetType)
 			cli.MapPrint(content)
 		},
-		Hidden: true, // TODO: Remove or set to false once implemented.
 	}
-	c.PersistentFlags().StringSlice(
-		"attributes",
-		[]string{},
-		"Comma delimited list of attributes and values to set them to.",
+	c.PersistentFlags().BoolP(
+		"force",
+		"f",
+		false,
+		fmt.Sprintln(
+			"Immediately power off without waiting for the OS.",
+		),
 	)
+	c.PersistentFlags().BoolP(
+		"button",
+		"b",
+		false,
+		"Emulate a power-button press.",
+	)
+	c.MarkFlagsMutuallyExclusive("button", "force")
 	return c
-}
-
-// FIXME: This is a skeleton, and is neither done nor correct. It is a napkin of how this could work.
-func setBIOSSettings(host string, attributes map[string]interface{}) interface{} {
-	c, err := auth.Connection(host)
-	defer c.Logout()
-
-	service := c.Service
-
-	systems, err := service.Systems()
-	if err != nil {
-		// TODO
-	}
-	bios, err := systems[0].Bios()
-	if err != nil {
-		// TODO
-	}
-	err = bios.UpdateBiosAttributes(attributes)
-	if err != nil {
-		// TODO
-	}
-	return err
 }

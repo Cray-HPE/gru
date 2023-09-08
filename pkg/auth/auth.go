@@ -28,6 +28,7 @@ package auth
 
 import (
 	"fmt"
+
 	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/spf13/viper"
 	"github.com/stmcginnis/gofish"
@@ -81,10 +82,11 @@ func Connection(host string) (*gofish.APIClient, error) {
 		password = fmt.Sprintf("%v", hostConfig["password"])
 	}
 	config := gofish.ClientConfig{
-		Endpoint: "https://" + host,
-		Username: username,
-		Password: password,
-		Insecure: viper.GetBool("insecure"),
+		Endpoint:  "https://" + host,
+		Username:  username,
+		Password:  password,
+		Insecure:  viper.GetBool("insecure"),
+		BasicAuth: true,
 	}
 	c, err := gofish.Connect(config)
 	return c, err

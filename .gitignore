@@ -1,5 +1,6 @@
 # Binaries for programs and plugins
 bin/
+!spec/support/bin
 dist/
 *.exe
 *.exe~
@@ -20,4 +21,5 @@ build/
 gru.y[a?]ml
 
 gru
+!testdata/fixtures/gru
 gru-*

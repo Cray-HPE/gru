@@ -27,45 +27,23 @@
 package power
 
 import (
-	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/Cray-HPE/gru/pkg/query"
 	"github.com/spf13/cobra"
 )
 
-// NewGetCommand creates the `power` subcommand for `get`.
-func NewGetCommand() *cobra.Command {
+// NewPowerStatusCommand creates the `status` subcommand for `power`.
+func NewPowerStatusCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "power",
-		Short: "List available power actions",
-		Long:  `Gets the available power actions for a host.`,
+		Use:   "status",
+		Short: "Power status for the target machine(s).",
+		Long:  `Prints the current power status reported by the blade management controller for the target machine(s).`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := query.Async(getPowerActionInformation, hosts)
+			content := query.Async(status, hosts)
 			cli.MapPrint(content)
 		},
+		Hidden: false,
 	}
 	return c
-}
-
-func getPowerActionInformation(host string) interface{} {
-	action := Action{}
-	c, err := auth.Connection(host)
-	if err != nil {
-		action.Error = err
-		return action
-	}
-
-	defer c.Logout()
-
-	service := c.Service
-
-	systems, err := service.Systems()
-	if err != nil {
-		action.Error = err
-	}
-
-	// FIXME: Gigabyte does not return available power commands.
-	action.Actions = systems[0].SupportedResetTypes
-	return action
 }

@@ -1,0 +1,38 @@
+---
+version: '3.7'
+# docker compose -f docker-compose.simple.yaml up -d
+services:
+
+  rfemulator0:
+    hostname: x0c0b0
+    image: artifactory.algol60.net/csm-docker/stable/csm-rie:1.5.0
+    environment:
+      - MOCKUPFOLDER=Intel
+      - XNAME=x0c0b0
+      - "AUTH_CONFIG=root:root_password:Administrator"
+      - PORT=5000
+    ports:
+      - "5000:5000"
+
+  rfemulator1:
+    hostname: x0c0s1b0
+    image: artifactory.algol60.net/csm-docker/stable/csm-rie:1.5.0
+    environment:
+      - MOCKUPFOLDER=DL325
+      - XNAME=x0c0s1b0
+      - "AUTH_CONFIG=root:root_password:Administrator"
+      - PORT=5000
+    ports:
+      - "5001:5000"
+
+  rfemulator2:
+    hostname: x0c0r2b0
+    image: artifactory.algol60.net/csm-docker/stable/csm-rie:1.5.0
+    environment:
+      - MOCKUPFOLDER=DL325
+      - XNAME=x0c0r2b0
+      - "AUTH_CONFIG=root:root_password:Administrator"
+      - PORT=5000
+    ports:
+      - "5002:5000"
+

@@ -27,24 +27,23 @@
 package power
 
 import (
+	"github.com/Cray-HPE/gru/pkg/cmd/cli"
+	"github.com/Cray-HPE/gru/pkg/set"
 	"github.com/spf13/cobra"
+	"github.com/stmcginnis/gofish/redfish"
 )
 
-// NewChassisCommand creates the `power` subcommand for `chassis`.
-func NewChassisCommand() *cobra.Command {
+// NewPowerOnCommand creates the `on` subcommand for `power`.
+func NewPowerOnCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:    "power [flags] host [...host]",
-		Short:  "Power Control",
-		Long:   `Check power status, or power on, off, cycle, or reset a host.`,
-		Hidden: false,
+		Use:   "on",
+		Short: "Power on the target machine(s).",
+		Long:  `Powers on the target machines (cold boot).`,
+		Run: func(c *cobra.Command, args []string) {
+			hosts := cli.ParseHosts(args)
+			content := set.Async(issue, hosts, redfish.OnResetType)
+			cli.MapPrint(content)
+		},
 	}
-	c.AddCommand(
-		NewPowerOffCommand(),
-		NewPowerResetCommand(),
-		NewPowerOnCommand(),
-		NewPowerCycleCommand(),
-		NewPowerStatusCommand(),
-		NewPowerNMICommand(),
-	)
 	return c
 }

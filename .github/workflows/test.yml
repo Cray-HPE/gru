@@ -16,5 +16,48 @@ jobs:
       with:
         go-version: ${{ env.GO_VERSION }}
 
-    - name: Test
-      run: make test
+    - name: checkout rie
+      uses: actions/checkout@v3
+      with:
+        path: csm-redfish-interface-emulator
+        repository: Cray-HPE/csm-redfish-interface-emulator
+        ref: v1.5.0
+        fetch-depth: 0
+      
+    - name: checkout shellspec
+      uses: actions/checkout@v3
+      with:
+        path: shellspec
+        repository: shellspec/shellspec
+        fetch-depth: 0
+
+    - if: ${{ matrix.os == 'macos-latest' }}
+      name: install docker for macos
+      run: |
+        HOMEBREW_NO_AUTO_UPDATE=1 brew install --cask docker
+        sudo /Applications/Docker.app/Contents/MacOS/Docker --unattended --install-privileged-components
+        open -a /Applications/Docker.app --args --unattended --accept-license
+        echo "waiting for Docker to start...this can take a while on github runners"
+        while ! /Applications/Docker.app/Contents/Resources/bin/docker info &>/dev/null; do sleep 1; done
+
+    - name: login to algol60 container registry
+      uses: docker/login-action@v2
+      with:
+        registry: artifactory.algol60.net
+        username: ${{ secrets.ARTIFACTORY_ALGOL60_USERNAME }}
+        password: ${{ secrets.ARTIFACTORY_ALGOL60_TOKEN }}
+
+    - name: standup simulation environment
+      id: setup-simulation-environment
+      continue-on-error: false
+      shell: bash
+      run: |
+        spec/support/bin/setup_simulator.sh ./csm-redfish-interface-emulator ./testdata/fixtures/rie/docker-compose.simple.yaml
+
+    - name: functional, integration, and edge tests
+      shell: bash
+      run: |
+        ln -s "$PWD"/shellspec/shellspec /usr/local/bin/
+        make test
+
+

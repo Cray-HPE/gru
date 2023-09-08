@@ -27,24 +27,48 @@
 package power
 
 import (
+	"fmt"
+	"github.com/Cray-HPE/gru/pkg/cmd"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli"
+	"github.com/Cray-HPE/gru/pkg/set"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"github.com/stmcginnis/gofish/redfish"
 )
 
-// NewChassisCommand creates the `power` subcommand for `chassis`.
-func NewChassisCommand() *cobra.Command {
+// NewPowerCycleCommand creates the `cycle` subcommand for `power`.
+func NewPowerCycleCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:    "power [flags] host [...host]",
-		Short:  "Power Control",
-		Long:   `Check power status, or power on, off, cycle, or reset a host.`,
+		Use:   "cycle",
+		Short: "Power cycle the target machine(s).",
+		Long: `Performs an ACPI shutdown and startup to power cycle the target machine(s).
+Also allows bypassing the OS shutdown, forcing a warm boot.`,
+		Run: func(c *cobra.Command, args []string) {
+			var resetType redfish.ResetType
+
+			hosts := cli.ParseHosts(args)
+
+			v := viper.GetViper()
+			bindErr := v.BindPFlags(c.Flags())
+			cmd.CheckError(bindErr)
+
+			resetType = redfish.GracefulRestartResetType
+			if v.GetBool("force") {
+				resetType = redfish.ForceRestartResetType
+			}
+
+			content := set.Async(issue, hosts, resetType)
+			cli.MapPrint(content)
+		},
 		Hidden: false,
 	}
-	c.AddCommand(
-		NewPowerOffCommand(),
-		NewPowerResetCommand(),
-		NewPowerOnCommand(),
-		NewPowerCycleCommand(),
-		NewPowerStatusCommand(),
-		NewPowerNMICommand(),
+	c.PersistentFlags().BoolP(
+		"force",
+		"f",
+		false,
+		fmt.Sprintln(
+			"Immediately restart waiting for the OS (warm boot).",
+		),
 	)
 	return c
 }
