@@ -41,7 +41,7 @@ jobs:
         while ! /Applications/Docker.app/Contents/Resources/bin/docker info &>/dev/null; do sleep 1; done
 
     - name: login to algol60 container registry
-      uses: docker/login-action@v2
+      uses: docker/login-action@v3
       with:
         registry: artifactory.algol60.net
         username: ${{ secrets.ARTIFACTORY_ALGOL60_USERNAME }}
