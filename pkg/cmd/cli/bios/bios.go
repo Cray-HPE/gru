@@ -27,9 +27,27 @@
 package bios
 
 import (
-	"github.com/stmcginnis/gofish/redfish"
 	"strings"
+
+	"github.com/spf13/cobra"
+	"github.com/stmcginnis/gofish/redfish"
 )
+
+// NewCommand creates the `chassis` subcommand.
+func NewCommand() *cobra.Command {
+	c := &cobra.Command{
+		Use:                   "bios",
+		DisableFlagsInUseLine: true,
+		Short:                 "BIOS control.",
+		Long:                  `Interact with a host's BIOS settings.`,
+		Hidden:                false,
+	}
+	c.AddCommand(
+		NewGetCommand(),
+		NewSetCommand(),
+	)
+	return c
+}
 
 func makeAttributes(args []string) redfish.BiosAttributes {
 	attributes := redfish.BiosAttributes{}

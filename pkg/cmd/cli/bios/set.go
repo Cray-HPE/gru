@@ -27,11 +27,10 @@
 package bios
 
 import (
+	"fmt"
+
 	"github.com/Cray-HPE/gru/pkg/auth"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/Cray-HPE/gru/pkg/set"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 // NewSetCommand creates the `bios` subcommand for `set`.
@@ -41,13 +40,15 @@ func NewSetCommand() *cobra.Command {
 		Short: "Sets BIOS attributes.",
 		Long:  `Sets BIOS attributes if the attribute is found and the value is valid.`,
 		Run: func(c *cobra.Command, args []string) {
-			hosts := cli.ParseHosts(args)
-			a := viper.GetStringSlice("attributes")
-			attributes := makeAttributes(a)
-			content := set.AsyncMap(setBIOSSettings, hosts, attributes)
-			cli.MapPrint(content)
+			// hosts := cli.ParseHosts(args)
+			// a := viper.GetStringSlice("attributes")
+			// attributes := makeAttributes(a)
+			// content := set.AsyncMap(setBIOSSettings, hosts, attributes)
+			content := getBIOSSettings(args[0])
+			fmt.Print(content)
+			// cli.MapPrint(content)
 		},
-		Hidden: true, // TODO: Remove or set to false once implemented.
+		Hidden: false,
 	}
 	c.PersistentFlags().StringSlice(
 		"attributes",
@@ -57,24 +58,31 @@ func NewSetCommand() *cobra.Command {
 	return c
 }
 
-// FIXME: This is a skeleton, and is neither done nor correct. It is a napkin of how this could work.
+// setBIOSSettings
 func setBIOSSettings(host string, attributes map[string]interface{}) interface{} {
 	c, err := auth.Connection(host)
+	if err != nil {
+		return err
+	}
 	defer c.Logout()
 
 	service := c.Service
 
 	systems, err := service.Systems()
 	if err != nil {
-		// TODO
+		return err
 	}
-	bios, err := systems[0].Bios()
+	b, err := systems[0].Bios()
 	if err != nil {
-		// TODO
+		return b
 	}
-	err = bios.UpdateBiosAttributes(attributes)
-	if err != nil {
-		// TODO
+	// err = bios.UpdateBiosAttributes(attributes)
+	// if err != nil {
+	// 	return bios
+	// }
+
+	for b, i := range b.Description {
+		fmt.Printf("%v-----------%+v\n", i, b)
 	}
-	return err
+	return b
 }

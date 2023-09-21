@@ -222,3 +222,6 @@ tidy:
 
 doc:
 	godoc -http=:8080 -index
+
+sim:
+	./spec/support/bin/setup_simulator.sh ./csm-redfish-interface-emulator ./testdata/fixtures/rie/docker-compose.simple.yaml

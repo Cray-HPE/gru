@@ -27,12 +27,27 @@
 package bios
 
 import (
+	"fmt"
+
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/Cray-HPE/gru/pkg/query"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+	"github.com/stmcginnis/gofish/redfish"
 )
+
+// StateChange represents a change in bios settings.
+type StateChange struct {
+	PreviousPowerState *redfish.Bios           `json:"Bios,omitempty"`
+	ResetType          *redfish.BiosAttributes `json:"BiosAttributes,omitempty"`
+	Error              error                   `json:"error,omitempty"`
+}
+
+// State represents a single bios state.
+type State struct {
+	Attribute *redfish.Bios `json:"Bios"`
+	Error     error         `json:"error,omitempty"`
+}
 
 // NewGetCommand creates a `bios` subcommand for `get`.
 func NewGetCommand() *cobra.Command {
@@ -45,7 +60,7 @@ func NewGetCommand() *cobra.Command {
 			content := query.Async(getBIOSSettings, hosts)
 			cli.MapPrint(content)
 		},
-		Hidden: true, // TODO: Remove or set to false once implemented.
+		Hidden: false,
 	}
 	c.PersistentFlags().StringSlice(
 		"attributes",
@@ -55,30 +70,78 @@ func NewGetCommand() *cobra.Command {
 	return c
 }
 
-// FIXME: This is a skeleton, and is neither done nor correct. It is a napkin of how this could work.
+type RecommendedBiosSetting struct {
+	Setting string `json:"setting,omitempty"`
+	Enabled string `json:"enabled,omitempty"`
+	Error   error  `json:"error,omitempty"`
+}
+
+type RecommendedBiosSettings []RecommendedBiosSetting
+
+// getBIOSSettings
 func getBIOSSettings(host string) interface{} {
+	param := RecommendedBiosSetting{}
 	c, err := auth.Connection(host)
+	if err != nil {
+		param.Error = err
+		return param
+	}
 	defer c.Logout()
 
 	service := c.Service
 
 	systems, err := service.Systems()
 	if err != nil {
-		// TODO
+		param.Error = err
+		return param
 	}
-	bios, err := systems[0].Bios()
+	b, err := systems[0].Bios()
 	if err != nil {
-		// TODO
+		param.Error = err
+		return param
 	}
-	a := viper.GetStringSlice("attributes")
-	if len(a) != 0 {
-		attributes := make(map[string]interface{})
-		for _, key := range a {
-			// FIXME: There is no validation for the key, and no handling if for the key if it doesn't exist.
-			// FIXME: Should handle vendor specific items where feasible, translating items such as "VTT" to the vendor's BIOS option.
-			attributes[key] = bios.Attributes[key]
+
+	params := RecommendedBiosSettings{}
+
+	for a, _ := range b.Attributes {
+		if a == "AutoPowerOn" ||
+			a == "VTdSupport" || a == "ProcAmdVirtualization" ||
+			a == "SRIOVEnable" || a == "Sriov" ||
+			a == "ProcessorHyperThreadingDisable" ||
+			a == "SvrMngmntAcpiIpmi" || a == "ProcX2Apic" {
+			state := b.Attributes.Bool(a)
+			param.Setting = a
+			param.Enabled = fmt.Sprintf("%v", state)
+			params = append(params, param)
 		}
-		return attributes
 	}
-	return bios.Attributes
+
+	return *b
 }
+
+// // issue issues an action against a host.
+// func issue(host string, action interface{}) interface{} {
+// 	sc := StateChange{}
+// 	c, err := auth.Connection(host)
+// 	if err != nil {
+// 		sc.Error = err
+// 		return sc
+// 	}
+// 	defer c.Logout()
+
+// 	service := c.Service
+
+// 	systems, err := service.Systems()
+// 	if err != nil {
+// 		sc.Error = err
+// 		return sc
+// 	}
+// 	sc.PreviousPowerState = systems[0].PowerState
+// 	sc.ResetType = action.(redfish.ResetType)
+// 	err = systems[0].Reset(sc.ResetType)
+// 	if err != nil {
+// 		sc.Error = err
+// 	}
+
+// 	return sc
+// }
