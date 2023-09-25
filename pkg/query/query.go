@@ -28,8 +28,9 @@ package query
 
 import (
 	"fmt"
-	"github.com/spf13/viper"
 	"sync"
+
+	"github.com/spf13/viper"
 )
 
 // Async runs an async query (fn) against a list of hosts. Returns a map of each host with their
