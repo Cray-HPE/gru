@@ -4,12 +4,18 @@ insecure: true
 username: root
 password: root_password
 hosts:
- 127.0.0.1:5000:
-   username: root
-   password: root_password
- 127.0.0.1:5001:
-   username: root
-   password: root_password
- 127.0.0.1:5002:
-   username: root
-   password: root_password
+  127.0.0.1:5000:
+    username: root
+    password: root_password
+  127.0.0.1:5001:
+    username: root
+    password: root_password
+  127.0.0.1:5002:
+    username: root
+    password: root_password
+  127.0.0.1:5003:
+    username: root
+    password: root_password
+  127.0.0.1:5004:
+    username: root
+    password: root_password

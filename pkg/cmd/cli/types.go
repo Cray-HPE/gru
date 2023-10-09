@@ -24,48 +24,21 @@
 
 */
 
-package boot
+package cli
 
 import (
-	"github.com/Cray-HPE/gru/pkg/auth"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/Cray-HPE/gru/pkg/query"
-	"github.com/spf13/cobra"
+	"github.com/stmcginnis/gofish/redfish"
 )
 
-// NewShowCommand creates the `boot` subcommand for `show`.
-func NewShowCommand() *cobra.Command {
-	c := &cobra.Command{
-		Use:   "boot [flags] host [...host]",
-		Short: "Boot information",
-		Long:  `Show the current BootOrder; BootNext, networkRetry, and more.`,
-		Run: func(c *cobra.Command, args []string) {
-			hosts := cli.ParseHosts(args)
-			content := query.Async(getBootInformation, hosts)
-			cli.MapPrint(content)
-		},
-	}
-	return c
+// StateChange represents a change in power states.
+type StateChange struct {
+	PreviousPowerState redfish.PowerState `json:"previousPowerState,omitempty"`
+	ResetType          redfish.ResetType  `json:"resetType,omitempty"`
+	Error              error              `json:"error,omitempty"`
 }
 
-func getBootInformation(host string, args ...string) interface{} {
-	boot := Boot{}
-	c, err := auth.Connection(host)
-	if err != nil {
-		boot.Error = err
-		return boot
-	}
-
-	defer c.Logout()
-
-	service := c.Service
-
-	systems, err := service.Systems()
-	if err != nil {
-		boot.Error = err
-	}
-	// FIXME: HPE and GB return boot orders without any identifiers, Intel returns nothing.
-	boot.Next = systems[0].Boot.BootNext
-	boot.Order = systems[0].Boot.BootOrder
-	return boot
+// State represents a single power state.
+type State struct {
+	PowerState redfish.PowerState `json:"powerState"`
+	Error      error              `json:"error,omitempty"`
 }

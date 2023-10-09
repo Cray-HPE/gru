@@ -18,7 +18,7 @@ services:
     hostname: x0c0s1b0
     image: artifactory.algol60.net/csm-docker/stable/csm-rie:1.5.0
     environment:
-      - MOCKUPFOLDER=DL325
+      - MOCKUPFOLDER=Gigabyte
       - XNAME=x0c0s1b0
       - "AUTH_CONFIG=root:root_password:Administrator"
       - PORT=5000
@@ -36,3 +36,24 @@ services:
     ports:
       - "5002:5000"
 
+  rfemulator3:
+    hostname: x0c0r3b0
+    image: artifactory.algol60.net/csm-docker/stable/csm-rie:1.5.0
+    environment:
+      - MOCKUPFOLDER=EX425
+      - XNAME=x0c0r3b0
+      - "AUTH_CONFIG=root:root_password:Administrator"
+      - PORT=5000
+    ports:
+      - "5003:5000"
+
+  rfemulator4:
+    hostname: x0c0r4b0
+    image: artifactory.algol60.net/csm-docker/stable/csm-rie:1.5.0
+    environment:
+      - MOCKUPFOLDER=XL675d_A40
+      - XNAME=x0c0r4b0
+      - "AUTH_CONFIG=root:root_password:Administrator"
+      - PORT=5000
+    ports:
+      - "5004:5000"

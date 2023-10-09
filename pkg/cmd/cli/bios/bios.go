@@ -27,16 +27,119 @@
 package bios
 
 import (
-	"github.com/stmcginnis/gofish/redfish"
+	"fmt"
+	"os"
+	"strconv"
 	"strings"
+
+	"github.com/Cray-HPE/gru/pkg/auth"
+	"github.com/stmcginnis/gofish/redfish"
+	"gopkg.in/yaml.v3"
 )
 
-func makeAttributes(args []string) redfish.BiosAttributes {
-	attributes := redfish.BiosAttributes{}
+var (
+	fromfile string
+	virt     = false
+	pending  = false
+	defaults = false
+)
+
+// getBiosAttributes returns the computer systems, the bios (for system 0), and an error/nil from an endpoint
+func getBiosAttributes(host string) (systems []*redfish.ComputerSystem, bios *redfish.Bios, err error) {
+	// set up the client
+	c, err := auth.Connection(host)
+	if err != nil {
+		return systems, bios, err
+	}
+	defer c.Logout()
+
+	// get the sytems
+	service := c.Service
+	systems, err = service.Systems()
+	if err != nil {
+		return systems, bios, err
+	}
+
+	// get the bios for the first system
+	// FIXME: return all?
+	bios, err = systems[0].Bios()
+	if err != nil {
+		return systems, bios, err
+	}
+
+	return systems, bios, nil
+}
+
+// makeAttributes makes a map[string]interface out of a comma separate slice of \
+// key=values, which are split on on '='.  the resultant value is a string,
+// which does not work for all attributes
+func makeAttributes(args []string) map[string]interface{} {
+	attributes := make(map[string]interface{}, 0)
 	for _, attribute := range args {
 		if key, value, ok := strings.Cut(attribute, "="); ok {
-			attributes[key] = value
+			// intel seems to mostly use int.  strings bork up the bios attributes
+			// FIXME: this is stupid because other vendors use strings and ints
+			// it is also stupid because intel does not show allowable values as the
+			// others do. handle multiple vendors appropriately
+			s, err := strconv.Atoi(value)
+			if err != nil {
+				attributes[key] = fmt.Sprintf("cannot convert %v to an int!", value)
+			}
+			attributes[key] = s
 		}
 	}
 	return attributes
+}
+
+// unmarshalBiosKeyValFile unmarshals a yaml file into key/value pairs as a map[string]interface{}
+func unmarshalBiosKeyValFile(file string) (settings map[string]interface{}, err error) {
+	settings = make(map[string]interface{}, 0)
+
+	biosKv, err := os.ReadFile(file)
+	if err != nil {
+		return settings, err
+	}
+	err = yaml.Unmarshal(biosKv, settings)
+	if err != nil {
+		return settings, err
+	}
+
+	return settings, nil
+}
+
+// virtSettings is a shortcut for enabling/disabling virtualization as it often
+// requires more than one setting to be enabled and varies between vendors
+// it takes a bool to determine to enable/disable and the manufacturer name
+// to properly determine the settings (disable is currently not supported)
+func virtSettings(enable bool, manufacturer string) (settings redfish.BiosAttributes) {
+	settings = redfish.BiosAttributes{}
+
+	switch manufacturer {
+	case "Intel Corporation":
+		if enable {
+			settings = IntelEnableVirtualization
+		} else {
+			return nil
+		}
+	case "Cray Inc.":
+		if enable {
+			settings = CrayEnableVirtualization
+		} else {
+			return nil
+		}
+	case "GIGABYTE":
+		if enable {
+			settings = GigabyteEnableVirtualization
+		} else {
+			return nil
+		}
+	case "HPE":
+		if enable {
+			settings = HpeEnableVirtualization
+		} else {
+			return nil
+		}
+	}
+
+	return settings
 }

@@ -27,54 +27,137 @@
 package bios
 
 import (
-	"github.com/Cray-HPE/gru/pkg/auth"
+	"fmt"
+
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/Cray-HPE/gru/pkg/set"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/stmcginnis/gofish/redfish"
 )
 
 // NewSetCommand creates the `bios` subcommand for `set`.
 func NewSetCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "set attribute=value[,keyN=valueN]",
+		Use:   "bios",
 		Short: "Sets BIOS attributes.",
+		Args:  cobra.MinimumNArgs(1),
 		Long:  `Sets BIOS attributes if the attribute is found and the value is valid.`,
 		Run: func(c *cobra.Command, args []string) {
+			fromfile, _ = c.PersistentFlags().GetString("from-file")
+			defaults, _ = c.PersistentFlags().GetBool("defaults")
 			hosts := cli.ParseHosts(args)
+			virt = viper.GetBool("virt")
 			a := viper.GetStringSlice("attributes")
 			attributes := makeAttributes(a)
 			content := set.AsyncMap(setBIOSSettings, hosts, attributes)
 			cli.MapPrint(content)
 		},
-		Hidden: true, // TODO: Remove or set to false once implemented.
+		Hidden: false,
 	}
 	c.PersistentFlags().StringSlice(
 		"attributes",
 		[]string{},
-		"Comma delimited list of attributes and values to set them to.",
+		"Comma delimited list of attributes and values to set them to: attribute=value[,keyN=valueN].",
 	)
+	c.PersistentFlags().String(
+		"from-file",
+		"",
+		"Path to a key/value YML file with bios attributes and their desired value(s)",
+	)
+	c.PersistentFlags().Bool(
+		"virt",
+		false,
+		"Enable virtualization using pre-determined, per-vendor settings",
+	)
+	c.PersistentFlags().Bool(
+		"defaults",
+		false,
+		"Reset all BIOS attributes to vendor defaults",
+	)
+	c.MarkFlagsMutuallyExclusive("attributes", "from-file", "virt", "defaults")
 	return c
 }
 
-// FIXME: This is a skeleton, and is neither done nor correct. It is a napkin of how this could work.
-func setBIOSSettings(host string, attributes map[string]interface{}) interface{} {
-	c, err := auth.Connection(host)
-	defer c.Logout()
+// setBIOSSettings sets bios settings on the host
+func setBIOSSettings(host string, requestedAttributes map[string]interface{}) interface{} {
+	var pendingAttrs = map[string]interface{}{}
 
-	service := c.Service
+	systems, bios, err := getBiosAttributes(host)
+	if err != nil {
+		pendingAttrs = map[string]interface{}{
+			"Error": fmt.Sprintf("%v", err),
+		}
+		return pendingAttrs
+	}
 
-	systems, err := service.Systems()
-	if err != nil {
-		// TODO
+	// Restore default BIOS values
+	if defaults {
+		err = bios.ResetBios()
+		if err != nil {
+			pendingAttrs = map[string]interface{}{
+				"Error": fmt.Sprintf("BIOS reset failure: %v", err),
+			}
+			return pendingAttrs
+		}
+		return pendingAttrs
 	}
-	bios, err := systems[0].Bios()
-	if err != nil {
-		// TODO
+
+	var attributes = redfish.BiosAttributes{}
+
+	// if virtualization is requested to be enabled
+	if virt {
+		// use vendor-specific settings, pre-determined and known to work
+		attributes = virtSettings(virt, systems[0].Manufacturer)
 	}
+
+	if len(requestedAttributes) == 0 {
+		// if no attributes are set, check the file
+		if fromfile != "" {
+			settings, err := unmarshalBiosKeyValFile(fromfile)
+			if err != nil {
+				pendingAttrs = map[string]interface{}{
+					"Error": fmt.Sprintf("%v", err),
+				}
+				return pendingAttrs
+			}
+			// loop through the file's key/values and add them to the map
+			// avoid adding duplicate keys
+			for k, v := range settings {
+				_, exists := requestedAttributes[k]
+				if !exists {
+					attributes[k] = v
+				}
+			}
+		}
+	} else {
+		// create a map of all requested attributes
+		for k, v := range requestedAttributes {
+			attributes[k] = v
+		}
+	}
+
+	// update the bios settings via redfish
 	err = bios.UpdateBiosAttributes(attributes)
 	if err != nil {
-		// TODO
+		pendingAttrs = map[string]interface{}{
+			"Error": fmt.Sprintf("%v", err),
+		}
+		return pendingAttrs
 	}
-	return err
+
+	// get the bios object again to check for the pending changes
+	_, biosPost, err := getBiosAttributes(host)
+	if err != nil {
+		pendingAttrs = map[string]interface{}{
+			"Error": fmt.Sprintf("%v", err),
+		}
+		return pendingAttrs
+	}
+
+	// get the pending changes
+	pendingAttrs = getPendingAttributes(biosPost)
+
+	// return the entire Pending key
+	return pendingAttrs
 }
