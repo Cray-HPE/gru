@@ -28,25 +28,13 @@ package power
 
 import (
 	"github.com/Cray-HPE/gru/pkg/auth"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/stmcginnis/gofish/redfish"
 )
 
-// StateChange represents a change in power states.
-type StateChange struct {
-	PreviousPowerState redfish.PowerState `json:"previousPowerState,omitempty"`
-	ResetType          redfish.ResetType  `json:"resetType,omitempty"`
-	Error              error              `json:"error,omitempty"`
-}
-
-// State represents a single power state.
-type State struct {
-	PowerState redfish.PowerState `json:"powerState"`
-	Error      error              `json:"error,omitempty"`
-}
-
 // Issue issues an action against a host.
 func Issue(host string, action interface{}) interface{} {
-	sc := StateChange{}
+	sc := cli.StateChange{}
 	c, err := auth.Connection(host)
 	if err != nil {
 		sc.Error = err
@@ -72,8 +60,8 @@ func Issue(host string, action interface{}) interface{} {
 }
 
 // status retrieves the redfish.PowerState for a machine..
-func status(host string) interface{} {
-	s := State{}
+func status(host string, args ...string) interface{} {
+	s := cli.State{}
 	c, err := auth.Connection(host)
 	if err != nil {
 		s.Error = err

@@ -186,6 +186,14 @@ clean:
 
 test: tools unit functional integration edge
 
+sim:
+	if ! [ -d ./csm-redfish-interface-emulator ]; then git clone https://github.com/Cray-HPE/csm-redfish-interface-emulator.git; fi
+	spec/support/bin/setup_simulator.sh ./csm-redfish-interface-emulator ./testdata/fixtures/rie/docker-compose.simple.yaml
+
+spec:
+	if ! [ -d ./shellspec ]; then git clone https://github.com/shellspec/shellspec.git; fi
+	ln -s "$(shell pwd)"/shellspec/shellspec /usr/local/bin/
+
 unit: build
 	mkdir -pv $(TEST_OUTPUT_DIR)/unittest $(TEST_OUTPUT_DIR)/coverage
 	go test ./cmd/... ./pkg/... -v -coverprofile $(TEST_OUTPUT_DIR)/coverage.out -covermode count | tee "$(TEST_OUTPUT_DIR)/testing.out"

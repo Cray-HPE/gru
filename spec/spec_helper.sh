@@ -40,6 +40,7 @@ spec_helper_precheck() {
   # also helpful for cani config fixtures if this is a static, abs path
   setenv GRU_DIR="/tmp/.gru"
   setenv GRU_CONF="/tmp/.gru/gru.yml"
+  setenv GRU_BIOS_KV="/tmp/.gru/attributes.yml"
 }
 
 # This callback function will be invoked after a specfile has been loaded.
@@ -50,7 +51,7 @@ spec_helper_loaded() {
 # This callback function will be invoked after core modules has been loaded.
 spec_helper_configure() {
   # Available functions: import, before_each, after_each, before_all, after_all
-  : import 'support/custom_matcher'
+  import 'support/custom_matcher'
 }
 
 # compare value to file content
@@ -65,6 +66,13 @@ use_valid_config(){
   mkdir -p "$(dirname "$GRU_CONF")"
   cp "$FIXTURES"/gru/configs/gru.yml "$GRU_CONF"
 }
+
+use_valid_bios_attributes_file(){
+  #shellcheck disable=SC2317
+  mkdir -p "$(dirname "$GRU_CONF")"
+  cp "$FIXTURES"/gru/configs/attributes.yml "$GRU_BIOS_KV"
+}
+
 
 # Custom matcher used to find a string inside of a text containing ANSI escape codes.
 # https://github.com/shellspec/shellspec/issues/278

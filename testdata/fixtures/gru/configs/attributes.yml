@@ -1,0 +1,3 @@
+---
+BootTimeout: 10
+SRIOVEnable: 1
