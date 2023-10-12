@@ -76,6 +76,7 @@ func NewSetCommand() *cobra.Command {
 		"Reset all BIOS attributes to vendor defaults",
 	)
 	c.MarkFlagsMutuallyExclusive("attributes", "from-file", "virt", "defaults")
+	c.Root().MarkFlagsOneRequired("attributes", "from-file", "virt", "defaults")
 	return c
 }
 
