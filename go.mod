@@ -28,9 +28,10 @@ module github.com/Cray-HPE/gru
 go 1.20
 
 require (
-	github.com/spf13/cobra v1.7.0
+	github.com/spf13/cobra v1.7.1-0.20231009125040-95d8a1e45d77
 	github.com/spf13/viper v1.13.0
 	github.com/stmcginnis/gofish v0.13.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -50,5 +51,4 @@ require (
 	golang.org/x/text v0.3.8 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
