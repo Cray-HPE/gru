@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0135",
+  "DefaultValue": "True",
+  "DisplayName": "Disable Memory Error Injection",
+  "HelpText": "True: UMC::CH::MiscCfg[DisErrInj]=1",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "False",
+      "ValueName": "False"
+    },
+    {
+      "ValueDisplayName": "True",
+      "ValueName": "True"
+    }
+  ]
+}

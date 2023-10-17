@@ -1,0 +1,26 @@
+{
+  "AttributeName": "IPMI102",
+  "DefaultValue": "Do Nothing",
+  "DisplayName": "FRB-2 Timer Policy",
+  "HelpText": "Configure how the system should respond if the FRB-2 Timer expires. Not available if FRB-2 Timer is disabled.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Do Nothing",
+      "ValueName": "Do Nothing"
+    },
+    {
+      "ValueDisplayName": "Reset",
+      "ValueName": "Reset"
+    },
+    {
+      "ValueDisplayName": "Power Down",
+      "ValueName": "Power Down"
+    },
+    {
+      "ValueDisplayName": "Power Cycle",
+      "ValueName": "Power Cycle"
+    }
+  ]
+}

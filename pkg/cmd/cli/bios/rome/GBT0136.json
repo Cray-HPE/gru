@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0136",
+  "DefaultValue": "Enabled",
+  "DisplayName": "No Snoop",
+  "HelpText": "Enables or Disables PCI Express Device No Snoop option.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

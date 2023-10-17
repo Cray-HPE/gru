@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0499",
+  "DefaultValue": 0,
+  "DisplayName": "PCIe Root Port Corr Err Mask Reg",
+  "HelpText": "Initialize the PCIe AER Corrected Error Mask register of Root Port",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 4294967295
+}

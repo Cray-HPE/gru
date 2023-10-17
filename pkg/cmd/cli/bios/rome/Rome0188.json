@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0188",
+  "DefaultValue": "Auto",
+  "DisplayName": "xGMI Max Link Width Control",
+  "HelpText": "Auto = Use default xGMI max supported link width  Manual = User can set custom xGMI max link width",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    }
+  ]
+}

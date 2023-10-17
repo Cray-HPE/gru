@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0059",
+  "DefaultValue": "Auto",
+  "DisplayName": "SMT Control",
+  "HelpText": "Can be used to disable symmetric multithreading. To re-enable SMT, a POWER CYCLE is needed after selecting the 'Auto' option. WARNING - S3 is NOT SUPPORTED on systems where SMT is disabled.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disable",
+      "ValueName": "Disable"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

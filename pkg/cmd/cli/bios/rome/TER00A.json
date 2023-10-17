@@ -1,0 +1,8 @@
+{
+  "AttributeName": "TER00A",
+  "DefaultValue": true,
+  "DisplayName": "VT-UTF8 Combo Key Support",
+  "HelpText": "Enable VT-UTF8 Combination Key Support for ANSI/VT100 terminals",
+  "ReadOnly": false,
+  "Type": "Boolean"
+}

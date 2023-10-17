@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0336",
+  "DefaultValue": 255,
+  "DisplayName": "ACPI SLIT remote inter-SLink distance",
+  "HelpText": "Specify the distance between two SLink domains, each on a different socket.",
+  "LowerBound": 10,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 255
+}

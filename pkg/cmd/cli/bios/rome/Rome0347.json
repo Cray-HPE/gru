@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0347",
+  "DefaultValue": 0,
+  "DisplayName": "AddrCmdSetup",
+  "HelpText": "Setup time on CAD bus signals. Valid values 3Fh-0h.",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 63
+}

@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0206",
+  "DefaultValue": "Auto",
+  "DisplayName": "Sata RAS Support",
+  "HelpText": "Disable or enable Sata RAS Support",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

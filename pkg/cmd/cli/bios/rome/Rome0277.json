@@ -1,0 +1,30 @@
+{
+  "AttributeName": "Rome0277",
+  "DefaultValue": "Auto",
+  "DisplayName": "NTB Mode",
+  "HelpText": "Select NTB Mode (Core 0, Port 0)",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "NTB Disabled",
+      "ValueName": "NTB Disabled"
+    },
+    {
+      "ValueDisplayName": "NTB Primary",
+      "ValueName": "NTB Primary"
+    },
+    {
+      "ValueDisplayName": "NTB Secondary",
+      "ValueName": "NTB Secondary"
+    },
+    {
+      "ValueDisplayName": "NTB Random",
+      "ValueName": "NTB Random"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

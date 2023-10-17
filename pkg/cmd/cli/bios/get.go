@@ -76,6 +76,11 @@ func NewGetCommand() *cobra.Command {
 		false,
 		"Shortcut to get all pre-determined, per-vendor settings for virtualization",
 	)
+	c.PersistentFlags().Bool(
+		"friendly",
+		false,
+		"Use friendly attribute names (when applicable)",
+	)
 	return c
 }
 
@@ -140,6 +145,9 @@ func getBIOSSettings(host string, requestedAttributes ...string) interface{} {
 			// use vendor-specific settings, pre-determined and known to work
 			virtAttrs := virtSettings(virt, systems[0].Manufacturer)
 			for k := range virtAttrs {
+				for a, v := range RomeMap.Attributes {
+					fmt.Println(a, v)
+				}
 				attributes[k] = bios.Attributes[k]
 			}
 		} else {
@@ -209,6 +217,5 @@ func getPendingAttributes(bios *redfish.Bios) map[string]interface{} {
 			// "UpdateApplyTimes": at,
 		},
 	}
-
 	return pendingAttrs
 }

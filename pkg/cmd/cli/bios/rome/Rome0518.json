@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0518",
+  "DefaultValue": "Negative",
+  "DisplayName": "Fan Polarity",
+  "HelpText": "0 = negative  1 = positive",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Negative",
+      "ValueName": "Negative"
+    },
+    {
+      "ValueDisplayName": "Positive",
+      "ValueName": "Positive"
+    }
+  ]
+}

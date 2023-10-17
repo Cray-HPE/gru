@@ -1,0 +1,17 @@
+{
+  "Dependency": {
+    "MapFrom": [
+      {
+        "MapFromAttribute": "SYSACS",
+        "MapFromCondition": "EQU",
+        "MapFromProperty": "CurrentValue",
+        "MapFromValue": 1
+      }
+    ],
+    "MapToAttribute": "GBT0136",
+    "MapToProperty": "GrayOut",
+    "MapToValue": "true"
+  },
+  "DependencyFor": "SYSACS",
+  "Type": "Map"
+}

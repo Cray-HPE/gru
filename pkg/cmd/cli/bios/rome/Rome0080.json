@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0080",
+  "DefaultValue": "Auto",
+  "DisplayName": "ACPI SRAT L3 Cache As NUMA Domain",
+  "HelpText": "Enabled: Each CCX in the system will be declared as a separate NUMA domain.  Disabled: Memory Addressing  NUMA nodes per socket will be declared.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0070",
+  "DefaultValue": "False",
+  "DisplayName": "PSP error injection support",
+  "HelpText": "'True' enables error injection.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "False",
+      "ValueName": "False"
+    },
+    {
+      "ValueDisplayName": "True",
+      "ValueName": "True"
+    }
+  ]
+}

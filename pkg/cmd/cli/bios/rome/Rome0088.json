@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0088",
+  "DefaultValue": "Auto",
+  "DisplayName": "Overclock",
+  "HelpText": "Memory Overclock Settings",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

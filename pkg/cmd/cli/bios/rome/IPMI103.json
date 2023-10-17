@@ -1,0 +1,18 @@
+{
+  "AttributeName": "IPMI103",
+  "DefaultValue": "Disabled",
+  "DisplayName": "OS Watchdog Timer",
+  "HelpText": "If enabled, starts a BIOS timer which can only be shut off by Management Software after the OS loads.  Helps determine that the OS successfully loaded or follows the OS Boot Watchdog Timer policy.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

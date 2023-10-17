@@ -1,0 +1,22 @@
+{
+  "AttributeName": "TCG016",
+  "DefaultValue": "Auto",
+  "DisplayName": "  Device Select",
+  "HelpText": "TPM 1.2 will restrict support to TPM 1.2 devices, TPM 2.0 will restrict support to TPM 2.0 devices, Auto will support both with the default set to TPM 2.0 devices if not found, TPM 1.2 devices will be enumerated ",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "TPM 1.2",
+      "ValueName": "TPM 1.2"
+    },
+    {
+      "ValueDisplayName": "TPM 2.0",
+      "ValueName": "TPM 2.0"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0550",
+  "DefaultValue": "Auto",
+  "DisplayName": "Diagnostic Mode",
+  "HelpText": "Select Diag mode enable or disable",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

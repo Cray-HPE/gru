@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0040",
+  "DefaultValue": "Auto",
+  "DisplayName": "ACPI _CST C1 Declaration",
+  "HelpText": "Determines whether or not to declare the C1 state to the OS.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

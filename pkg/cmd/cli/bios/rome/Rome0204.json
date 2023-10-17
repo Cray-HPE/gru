@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0204",
+  "DefaultValue": "Auto",
+  "DisplayName": "Sync Flood on PCIe Fatal Error",
+  "HelpText": "When 'Sync Flood on PCIe Fatal Error' is True, PcdAmdPcieSyncFloodOnFatal should be set to True.    When 'Sync Flood on PCIe Fatal Error' is False, PcdAmdPcieSyncFloodOnFatal should be set to False.    When 'Sync Flood on PCIe Fatal Error' is Auto, PcdAmdPcieSyncFloodOnFatal should retain its AGESA default.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "True",
+      "ValueName": "True"
+    },
+    {
+      "ValueDisplayName": "False",
+      "ValueName": "False"
+    }
+  ]
+}

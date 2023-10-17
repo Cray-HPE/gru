@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0482",
+  "DefaultValue": "Off",
+  "DisplayName": "PCIe Compliance Mode",
+  "HelpText": "PCIe Link Compliance Mode.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Off",
+      "ValueName": "Off"
+    },
+    {
+      "ValueDisplayName": "On",
+      "ValueName": "On"
+    }
+  ]
+}

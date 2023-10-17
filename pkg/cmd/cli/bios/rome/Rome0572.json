@@ -1,0 +1,26 @@
+{
+  "AttributeName": "Rome0572",
+  "DefaultValue": "Onboard Device",
+  "DisplayName": "Output Device Type",
+  "HelpText": "Select Output Device Type",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "First loaded Device",
+      "ValueName": "First loaded Device"
+    },
+    {
+      "ValueDisplayName": "Onboard Device",
+      "ValueName": "Onboard Device"
+    },
+    {
+      "ValueDisplayName": "External Device",
+      "ValueName": "External Device"
+    },
+    {
+      "ValueDisplayName": "Specific Device",
+      "ValueName": "Specific Device"
+    }
+  ]
+}

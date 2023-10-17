@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0169",
+  "DefaultValue": "Auto",
+  "DisplayName": "Early Link Speed",
+  "HelpText": "Set Early Link Speed",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Gen1",
+      "ValueName": "Gen1"
+    },
+    {
+      "ValueDisplayName": "Gen2",
+      "ValueName": "Gen2"
+    }
+  ]
+}

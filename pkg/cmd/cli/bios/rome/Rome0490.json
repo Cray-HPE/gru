@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0490",
+  "DefaultValue": "Polled",
+  "DisplayName": "PCIe GHES Notify Type",
+  "HelpText": "Notification type for PCIe corrected errors",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Polled",
+      "ValueName": "Polled"
+    },
+    {
+      "ValueDisplayName": "SCI",
+      "ValueName": "SCI"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "TCG003",
+  "DefaultValue": "Enable",
+  "DisplayName": "  Security Device Support",
+  "HelpText": "Enables or Disables BIOS support for security device. O.S. will not show Security Device. TCG EFI protocol and INT1A interface will not be available.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disable",
+      "ValueName": "Disable"
+    },
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    }
+  ]
+}

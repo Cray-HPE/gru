@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0573",
+  "DefaultValue": "Enabled",
+  "DisplayName": "Program All VR",
+  "HelpText": "Enable/Disable program all VR on MB.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "AttributeName": "TER00B",
+  "DefaultValue": false,
+  "DisplayName": "Recorder Mode",
+  "HelpText": "With this mode enabled only text will be sent. This is to capture Terminal data.",
+  "ReadOnly": false,
+  "Type": "Boolean"
+}

@@ -1,0 +1,26 @@
+{
+  "AttributeName": "GBT0140",
+  "DefaultValue": "5",
+  "DisplayName": "Link Training Retry",
+  "HelpText": "Defines number of Retry Attempts software will take to retrain the link if previous training attempt was unsuccessful.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "2",
+      "ValueName": "2"
+    },
+    {
+      "ValueDisplayName": "3",
+      "ValueName": "3"
+    },
+    {
+      "ValueDisplayName": "5",
+      "ValueName": "5"
+    }
+  ]
+}

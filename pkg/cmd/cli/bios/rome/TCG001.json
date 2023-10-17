@@ -1,0 +1,18 @@
+{
+  "AttributeName": "TCG001",
+  "DefaultValue": "Enabled",
+  "DisplayName": "  TPM State",
+  "HelpText": "Enable/Disable Security Device. NOTE: Your Computer will reboot during restart in order to change State of the Device.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

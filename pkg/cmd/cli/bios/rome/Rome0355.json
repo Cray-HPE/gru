@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0355",
+  "DefaultValue": 0,
+  "DisplayName": "Target Static Lane Select Upper 32 bit",
+  "HelpText": "Static Lane Select for Upper 32 bit. The bit mask represents the bits to be read",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 4294967295
+}

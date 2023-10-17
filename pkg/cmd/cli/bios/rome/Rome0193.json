@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0193",
+  "DefaultValue": "Auto",
+  "DisplayName": "BoostFmaxEn",
+  "HelpText": "Auto = Use the default Fmax  Manual = User can set the boost Fmax",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

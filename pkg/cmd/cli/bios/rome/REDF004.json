@@ -1,0 +1,11 @@
+{
+  "AttributeName": "REDF004",
+  "DefaultValue": 65535,
+  "DisplayName": "IP Port",
+  "HelpText": "Enter IP Port",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 1,
+  "Type": "Integer",
+  "UpperBound": 65535
+}

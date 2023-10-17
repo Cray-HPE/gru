@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0552",
+  "DefaultValue": "Disabled",
+  "DisplayName": "ErP Mode",
+  "HelpText": "ErP Lot 9 support",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Lot 9",
+      "ValueName": "Lot 9"
+    }
+  ]
+}

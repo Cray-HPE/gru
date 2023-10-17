@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0079",
+  "DefaultValue": "Auto",
+  "DisplayName": "DRAM map inversion",
+  "HelpText": "Inverting the map will cause the highest memory channels to get assigned the lowest addresses in the system.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

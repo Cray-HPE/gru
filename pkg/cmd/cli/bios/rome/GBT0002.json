@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0002",
+  "DefaultValue": "Enabled",
+  "DisplayName": "PCIE_2 ROM",
+  "HelpText": "Enable/Disable PCIE_2 I/O ROM.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0162",
+  "DefaultValue": "Enabled",
+  "DisplayName": "IOMMU",
+  "HelpText": "Enable/Disable IOMMU",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

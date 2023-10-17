@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0334",
+  "DefaultValue": 60,
+  "DisplayName": "ACPI SLIT remote SLink distance",
+  "HelpText": "Specify the distance to an SLink domain on the other socket.",
+  "LowerBound": 10,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 255
+}

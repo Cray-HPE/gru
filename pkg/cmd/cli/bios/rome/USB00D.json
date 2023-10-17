@@ -1,0 +1,18 @@
+{
+  "AttributeName": "USB00D",
+  "DefaultValue": "Enabled",
+  "DisplayName": "Port 60/64 Emulation",
+  "HelpText": "Enables I/O port 60h/64h emulation support. This should be enabled for the complete USB keyboard legacy support for non-USB aware OSes.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0025",
+  "DefaultValue": "Enabled",
+  "DisplayName": "MEZZ, root port 2",
+  "HelpText": "Enable/Disable MEZZ, root port 2.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

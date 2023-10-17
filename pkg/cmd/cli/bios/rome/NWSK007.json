@@ -1,0 +1,18 @@
+{
+  "AttributeName": "NWSK007",
+  "DefaultValue": "Disabled",
+  "DisplayName": "Ipv6 HTTP Support",
+  "HelpText": "Enable/Disable IPv6 HTTP boot support. If disabled, IPv6 HTTP boot support will not be available.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

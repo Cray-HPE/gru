@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0066",
+  "DefaultValue": "Auto",
+  "DisplayName": "Freeze DF module queues on error",
+  "HelpText": "Controls DF::PIEConfig[DisImmSyncFloodOnFatalError]  Disabling this option sets DF:PIEConfig[DisImmSyncFloodOnFatalError]",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

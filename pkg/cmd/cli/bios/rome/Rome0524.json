@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0524",
+  "DefaultValue": "Auto",
+  "DisplayName": "XHCI3 enable (Socket1)",
+  "HelpText": "Enable or disable USB3 controller.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

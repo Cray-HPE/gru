@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0161",
+  "DefaultValue": "1",
+  "DisplayName": "Write Timing Sweep Step Size",
+  "HelpText": "This options supports step size for write Data Eye. Supported options are 1, 2 and 4",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "1",
+      "ValueName": "1"
+    },
+    {
+      "ValueDisplayName": "2",
+      "ValueName": "2"
+    },
+    {
+      "ValueDisplayName": "4",
+      "ValueName": "4"
+    }
+  ]
+}

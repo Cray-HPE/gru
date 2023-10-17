@@ -1,0 +1,18 @@
+{
+  "AttributeName": "TER010",
+  "DefaultValue": "COM1/SOL",
+  "DisplayName": "Redirection COM Port",
+  "HelpText": "Select a COM port to display redirection of Legacy OS and Legacy OPROM Messages",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "COM1/SOL",
+      "ValueName": "COM1/SOL"
+    },
+    {
+      "ValueDisplayName": "COM2",
+      "ValueName": "COM2"
+    }
+  ]
+}

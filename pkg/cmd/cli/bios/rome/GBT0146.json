@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0146",
+  "DefaultValue": "Disabled",
+  "DisplayName": "IDO Request Enable",
+  "HelpText": "If supported by hardware and set to 'Enabled', this permits setting the number of ID-Based Ordering (IDO) bit (Attribute[2]) requests to be initiated.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

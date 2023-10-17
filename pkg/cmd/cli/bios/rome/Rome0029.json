@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0029",
+  "DefaultValue": "Auto",
+  "DisplayName": "RedirectForReturnDis",
+  "HelpText": "From a workaround for GCC/C000005 issue for XV Core on CZ A0, setting MSRC001_1029 Decode Configuration (DE_CFG) bit 14 [DecfgNoRdrctForReturns] to 1",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "1",
+      "ValueName": "1"
+    },
+    {
+      "ValueDisplayName": "0",
+      "ValueName": "0"
+    }
+  ]
+}

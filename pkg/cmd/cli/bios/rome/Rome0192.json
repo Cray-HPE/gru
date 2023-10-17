@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0192",
+  "DefaultValue": "Auto",
+  "DisplayName": "CPPC",
+  "HelpText": "FEATURE_CPPC_MASK",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

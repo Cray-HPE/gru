@@ -1,0 +1,166 @@
+{
+  "AttributeName": "Rome0094",
+  "DefaultValue": "Auto",
+  "DisplayName": "Tras",
+  "HelpText": "Specifies the Active to Precharge Delay Time.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "15h Clk",
+      "ValueName": "15h Clk"
+    },
+    {
+      "ValueDisplayName": "16h Clk",
+      "ValueName": "16h Clk"
+    },
+    {
+      "ValueDisplayName": "17h Clk",
+      "ValueName": "17h Clk"
+    },
+    {
+      "ValueDisplayName": "18h Clk",
+      "ValueName": "18h Clk"
+    },
+    {
+      "ValueDisplayName": "19h Clk",
+      "ValueName": "19h Clk"
+    },
+    {
+      "ValueDisplayName": "1Ah Clk",
+      "ValueName": "1Ah Clk"
+    },
+    {
+      "ValueDisplayName": "1Bh Clk",
+      "ValueName": "1Bh Clk"
+    },
+    {
+      "ValueDisplayName": "1Ch Clk",
+      "ValueName": "1Ch Clk"
+    },
+    {
+      "ValueDisplayName": "1Dh Clk",
+      "ValueName": "1Dh Clk"
+    },
+    {
+      "ValueDisplayName": "1Eh Clk",
+      "ValueName": "1Eh Clk"
+    },
+    {
+      "ValueDisplayName": "1Fh Clk",
+      "ValueName": "1Fh Clk"
+    },
+    {
+      "ValueDisplayName": "20h Clk",
+      "ValueName": "20h Clk"
+    },
+    {
+      "ValueDisplayName": "21h Clk",
+      "ValueName": "21h Clk"
+    },
+    {
+      "ValueDisplayName": "22h Clk",
+      "ValueName": "22h Clk"
+    },
+    {
+      "ValueDisplayName": "23h Clk",
+      "ValueName": "23h Clk"
+    },
+    {
+      "ValueDisplayName": "24h Clk",
+      "ValueName": "24h Clk"
+    },
+    {
+      "ValueDisplayName": "25h Clk",
+      "ValueName": "25h Clk"
+    },
+    {
+      "ValueDisplayName": "26h Clk",
+      "ValueName": "26h Clk"
+    },
+    {
+      "ValueDisplayName": "27h Clk",
+      "ValueName": "27h Clk"
+    },
+    {
+      "ValueDisplayName": "28h Clk",
+      "ValueName": "28h Clk"
+    },
+    {
+      "ValueDisplayName": "29h Clk",
+      "ValueName": "29h Clk"
+    },
+    {
+      "ValueDisplayName": "2Ah Clk",
+      "ValueName": "2Ah Clk"
+    },
+    {
+      "ValueDisplayName": "2Bh Clk",
+      "ValueName": "2Bh Clk"
+    },
+    {
+      "ValueDisplayName": "2Ch Clk",
+      "ValueName": "2Ch Clk"
+    },
+    {
+      "ValueDisplayName": "2Dh Clk",
+      "ValueName": "2Dh Clk"
+    },
+    {
+      "ValueDisplayName": "2Eh Clk",
+      "ValueName": "2Eh Clk"
+    },
+    {
+      "ValueDisplayName": "2Fh Clk",
+      "ValueName": "2Fh Clk"
+    },
+    {
+      "ValueDisplayName": "30h Clk",
+      "ValueName": "30h Clk"
+    },
+    {
+      "ValueDisplayName": "31h Clk",
+      "ValueName": "31h Clk"
+    },
+    {
+      "ValueDisplayName": "32h Clk",
+      "ValueName": "32h Clk"
+    },
+    {
+      "ValueDisplayName": "33h Clk",
+      "ValueName": "33h Clk"
+    },
+    {
+      "ValueDisplayName": "34h Clk",
+      "ValueName": "34h Clk"
+    },
+    {
+      "ValueDisplayName": "35h Clk",
+      "ValueName": "35h Clk"
+    },
+    {
+      "ValueDisplayName": "36h Clk",
+      "ValueName": "36h Clk"
+    },
+    {
+      "ValueDisplayName": "37h Clk",
+      "ValueName": "37h Clk"
+    },
+    {
+      "ValueDisplayName": "38h Clk",
+      "ValueName": "38h Clk"
+    },
+    {
+      "ValueDisplayName": "39h Clk",
+      "ValueName": "39h Clk"
+    },
+    {
+      "ValueDisplayName": "3Ah Clk",
+      "ValueName": "3Ah Clk"
+    }
+  ]
+}

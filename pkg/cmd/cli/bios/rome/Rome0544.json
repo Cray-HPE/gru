@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0544",
+  "DefaultValue": 65,
+  "DisplayName": "Preferred IO Bus",
+  "HelpText": "Preferred IO Bus Number  0x0-0xFF : Bus Number",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 65535
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0495",
+  "DefaultValue": "Disabled",
+  "DisplayName": "HEST DMC Structure Support",
+  "HelpText": "HEST DMC(Deferred Machine Check) Structure Support",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled ",
+      "ValueName": "Enabled "
+    }
+  ]
+}

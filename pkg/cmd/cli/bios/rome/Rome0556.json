@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0556",
+  "DefaultValue": "Auto",
+  "DisplayName": "Boot Timer Enable",
+  "HelpText": "Boot Timer enable.  Enable : force PMx44 bit 27 = 1  Disable : force PMx44 bit 27 = 0  Auto:PMx44 bit 27 = PcdBootTimerEnable",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

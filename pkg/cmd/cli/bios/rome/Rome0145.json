@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0145",
+  "DefaultValue": "Auto",
+  "DisplayName": "Address Hash CS",
+  "HelpText": "Enable or disable CS address hashing",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

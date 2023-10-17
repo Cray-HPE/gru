@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0181",
+  "DefaultValue": "Auto",
+  "DisplayName": "CLDO_VDDP Control",
+  "HelpText": "Manual = User can set customized CLDO_VDDP voltage",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    }
+  ]
+}

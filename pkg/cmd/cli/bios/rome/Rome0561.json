@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0561",
+  "DefaultValue": "7.8 usec",
+  "DisplayName": "DRAM Refresh Rate",
+  "HelpText": "DRAM refresh rate",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "7.8 usec",
+      "ValueName": "7.8 usec"
+    },
+    {
+      "ValueDisplayName": "3.9 usec",
+      "ValueName": "3.9 usec"
+    }
+  ]
+}

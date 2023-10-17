@@ -1,0 +1,18 @@
+{
+  "AttributeName": "TCG013",
+  "DefaultValue": "Enabled",
+  "DisplayName": "  Endorsement Hierarchy",
+  "HelpText": "Enable or Disable Endorsement Hierarchy",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

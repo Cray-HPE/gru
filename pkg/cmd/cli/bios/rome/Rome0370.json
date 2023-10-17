@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0370",
+  "DefaultValue": 0,
+  "DisplayName": "High Temperature",
+  "HelpText": "High Temperature ['C]",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 255
+}

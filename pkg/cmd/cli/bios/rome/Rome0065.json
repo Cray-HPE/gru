@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0065",
+  "DefaultValue": "Auto",
+  "DisplayName": "Disable DF to external IP SyncFloodPropagation",
+  "HelpText": "Disable SyncFlood to UMC & downstream slaves.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Sync flood disabled",
+      "ValueName": "Sync flood disabled"
+    },
+    {
+      "ValueDisplayName": "Sync flood enabled",
+      "ValueName": "Sync flood enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

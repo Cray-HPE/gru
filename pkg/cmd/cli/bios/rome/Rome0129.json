@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0129",
+  "DefaultValue": "Auto",
+  "DisplayName": "Data Bus Configuration User Controls",
+  "HelpText": "Specify the mode for drive strength to Auto or Manual",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    }
+  ]
+}

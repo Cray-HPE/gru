@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0098",
+  "DefaultValue": "Auto",
+  "DisplayName": "Tfaw Ctrl",
+  "HelpText": "Specify Tfaw",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    }
+  ]
+}

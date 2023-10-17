@@ -1,0 +1,18 @@
+{
+  "AttributeName": "SETUP004",
+  "DefaultValue": "On",
+  "DisplayName": "Bootup NumLock State",
+  "HelpText": "Select the keyboard NumLock state",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "On",
+      "ValueName": "On"
+    },
+    {
+      "ValueDisplayName": "Off",
+      "ValueName": "Off"
+    }
+  ]
+}

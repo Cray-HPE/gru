@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0555",
+  "DefaultValue": "Auto",
+  "DisplayName": "CV test",
+  "HelpText": "Set this to Enabled to support running PCIECV tool.    Auto - preserve h/w defaults",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

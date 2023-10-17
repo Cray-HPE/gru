@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0148",
+  "DefaultValue": "Disabled",
+  "DisplayName": "MBIST Enable",
+  "HelpText": "Enable or disable Memory MBIST",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

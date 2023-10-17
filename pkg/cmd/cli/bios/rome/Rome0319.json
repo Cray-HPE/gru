@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0319",
+  "DefaultValue": 0,
+  "DisplayName": "Frequency (MHz)",
+  "HelpText": "Current core frequency in MHz",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 4294967295
+}

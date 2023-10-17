@@ -1,0 +1,9 @@
+{
+  "AttributeName": "SETUP002",
+  "DisplayName": "User Password",
+  "HelpText": "Set User Password",
+  "MaxLength": 20,
+  "MinLength": 3,
+  "ReadOnly": false,
+  "Type": "Password"
+}

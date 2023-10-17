@@ -1,0 +1,42 @@
+{
+  "AttributeName": "Rome0071",
+  "DefaultValue": "Auto",
+  "DisplayName": "DRAM scrub time",
+  "HelpText": "Provide a value that is the number of hours to scrub memory.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "1 hour",
+      "ValueName": "1 hour"
+    },
+    {
+      "ValueDisplayName": "4 hours",
+      "ValueName": "4 hours"
+    },
+    {
+      "ValueDisplayName": "8 hours",
+      "ValueName": "8 hours"
+    },
+    {
+      "ValueDisplayName": "16 hours",
+      "ValueName": "16 hours"
+    },
+    {
+      "ValueDisplayName": "24 hours",
+      "ValueName": "24 hours"
+    },
+    {
+      "ValueDisplayName": "48 hours",
+      "ValueName": "48 hours"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

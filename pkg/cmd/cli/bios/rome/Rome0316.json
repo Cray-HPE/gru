@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0316",
+  "DefaultValue": 16,
+  "DisplayName": "Pstate6 FID",
+  "HelpText": "Specifies the core frequency multiplier. COF = 200MHz * FID / DID",
+  "LowerBound": 16,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 255
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "NWSK001",
+  "DefaultValue": "Enabled",
+  "DisplayName": "Ipv4 PXE Support",
+  "HelpText": "Enable/Disable IPv4 PXE boot support. If disabled, IPv4 PXE boot support will not be available.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

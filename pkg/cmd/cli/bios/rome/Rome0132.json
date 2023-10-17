@@ -1,0 +1,46 @@
+{
+  "AttributeName": "Rome0132",
+  "DefaultValue": "Auto",
+  "DisplayName": "RttPark",
+  "HelpText": "No help string",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Rtt_PARK Disable",
+      "ValueName": "Rtt_PARK Disable"
+    },
+    {
+      "ValueDisplayName": "RZQ/4",
+      "ValueName": "RZQ/4"
+    },
+    {
+      "ValueDisplayName": "RZQ/2",
+      "ValueName": "RZQ/2"
+    },
+    {
+      "ValueDisplayName": "RZQ/6",
+      "ValueName": "RZQ/6"
+    },
+    {
+      "ValueDisplayName": "RZQ/1",
+      "ValueName": "RZQ/1"
+    },
+    {
+      "ValueDisplayName": "RZQ/5",
+      "ValueName": "RZQ/5"
+    },
+    {
+      "ValueDisplayName": "RZQ/3",
+      "ValueName": "RZQ/3"
+    },
+    {
+      "ValueDisplayName": "RZQ/7",
+      "ValueName": "RZQ/7"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

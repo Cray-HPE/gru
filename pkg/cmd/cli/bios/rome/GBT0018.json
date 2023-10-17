@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0018",
+  "DefaultValue": "Enabled",
+  "DisplayName": "PCIE_4, root port 4",
+  "HelpText": "Enable/Disable PCIE_4, root port 4.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

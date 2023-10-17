@@ -1,0 +1,17 @@
+{
+  "Dependency": {
+    "MapFrom": [
+      {
+        "MapFromAttribute": "GBT0069",
+        "MapFromCondition": "EQU",
+        "MapFromProperty": "CurrentValue",
+        "MapFromValue": "Disabled"
+      }
+    ],
+    "MapToAttribute": "GBT0079",
+    "MapToProperty": "Hidden",
+    "MapToValue": "true"
+  },
+  "DependencyFor": "GBT0069",
+  "Type": "Map"
+}

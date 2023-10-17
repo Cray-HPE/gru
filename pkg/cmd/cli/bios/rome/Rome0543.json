@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0543",
+  "DefaultValue": "Disabled",
+  "DisplayName": "Debug Port Table 2",
+  "HelpText": "Debug Port Table 2",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

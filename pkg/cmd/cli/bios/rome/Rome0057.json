@@ -1,0 +1,38 @@
+{
+  "AttributeName": "Rome0057",
+  "DefaultValue": "Auto",
+  "DisplayName": "Core control",
+  "HelpText": "Sets the number of cores to be used. Once this option has been used to remove any cores, a POWER CYCLE is required in order for future selections to take effect.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "TWO (1 + 1)",
+      "ValueName": "TWO (1 + 1)"
+    },
+    {
+      "ValueDisplayName": "TWO (2 + 0)",
+      "ValueName": "TWO (2 + 0)"
+    },
+    {
+      "ValueDisplayName": "THREE (3 + 0)",
+      "ValueName": "THREE (3 + 0)"
+    },
+    {
+      "ValueDisplayName": "FOUR (2 + 2)",
+      "ValueName": "FOUR (2 + 2)"
+    },
+    {
+      "ValueDisplayName": "FOUR (4 + 0)",
+      "ValueName": "FOUR (4 + 0)"
+    },
+    {
+      "ValueDisplayName": "SIX (3 + 3)",
+      "ValueName": "SIX (3 + 3)"
+    }
+  ]
+}

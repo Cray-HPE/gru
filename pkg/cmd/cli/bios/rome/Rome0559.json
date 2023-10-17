@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0559",
+  "DefaultValue": 6,
+  "DisplayName": "UrgRefLimit",
+  "HelpText": "Specifies the stored refresh limit to required enter urgent refresh mode  Constraint: SubUrgRefLowerBound <= UrgRefLimit  Valid value: 6 ~ 1",
+  "LowerBound": 1,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 6
+}

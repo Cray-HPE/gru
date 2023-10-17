@@ -1,0 +1,10 @@
+{
+  "AttributeName": "REDF005",
+  "DefaultValue": "",
+  "DisplayName": "BMC Redfish Version",
+  "HelpText": "Redfish version supported by BMC",
+  "MaxLength": 5,
+  "MinLength": 5,
+  "ReadOnly": true,
+  "Type": "String"
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0187",
+  "DefaultValue": "1",
+  "DisplayName": "xGMI Max Link Width",
+  "HelpText": "0 = Set max xGMI link width to x8  1 = Set max xGMI link width to x16",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "0",
+      "ValueName": "0"
+    },
+    {
+      "ValueDisplayName": "1",
+      "ValueName": "1"
+    }
+  ]
+}

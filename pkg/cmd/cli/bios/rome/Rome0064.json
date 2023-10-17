@@ -1,0 +1,38 @@
+{
+  "AttributeName": "Rome0064",
+  "DefaultValue": "Auto",
+  "DisplayName": "Core Watchdog Timer Severity",
+  "HelpText": "Specify the CPU watch dog timer severity (MSRC001_0074[CpuWdTmrCfgSeverity]).",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "No Error",
+      "ValueName": "No Error"
+    },
+    {
+      "ValueDisplayName": "Transparent",
+      "ValueName": "Transparent"
+    },
+    {
+      "ValueDisplayName": "Corrected",
+      "ValueName": "Corrected"
+    },
+    {
+      "ValueDisplayName": "Deferred",
+      "ValueName": "Deferred"
+    },
+    {
+      "ValueDisplayName": "Uncorrected",
+      "ValueName": "Uncorrected"
+    },
+    {
+      "ValueDisplayName": "Fatal",
+      "ValueName": "Fatal"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

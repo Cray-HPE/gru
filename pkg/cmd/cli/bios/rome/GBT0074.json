@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0074",
+  "DefaultValue": "Auto",
+  "DisplayName": "M_2_2 Lanes",
+  "HelpText": "Change M_2_2 PCIe lanes.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

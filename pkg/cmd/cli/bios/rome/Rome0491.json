@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0491",
+  "DefaultValue": "NMI",
+  "DisplayName": "PCIe UnCorr GHES Notify Type",
+  "HelpText": "Notification type for PCIe uncorrected errors",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Polled",
+      "ValueName": "Polled"
+    },
+    {
+      "ValueDisplayName": "NMI",
+      "ValueName": "NMI"
+    }
+  ]
+}

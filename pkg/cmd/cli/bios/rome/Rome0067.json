@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0067",
+  "DefaultValue": "Auto",
+  "DisplayName": "CC6 memory region encryption",
+  "HelpText": "Control whether or not the CC6 save/restore memory is encrypted",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

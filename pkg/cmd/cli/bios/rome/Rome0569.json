@@ -1,0 +1,26 @@
+{
+  "AttributeName": "Rome0569",
+  "DefaultValue": "20 sec",
+  "DisplayName": "USB transfer time-out",
+  "HelpText": "The time-out value for Control, Bulk, and Interrupt transfers.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "1 sec",
+      "ValueName": "1 sec"
+    },
+    {
+      "ValueDisplayName": "5 sec",
+      "ValueName": "5 sec"
+    },
+    {
+      "ValueDisplayName": "10 sec",
+      "ValueName": "10 sec"
+    },
+    {
+      "ValueDisplayName": "20 sec",
+      "ValueName": "20 sec"
+    }
+  ]
+}

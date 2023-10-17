@@ -1,0 +1,94 @@
+{
+  "AttributeName": "Rome0063",
+  "DefaultValue": "Auto",
+  "DisplayName": "Core Watchdog Timer Interval",
+  "HelpText": "CPU Watchdog Timer Interval",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "21.461s",
+      "ValueName": "21.461s"
+    },
+    {
+      "ValueDisplayName": "10.730s",
+      "ValueName": "10.730s"
+    },
+    {
+      "ValueDisplayName": "5.364s",
+      "ValueName": "5.364s"
+    },
+    {
+      "ValueDisplayName": "2.681s",
+      "ValueName": "2.681s"
+    },
+    {
+      "ValueDisplayName": "1.340s",
+      "ValueName": "1.340s"
+    },
+    {
+      "ValueDisplayName": "669.41ms",
+      "ValueName": "669.41ms"
+    },
+    {
+      "ValueDisplayName": "334.05ms",
+      "ValueName": "334.05ms"
+    },
+    {
+      "ValueDisplayName": "166.37ms",
+      "ValueName": "166.37ms"
+    },
+    {
+      "ValueDisplayName": "82.53ms",
+      "ValueName": "82.53ms"
+    },
+    {
+      "ValueDisplayName": "40.61ms",
+      "ValueName": "40.61ms"
+    },
+    {
+      "ValueDisplayName": "20.970ms",
+      "ValueName": "20.970ms"
+    },
+    {
+      "ValueDisplayName": "10.484ms",
+      "ValueName": "10.484ms"
+    },
+    {
+      "ValueDisplayName": "5.241ms",
+      "ValueName": "5.241ms"
+    },
+    {
+      "ValueDisplayName": "2.620ms",
+      "ValueName": "2.620ms"
+    },
+    {
+      "ValueDisplayName": "1.309ms",
+      "ValueName": "1.309ms"
+    },
+    {
+      "ValueDisplayName": "654.08us",
+      "ValueName": "654.08us"
+    },
+    {
+      "ValueDisplayName": "326.4us",
+      "ValueName": "326.4us"
+    },
+    {
+      "ValueDisplayName": "162.56us",
+      "ValueName": "162.56us"
+    },
+    {
+      "ValueDisplayName": "80.64us",
+      "ValueName": "80.64us"
+    },
+    {
+      "ValueDisplayName": "39.68us",
+      "ValueName": "39.68us"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

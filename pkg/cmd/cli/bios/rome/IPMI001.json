@@ -1,0 +1,22 @@
+{
+  "AttributeName": "IPMI001",
+  "DefaultValue": "No",
+  "DisplayName": "Erase SEL",
+  "HelpText": "Choose options for erasing SEL.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "No",
+      "ValueName": "No"
+    },
+    {
+      "ValueDisplayName": "Yes, On next reset",
+      "ValueName": "Yes, On next reset"
+    },
+    {
+      "ValueDisplayName": "Yes, On every reset",
+      "ValueName": "Yes, On every reset"
+    }
+  ]
+}

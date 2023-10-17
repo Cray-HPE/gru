@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0332",
+  "DefaultValue": 11,
+  "DisplayName": "ACPI SLIT virtual distance",
+  "HelpText": "Specify the distance between two virtual domains (see L3 Cache as NUMA Domain) in the same physical domain.",
+  "LowerBound": 10,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 255
+}

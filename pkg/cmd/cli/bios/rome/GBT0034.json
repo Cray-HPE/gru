@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0034",
+  "DefaultValue": "Enabled",
+  "DisplayName": "Onboard LAN 2 Controller",
+  "HelpText": "Enable/Disable LAN 2 controller.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

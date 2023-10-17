@@ -1,0 +1,30 @@
+{
+  "AttributeName": "FBO101",
+  "DefaultValue": "Hard Disk",
+  "DisplayName": "Boot Option #1",
+  "HelpText": "Sets the system boot order",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Hard Disk",
+      "ValueName": "Hard Disk"
+    },
+    {
+      "ValueDisplayName": "CD/DVD",
+      "ValueName": "CD/DVD"
+    },
+    {
+      "ValueDisplayName": "USB Device",
+      "ValueName": "USB Device"
+    },
+    {
+      "ValueDisplayName": "Network",
+      "ValueName": "Network"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

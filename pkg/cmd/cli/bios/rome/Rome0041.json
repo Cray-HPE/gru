@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0041",
+  "DefaultValue": "Auto",
+  "DisplayName": "MCA error thresh enable",
+  "HelpText": "Enable MCA error thresholding.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "False",
+      "ValueName": "False"
+    },
+    {
+      "ValueDisplayName": "True",
+      "ValueName": "True"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

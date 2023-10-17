@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0486",
+  "DefaultValue": "Enabled ",
+  "DisplayName": "RAS Periodic SMI Control",
+  "HelpText": "Enable/ disable Periodic SMI for polling [MCA Threshold] error",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled ",
+      "ValueName": "Enabled "
+    }
+  ]
+}

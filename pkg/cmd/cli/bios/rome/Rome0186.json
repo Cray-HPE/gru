@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0186",
+  "DefaultValue": "Unforce",
+  "DisplayName": "xGMI Force Link Width Control",
+  "HelpText": "Unforce = Do not force the xGMI to a fixed width  Force = Force the xGMI link to the user specified width",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Unforce",
+      "ValueName": "Unforce"
+    },
+    {
+      "ValueDisplayName": "Force",
+      "ValueName": "Force"
+    }
+  ]
+}

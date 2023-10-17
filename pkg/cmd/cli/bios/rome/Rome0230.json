@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0230",
+  "DefaultValue": "Auto",
+  "DisplayName": "D3 Cold Support",
+  "HelpText": "No help string",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

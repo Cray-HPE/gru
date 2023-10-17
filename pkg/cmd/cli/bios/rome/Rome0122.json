@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0122",
+  "DefaultValue": "Auto",
+  "DisplayName": "Power Down Enable",
+  "HelpText": "Enable or disable DDR power down mode",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "SECB001",
+  "DefaultValue": "Disabled",
+  "DisplayName": "Secure Boot",
+  "HelpText": "Secure Boot feature is Active if Secure Boot is Enabled,  Platform Key(PK) is enrolled and the System is in User mode.  The mode change requires platform reset",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0200",
+  "DefaultValue": "Log Errors in MCA",
+  "DisplayName": "SLINK Read Response Error Handling",
+  "HelpText": "This value specifies whether SLINK write response errors are converted to an Okay response.  When this value is set to 0, write response errors will be logged in the MCA.  When set to 1, write response errors will trigger an MCOMMIT error. When this value is set to 2, write response errors are converted to Okay responses.  ",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Trigger MCOMMIT Error",
+      "ValueName": "Trigger MCOMMIT Error"
+    },
+    {
+      "ValueDisplayName": "Log Errors in MCA",
+      "ValueName": "Log Errors in MCA"
+    }
+  ]
+}
