@@ -29,6 +29,7 @@ package boot
 import (
 	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/power"
 	"github.com/Cray-HPE/gru/pkg/set"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -50,6 +51,10 @@ func NewBootBiosOverrideCommand() *cobra.Command {
 
 			content := set.Async(issueOverride, hosts, redfish.BiosSetupBootSourceOverrideTarget)
 			cli.MapPrint(content)
+			if v.GetBool("now") {
+				content = set.Async(power.Issue, hosts, redfish.ForceRestartResetType)
+				cli.MapPrint(content)
+			}
 		},
 	}
 	return c

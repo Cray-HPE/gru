@@ -41,7 +41,7 @@ func NewPowerNMICommand() *cobra.Command {
 		Long:  `Issue a non-maskable interrupt, triggering a crash/core dump.`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := set.Async(issue, hosts, redfish.NmiResetType)
+			content := set.Async(Issue, hosts, redfish.NmiResetType)
 			cli.MapPrint(content)
 		},
 		Hidden: false,

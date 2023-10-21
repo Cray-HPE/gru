@@ -61,7 +61,7 @@ as well as a power-button emulated shutdown.`,
 				resetType = redfish.PushPowerButtonResetType
 			}
 
-			content := set.Async(issue, hosts, resetType)
+			content := set.Async(Issue, hosts, resetType)
 			cli.MapPrint(content)
 		},
 	}

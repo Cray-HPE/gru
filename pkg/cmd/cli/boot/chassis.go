@@ -63,5 +63,14 @@ func NewChassisCommand() *cobra.Command {
 		),
 	)
 
+	c.PersistentFlags().BoolP(
+		"now",
+		"n",
+		false,
+		fmt.Sprintln(
+			"Reset the server(s) immediately after applying the boot override.",
+		),
+	)
+
 	return c
 }

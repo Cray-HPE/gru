@@ -41,7 +41,7 @@ func NewPowerResetCommand() *cobra.Command {
 		Long:  `Forcefully restart the target machine(s) without a graceful shutdown.`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := set.Async(issue, hosts, redfish.ForceRestartResetType)
+			content := set.Async(Issue, hosts, redfish.ForceRestartResetType)
 			cli.MapPrint(content)
 		},
 		Hidden: false,

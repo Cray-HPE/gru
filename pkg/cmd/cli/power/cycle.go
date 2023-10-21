@@ -57,7 +57,7 @@ Also allows bypassing the OS shutdown, forcing a warm boot.`,
 				resetType = redfish.ForceRestartResetType
 			}
 
-			content := set.Async(issue, hosts, resetType)
+			content := set.Async(Issue, hosts, resetType)
 			cli.MapPrint(content)
 		},
 		Hidden: false,

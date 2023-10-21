@@ -44,8 +44,8 @@ type State struct {
 	Error      error              `json:"error,omitempty"`
 }
 
-// issue issues an action against a host.
-func issue(host string, action interface{}) interface{} {
+// Issue issues an action against a host.
+func Issue(host string, action interface{}) interface{} {
 	sc := StateChange{}
 	c, err := auth.Connection(host)
 	if err != nil {
