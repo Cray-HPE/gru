@@ -40,7 +40,7 @@ import (
 func NewPowerOffCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "off",
-		Short: "Power off the target machine(s).",
+		Short: "Power off the target machine(s)",
 		Long: `Powers off the target machine(s) with an ACPI shutdown.
 Permits forcing a shutdown (without waiting for the OS),
 as well as a power-button emulated shutdown.`,
@@ -61,7 +61,7 @@ as well as a power-button emulated shutdown.`,
 				resetType = redfish.PushPowerButtonResetType
 			}
 
-			content := set.Async(issue, hosts, resetType)
+			content := set.Async(Issue, hosts, resetType)
 			cli.MapPrint(content)
 		},
 	}

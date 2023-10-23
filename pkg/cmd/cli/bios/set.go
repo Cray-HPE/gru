@@ -38,7 +38,7 @@ import (
 func NewSetCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "set attribute=value[,keyN=valueN]",
-		Short: "Sets BIOS attributes.",
+		Short: "Sets BIOS attributes",
 		Long:  `Sets BIOS attributes if the attribute is found and the value is valid.`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)

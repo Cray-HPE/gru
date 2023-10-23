@@ -38,7 +38,7 @@ import (
 func NewGetCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "get [key[,keyN]]",
-		Short: "Gets BIOS settings by key-name, or get every key.",
+		Short: "Gets BIOS settings by key-name, or get every key",
 		Long:  `Gets BIOS settings.`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)

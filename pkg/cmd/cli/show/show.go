@@ -39,7 +39,7 @@ func NewCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:                   "show",
 		DisableFlagsInUseLine: true,
-		Short:                 "Curated server information.",
+		Short:                 "Curated server information",
 		Long:                  `Print pre-defined classes of information from one or more BMCs.`,
 		Run: func(c *cobra.Command, args []string) {
 		},

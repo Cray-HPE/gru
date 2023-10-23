@@ -35,7 +35,7 @@ import (
 func NewCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "get",
-		Short: "Shortcut for getting certain information from RedFish.",
+		Short: "Shortcut for getting certain information from RedFish",
 		Long:  `Shortcut for getting certain information from RedFish.`,
 		Run: func(c *cobra.Command, args []string) {
 		},
