@@ -36,7 +36,7 @@ import (
 func NewPowerStatusCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "status",
-		Short: "Power status for the target machine(s).",
+		Short: "Power status for the target machine(s)",
 		Long:  `Prints the current power status reported by the blade management controller for the target machine(s).`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)

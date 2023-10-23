@@ -37,7 +37,7 @@ func NewCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:                   "chassis",
 		DisableFlagsInUseLine: true,
-		Short:                 "Chassis control.",
+		Short:                 "Chassis control",
 		Long:                  `Interact with a host's chassis.`,
 		Hidden:                false,
 	}

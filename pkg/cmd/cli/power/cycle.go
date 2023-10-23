@@ -40,7 +40,7 @@ import (
 func NewPowerCycleCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "cycle",
-		Short: "Power cycle the target machine(s).",
+		Short: "Power cycle the target machine(s)",
 		Long: `Performs an ACPI shutdown and startup to power cycle the target machine(s).
 Also allows bypassing the OS shutdown, forcing a warm boot.`,
 		Run: func(c *cobra.Command, args []string) {

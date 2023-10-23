@@ -37,7 +37,7 @@ import (
 func NewPowerNMICommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "nmi",
-		Short: "Issue an NMI to the target machine(s).",
+		Short: "Issue an NMI to the target machine(s)",
 		Long:  `Issue a non-maskable interrupt, triggering a crash/core dump.`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)

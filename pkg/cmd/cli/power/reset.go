@@ -37,7 +37,7 @@ import (
 func NewPowerResetCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "reset",
-		Short: "Power reset the target machine(s).",
+		Short: "Power reset the target machine(s)",
 		Long:  `Forcefully restart the target machine(s) without a graceful shutdown.`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)

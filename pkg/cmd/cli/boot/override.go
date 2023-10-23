@@ -40,7 +40,7 @@ import (
 func NewBootBiosOverrideCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "bios host [...host]",
-		Short: "Boot to BIOS.",
+		Short: "Boot to BIOS",
 		Long:  `Override the next boot with the BIOS option.`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
@@ -64,7 +64,7 @@ func NewBootBiosOverrideCommand() *cobra.Command {
 func NewBootPxeOverrideCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "pxe host [...host]",
-		Short: "Boot with PXE.",
+		Short: "Boot with PXE",
 		Long:  `Override the next boot with the PXE option.`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
@@ -79,7 +79,7 @@ func NewBootPxeOverrideCommand() *cobra.Command {
 func NewBootHddOverrideCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "hdd host [...host]",
-		Short: "Boot from the HDD.",
+		Short: "Boot from the HDD",
 		Long:  `Override the next boot with the HDD option.`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
@@ -94,7 +94,7 @@ func NewBootHddOverrideCommand() *cobra.Command {
 func NewBootUEFIHttpOverrideCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "http host [...host]",
-		Short: "Boot with HTTP.",
+		Short: "Boot with HTTP",
 		Long:  `Override the next boot with the HTTP option.`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
@@ -109,7 +109,7 @@ func NewBootUEFIHttpOverrideCommand() *cobra.Command {
 func NewBootNoneOverrideCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "none host [...host]",
-		Short: "Clear the boot override.",
+		Short: "Clear the boot override",
 		Long:  `Clears a boot override.`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)

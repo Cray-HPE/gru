@@ -40,7 +40,7 @@ import (
 func NewPowerOffCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "off",
-		Short: "Power off the target machine(s).",
+		Short: "Power off the target machine(s)",
 		Long: `Powers off the target machine(s) with an ACPI shutdown.
 Permits forcing a shutdown (without waiting for the OS),
 as well as a power-button emulated shutdown.`,

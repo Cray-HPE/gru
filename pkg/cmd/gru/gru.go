@@ -74,20 +74,20 @@ the YAML file may provide these per host.
 		"c",
 		fmt.Sprintf("./%s.yml", name),
 		fmt.Sprintln(
-			"Configuration file containing BMC credentials, necessary if USERNAME and PASSWORD are not defined in the environment.",
+			"Configuration file containing BMC credentials, necessary if USERNAME and PASSWORD are not defined in the environment",
 			name,
 		),
 	)
 	c.PersistentFlags().Bool(
 		"insecure",
 		false,
-		"Ignore untrusted or insecure certificates.",
+		"Ignore untrusted or insecure certificates",
 	)
 	c.PersistentFlags().BoolP(
 		"json",
 		"j",
 		false,
-		"Output results in JSON.",
+		"Output results in JSON",
 	)
 	c.AddCommand(
 		chassis.NewCommand(),

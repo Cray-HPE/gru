@@ -37,7 +37,7 @@ import (
 func NewChassisCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "boot [flags] host [...host]",
-		Short: "Set next boot device.",
+		Short: "Set next boot device",
 		Long:  `Overrides the next boot device for a one-time override. Only sets UEFI boot modes.`,
 		Run: func(c *cobra.Command, args []string) {
 			v := viper.GetViper()
