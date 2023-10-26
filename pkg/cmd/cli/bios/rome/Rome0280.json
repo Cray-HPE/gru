@@ -1,0 +1,30 @@
+{
+  "AttributeName": "Rome0280",
+  "DefaultValue": "Auto",
+  "DisplayName": "ABL PMU message Control",
+  "HelpText": "To control the total number of PMU debug messages.  Several major controls are listed below:  1. Detailed debug messages (e.g. Eye delays)  2. Coarse debug messages (e.g. rank information)  3. Stage completion  4. Firmware completion messages only",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Detailed debug message",
+      "ValueName": "Detailed debug message"
+    },
+    {
+      "ValueDisplayName": "Coarse debug message",
+      "ValueName": "Coarse debug message"
+    },
+    {
+      "ValueDisplayName": "Stage completion",
+      "ValueName": "Stage completion"
+    },
+    {
+      "ValueDisplayName": "Firmware completion message only",
+      "ValueName": "Firmware completion message only"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

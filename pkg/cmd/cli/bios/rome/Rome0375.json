@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0375",
+  "DefaultValue": 0,
+  "DisplayName": "Temperature Hysteresis",
+  "HelpText": "Temperature Hysteresis ['C]",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 255
+}

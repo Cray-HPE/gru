@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0139",
+  "DefaultValue": "Auto",
+  "DisplayName": "TSME",
+  "HelpText": "Transparent SME: AddrTweakEn = 1; ForceEncrEn =0; DataEncrEn = 1",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

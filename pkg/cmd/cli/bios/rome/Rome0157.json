@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0157",
+  "DefaultValue": "Per Chip Select",
+  "DisplayName": "Worst Case Margin Granularity",
+  "HelpText": "Select per Chip or per Nibble",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Per Chip Select",
+      "ValueName": "Per Chip Select"
+    },
+    {
+      "ValueDisplayName": "Per Nibble",
+      "ValueName": "Per Nibble"
+    }
+  ]
+}

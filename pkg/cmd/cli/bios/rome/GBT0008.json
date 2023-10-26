@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0008",
+  "DefaultValue": "Enabled",
+  "DisplayName": "MEZZ I/O ROM",
+  "HelpText": "Enable/Disable MEZZ I/O ROM.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

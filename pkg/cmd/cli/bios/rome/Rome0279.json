@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0279",
+  "DefaultValue": "Auto",
+  "DisplayName": "ABL Console Out Control",
+  "HelpText": "Enable : Enable ConsoleOut Function for ABL  Disable : Disable ConsoleOut Function for ABL  Auto : Keep default behavior",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disable",
+      "ValueName": "Disable"
+    },
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

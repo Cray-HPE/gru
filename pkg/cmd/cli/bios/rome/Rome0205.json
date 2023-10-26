@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0205",
+  "DefaultValue": "AHCI",
+  "DisplayName": "SATA Mode",
+  "HelpText": "Select OnChip SATA Type",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "AHCI",
+      "ValueName": "AHCI"
+    },
+    {
+      "ValueDisplayName": "AHCI as ID 0x7904",
+      "ValueName": "AHCI as ID 0x7904"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

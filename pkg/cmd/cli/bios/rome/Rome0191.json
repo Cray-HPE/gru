@@ -1,0 +1,26 @@
+{
+  "AttributeName": "Rome0191",
+  "DefaultValue": "P0",
+  "DisplayName": "Fixed SOC Pstate",
+  "HelpText": "No help string",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "P0",
+      "ValueName": "P0"
+    },
+    {
+      "ValueDisplayName": "P1",
+      "ValueName": "P1"
+    },
+    {
+      "ValueDisplayName": "P2",
+      "ValueName": "P2"
+    },
+    {
+      "ValueDisplayName": "P3",
+      "ValueName": "P3"
+    }
+  ]
+}

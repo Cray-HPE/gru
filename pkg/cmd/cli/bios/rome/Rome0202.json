@@ -1,0 +1,26 @@
+{
+  "AttributeName": "Rome0202",
+  "DefaultValue": "Auto",
+  "DisplayName": "PCIe Aer Reporting Mechanism",
+  "HelpText": "This value selects the method of reporting AER errors from PCI Express.  A value of 0 indicates that the hardware will report the error through MCA.  A value of 1 allows OS First handling of the errors through generation of a system control interrupt (SCI).  A value of 2 provides for Firmware First handling of errors through generation of a system management interrupt (SMI).",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Firmware First",
+      "ValueName": "Firmware First"
+    },
+    {
+      "ValueDisplayName": "OS First",
+      "ValueName": "OS First"
+    },
+    {
+      "ValueDisplayName": "MCA",
+      "ValueName": "MCA"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

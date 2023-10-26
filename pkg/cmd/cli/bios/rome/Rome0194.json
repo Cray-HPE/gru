@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0194",
+  "DefaultValue": "Auto",
+  "DisplayName": "Fan Table Control",
+  "HelpText": "Auto = Use the default fan table  Manual = User can set customized fan table",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

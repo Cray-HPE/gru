@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0341",
+  "DefaultValue": 0,
+  "DisplayName": "Trcpage",
+  "HelpText": "SDRAM Optional Features (tMAW, MAC). Valid value 3FFh - 0h",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 1023
+}

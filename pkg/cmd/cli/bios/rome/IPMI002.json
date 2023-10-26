@@ -1,0 +1,18 @@
+{
+  "AttributeName": "IPMI002",
+  "DefaultValue": "Do Nothing",
+  "DisplayName": "When SEL is Full",
+  "HelpText": "Choose options for reactions to a full SEL.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Do Nothing",
+      "ValueName": "Do Nothing"
+    },
+    {
+      "ValueDisplayName": "Erase Immediately",
+      "ValueName": "Erase Immediately"
+    }
+  ]
+}

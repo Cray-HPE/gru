@@ -1,0 +1,18 @@
+{
+  "AttributeName": "PCIS007",
+  "DefaultValue": "Enabled",
+  "DisplayName": "SR-IOV Support",
+  "HelpText": "If system has SR-IOV capable PCIe Devices, this option Enables or Disables Single Root IO Virtualization Support.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

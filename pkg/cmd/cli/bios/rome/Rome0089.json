@@ -1,0 +1,46 @@
+{
+  "AttributeName": "Rome0089",
+  "DefaultValue": "Auto",
+  "DisplayName": "Memory Clock Speed",
+  "HelpText": "Specifies the memory clock frequency.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "667MHz",
+      "ValueName": "667MHz"
+    },
+    {
+      "ValueDisplayName": "800MHz",
+      "ValueName": "800MHz"
+    },
+    {
+      "ValueDisplayName": "933MHz",
+      "ValueName": "933MHz"
+    },
+    {
+      "ValueDisplayName": "1067MHz",
+      "ValueName": "1067MHz"
+    },
+    {
+      "ValueDisplayName": "1200MHz",
+      "ValueName": "1200MHz"
+    },
+    {
+      "ValueDisplayName": "1333MHz",
+      "ValueName": "1333MHz"
+    },
+    {
+      "ValueDisplayName": "1467MHz",
+      "ValueName": "1467MHz"
+    },
+    {
+      "ValueDisplayName": "1600MHz",
+      "ValueName": "1600MHz"
+    }
+  ]
+}

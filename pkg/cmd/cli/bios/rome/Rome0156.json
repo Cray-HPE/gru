@@ -1,0 +1,26 @@
+{
+  "AttributeName": "Rome0156",
+  "DefaultValue": "Worst Case Margin Only",
+  "DisplayName": "Data Eye Type",
+  "HelpText": "This options determines which results are expected to be captured for Data Eye. Supported options are 1D Voltage Sweep, 1D Timing Sweep, 2D Full Data Eye and Worst Case Margin only.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "1D Voltage Sweep",
+      "ValueName": "1D Voltage Sweep"
+    },
+    {
+      "ValueDisplayName": "1D Timing Sweep",
+      "ValueName": "1D Timing Sweep"
+    },
+    {
+      "ValueDisplayName": "2D Full Data Eye",
+      "ValueName": "2D Full Data Eye"
+    },
+    {
+      "ValueDisplayName": "Worst Case Margin Only",
+      "ValueName": "Worst Case Margin Only"
+    }
+  ]
+}

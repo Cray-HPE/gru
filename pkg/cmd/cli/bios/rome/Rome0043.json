@@ -1,0 +1,26 @@
+{
+  "AttributeName": "Rome0043",
+  "DefaultValue": "Auto",
+  "DisplayName": "Xtrig7 Workaround",
+  "HelpText": "By default (Auto), the Bronze workaround is applied.  Bronze workaround: DbReq and PDM function as expected, breakpoint redirect capability compromised  Silver workaround: DbReq, PDM, and breakpoint redirect function as expected, SCAN capability compromised",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "No Workaround",
+      "ValueName": "No Workaround"
+    },
+    {
+      "ValueDisplayName": "Bronze Workaround",
+      "ValueName": "Bronze Workaround"
+    },
+    {
+      "ValueDisplayName": "Silver Workaround",
+      "ValueName": "Silver Workaround"
+    }
+  ]
+}

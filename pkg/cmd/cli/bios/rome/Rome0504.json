@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0504",
+  "DefaultValue": 133128240,
+  "DisplayName": "Pcie Device UnCorr Error Sev Reg",
+  "HelpText": "Initialize the PCIe AER Uncorrected Error Severity registers of PCIe Device",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 4294967295
+}

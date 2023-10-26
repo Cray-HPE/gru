@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0326",
+  "DefaultValue": 0,
+  "DisplayName": "CCD 1 DownCore Bitmap",
+  "HelpText": "No help string",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 255
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "IPMI000",
+  "DefaultValue": "Enabled",
+  "DisplayName": "SEL Components",
+  "HelpText": "Change this to enable or disable all features of System Event Logging during boot.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0574",
+  "DefaultValue": "Enable",
+  "DisplayName": "Enhanced Preferred IO Mode",
+  "HelpText": "Enhanced Preferred IO Mode",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disable",
+      "ValueName": "Disable"
+    },
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "AttributeName": "Rome0149",
+  "DefaultValue": "Auto",
+  "DisplayName": "MBIST Test Mode",
+  "HelpText": "Select MBIST Test Mode -Interface Mode (Tests Single and Multiple CS transactions and Basic Connectivity) or Data Eye Mode (Measures Voltage vs. Timing)",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Interface Mode",
+      "ValueName": "Interface Mode"
+    },
+    {
+      "ValueDisplayName": "Data Eye Mode",
+      "ValueName": "Data Eye Mode"
+    },
+    {
+      "ValueDisplayName": "Both",
+      "ValueName": "Both"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

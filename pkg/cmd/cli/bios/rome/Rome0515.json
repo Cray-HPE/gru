@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0515",
+  "DefaultValue": "Auto",
+  "DisplayName": "DRAM Write CRC Enable and Retry Limit",
+  "HelpText": "UMC_CH::RecCtrl[RecEn][1] and UMC_CH::RecCtrl[MaxCrcRply]",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

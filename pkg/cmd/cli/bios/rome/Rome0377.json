@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0377",
+  "DefaultValue": 4,
+  "DisplayName": "Egress Poison Severity Low",
+  "HelpText": "Each bit set to 1 enables HIGH severity on the associated IOHC egress port. A bit of 0 indicates LOW severity.",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 4294967295
+}

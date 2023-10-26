@@ -1,0 +1,22 @@
+{
+  "AttributeName": "IPMI601",
+  "DefaultValue": "Enable",
+  "DisplayName": "IPv6 BMC Lan Option",
+  "HelpText": "Enable/Disable IPv6 BMC LAN channel function. Disable option will not modify any BMC network during BIOS Phase",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Unspecified",
+      "ValueName": "Unspecified"
+    },
+    {
+      "ValueDisplayName": "Disable",
+      "ValueName": "Disable"
+    },
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    }
+  ]
+}

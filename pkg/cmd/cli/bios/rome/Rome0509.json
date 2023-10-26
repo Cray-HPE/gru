@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0509",
+  "DefaultValue": 12,
+  "DisplayName": "ACPI SLIT same socket distance",
+  "HelpText": "Specify the distance to other physical domains within the same socket.",
+  "LowerBound": 10,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 255
+}

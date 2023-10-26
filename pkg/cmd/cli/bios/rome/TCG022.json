@@ -1,0 +1,18 @@
+{
+  "AttributeName": "TCG022",
+  "DefaultValue": "1.3",
+  "DisplayName": "  Physical Presence Spec Version",
+  "HelpText": "  Select to Tell O.S. to support PPI Spec Version 1.2 or 1.3. Note some HCK tests might not support 1.3.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "1.2",
+      "ValueName": "1.2"
+    },
+    {
+      "ValueDisplayName": "1.3",
+      "ValueName": "1.3"
+    }
+  ]
+}

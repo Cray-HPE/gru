@@ -1,0 +1,22 @@
+{
+  "AttributeName": "IPMI602",
+  "DefaultValue": "Unspecified",
+  "DisplayName": "IPv6 BMC Lan IP Address Source",
+  "HelpText": "Select to configure LAN channel parameters statically or dynamically(by BIOS or BMC)",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Unspecified",
+      "ValueName": "Unspecified"
+    },
+    {
+      "ValueDisplayName": "Static",
+      "ValueName": "Static"
+    },
+    {
+      "ValueDisplayName": "Dynamic-Obtained by BMC running DHCP",
+      "ValueName": "Dynamic-Obtained by BMC running DHCP"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0340",
+  "DefaultValue": 18,
+  "DisplayName": "Twr",
+  "HelpText": "Specifies the Minimum Write Recovery Time. Valid value 51h-Ah",
+  "LowerBound": 10,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 81
+}

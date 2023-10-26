@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0133",
+  "DefaultValue": "Disabled",
+  "DisplayName": "VGA Palette Snoop",
+  "HelpText": "Enables or Disables VGA Palette Registers Snooping.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "NWSK002",
+  "DefaultValue": "Enabled",
+  "DisplayName": "Ipv6 PXE Support",
+  "HelpText": "Enable/Disable IPv6 PXE boot support. If disabled, IPv6 PXE boot support will not be available.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

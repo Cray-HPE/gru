@@ -1,0 +1,34 @@
+{
+  "AttributeName": "Rome0131",
+  "DefaultValue": "Auto",
+  "DisplayName": "RttWr",
+  "HelpText": "No help string",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Dynamic ODT Off",
+      "ValueName": "Dynamic ODT Off"
+    },
+    {
+      "ValueDisplayName": "RZQ/2",
+      "ValueName": "RZQ/2"
+    },
+    {
+      "ValueDisplayName": "RZQ/1",
+      "ValueName": "RZQ/1"
+    },
+    {
+      "ValueDisplayName": "Hi-Z",
+      "ValueName": "Hi-Z"
+    },
+    {
+      "ValueDisplayName": "RZQ/3",
+      "ValueName": "RZQ/3"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

@@ -140,6 +140,15 @@ func getBIOSSettings(host string, requestedAttributes ...string) interface{} {
 			// use vendor-specific settings, pre-determined and known to work
 			virtAttrs := virtSettings(virt, systems[0].Manufacturer)
 			for k := range virtAttrs {
+				romeAttr, exists := romeMap.Attributes[k]
+				if exists {
+					// convert to a friendly name for non-json
+					if viper.GetBool("json") {
+						k = romeAttr.AttributeName
+					} else {
+						k = fmt.Sprintf("%s (%s)", romeAttr.AttributeName, romeAttr.DisplayName)
+					}
+				}
 				attributes[k] = bios.Attributes[k]
 			}
 		} else {

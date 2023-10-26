@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0076",
+  "DefaultValue": "Auto",
+  "DisplayName": "Memory interleaving",
+  "HelpText": "Allows for disabling memory interleaving.  Note that NUMA nodes per socket will be honored regardless of this setting.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

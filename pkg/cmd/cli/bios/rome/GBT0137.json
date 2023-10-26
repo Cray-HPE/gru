@@ -1,0 +1,38 @@
+{
+  "AttributeName": "GBT0137",
+  "DefaultValue": "Auto",
+  "DisplayName": "Maximum Payload",
+  "HelpText": "Set Maximum Payload of PCI Express Device or allow System BIOS to select the value.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "128 Bytes",
+      "ValueName": "128 Bytes"
+    },
+    {
+      "ValueDisplayName": "256 Bytes",
+      "ValueName": "256 Bytes"
+    },
+    {
+      "ValueDisplayName": "512 Bytes",
+      "ValueName": "512 Bytes"
+    },
+    {
+      "ValueDisplayName": "1024 Bytes",
+      "ValueName": "1024 Bytes"
+    },
+    {
+      "ValueDisplayName": "2048 Bytes",
+      "ValueName": "2048 Bytes"
+    },
+    {
+      "ValueDisplayName": "4096 Bytes",
+      "ValueName": "4096 Bytes"
+    }
+  ]
+}

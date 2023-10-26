@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0171",
+  "DefaultValue": "Auto",
+  "DisplayName": "Presence Detect Select mode",
+  "HelpText": "Control the Presence Detect Select mode",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "OR",
+      "ValueName": "OR"
+    },
+    {
+      "ValueDisplayName": "AND",
+      "ValueName": "AND"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

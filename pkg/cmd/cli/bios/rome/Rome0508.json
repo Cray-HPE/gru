@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0508",
+  "DefaultValue": "Auto",
+  "DisplayName": "ACPI SLIT Distance Control",
+  "HelpText": "Determines how the SLIT distances are declared.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

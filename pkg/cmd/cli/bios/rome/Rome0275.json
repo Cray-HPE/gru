@@ -1,0 +1,46 @@
+{
+  "AttributeName": "Rome0275",
+  "DefaultValue": "Auto",
+  "DisplayName": "NTB Location",
+  "HelpText": "No help string",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Socket0-Die0",
+      "ValueName": "Socket0-Die0"
+    },
+    {
+      "ValueDisplayName": "Socket0-Die1",
+      "ValueName": "Socket0-Die1"
+    },
+    {
+      "ValueDisplayName": "Socket0-Die2",
+      "ValueName": "Socket0-Die2"
+    },
+    {
+      "ValueDisplayName": "Socket0-Die3",
+      "ValueName": "Socket0-Die3"
+    },
+    {
+      "ValueDisplayName": "Socket1-Die0",
+      "ValueName": "Socket1-Die0"
+    },
+    {
+      "ValueDisplayName": "Socket1-Die1",
+      "ValueName": "Socket1-Die1"
+    },
+    {
+      "ValueDisplayName": "Socket1-Die2",
+      "ValueName": "Socket1-Die2"
+    },
+    {
+      "ValueDisplayName": "Socket1-Die3",
+      "ValueName": "Socket1-Die3"
+    }
+  ]
+}

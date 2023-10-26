@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0554",
+  "DefaultValue": "Auto",
+  "DisplayName": "Loopback Mode",
+  "HelpText": "Enable/Disable Pcie Loopback Mode",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

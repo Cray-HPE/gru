@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0553",
+  "DefaultValue": "Auto",
+  "DisplayName": "NBIO RAS Control",
+  "HelpText": "(0) Disabled, (1) MCA",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "MCA",
+      "ValueName": "MCA"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

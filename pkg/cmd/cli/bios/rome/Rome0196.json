@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0196",
+  "DefaultValue": "Auto",
+  "DisplayName": "NBIO RAS Global Control",
+  "HelpText": "NBIO RAS Global Control",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

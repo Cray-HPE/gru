@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0167",
+  "DefaultValue": "Disabled",
+  "DisplayName": "HD Audio Enable",
+  "HelpText": "Control HD audio enable or disable",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

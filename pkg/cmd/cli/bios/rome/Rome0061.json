@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0061",
+  "DefaultValue": "Auto",
+  "DisplayName": "L2 Stream HW Prefetcher",
+  "HelpText": "Option to Enable | Disable L2 Stream HW Prefetcher",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disable",
+      "ValueName": "Disable"
+    },
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

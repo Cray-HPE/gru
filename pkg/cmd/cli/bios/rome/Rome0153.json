@@ -1,0 +1,26 @@
+{
+  "AttributeName": "Rome0153",
+  "DefaultValue": "1 Aggressor Channel",
+  "DisplayName": "Aggressor Channel",
+  "HelpText": "This helps read the aggressors channels. If it is enabled, you can read from one or more than one aggressor channel. The default is set to disabled.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "1 Aggressor Channel",
+      "ValueName": "1 Aggressor Channel"
+    },
+    {
+      "ValueDisplayName": "3 Aggressor Channels",
+      "ValueName": "3 Aggressor Channels"
+    },
+    {
+      "ValueDisplayName": "7 Aggressor Channels",
+      "ValueName": "7 Aggressor Channels"
+    }
+  ]
+}

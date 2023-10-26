@@ -1,0 +1,11 @@
+{
+  "AttributeName": "NWSK004",
+  "DefaultValue": 4,
+  "DisplayName": "PXE boot wait time",
+  "HelpText": "Wait time in seconds to press ESC key to abort the PXE boot. Use either +/- or numeric keys to set the value.",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 1,
+  "Type": "Integer",
+  "UpperBound": 5
+}

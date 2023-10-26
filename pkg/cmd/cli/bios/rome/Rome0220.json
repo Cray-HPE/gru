@@ -1,0 +1,34 @@
+{
+  "AttributeName": "Rome0220",
+  "DefaultValue": "Auto",
+  "DisplayName": "Uart 0 Legacy Options",
+  "HelpText": "No help string",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "0x2E8",
+      "ValueName": "0x2E8"
+    },
+    {
+      "ValueDisplayName": "0x2F8",
+      "ValueName": "0x2F8"
+    },
+    {
+      "ValueDisplayName": "0x3E8",
+      "ValueName": "0x3E8"
+    },
+    {
+      "ValueDisplayName": "0x3F8",
+      "ValueName": "0x3F8"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

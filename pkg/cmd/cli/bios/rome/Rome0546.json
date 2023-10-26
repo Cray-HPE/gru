@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0546",
+  "DefaultValue": "Auto",
+  "DisplayName": "RdRand",
+  "HelpText": "Disable RdRand instruction",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    },
+    {
+      "ValueDisplayName": "Disable",
+      "ValueName": "Disable"
+    }
+  ]
+}

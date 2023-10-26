@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0295",
+  "DefaultValue": 0,
+  "DisplayName": "Voltage (uV)",
+  "HelpText": "Voltage in uV (1V = 1000 * 1000 uV)",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 4294967295
+}

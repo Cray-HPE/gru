@@ -1,0 +1,94 @@
+{
+  "AttributeName": "Rome0093",
+  "DefaultValue": "Auto",
+  "DisplayName": "Trp",
+  "HelpText": "Specifies Row Precharge Delay Time.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "8 Clk",
+      "ValueName": "8 Clk"
+    },
+    {
+      "ValueDisplayName": "9 Clk",
+      "ValueName": "9 Clk"
+    },
+    {
+      "ValueDisplayName": "0Ah Clk",
+      "ValueName": "0Ah Clk"
+    },
+    {
+      "ValueDisplayName": "0Bh Clk",
+      "ValueName": "0Bh Clk"
+    },
+    {
+      "ValueDisplayName": "0Ch Clk",
+      "ValueName": "0Ch Clk"
+    },
+    {
+      "ValueDisplayName": "0Dh Clk",
+      "ValueName": "0Dh Clk"
+    },
+    {
+      "ValueDisplayName": "0Eh Clk",
+      "ValueName": "0Eh Clk"
+    },
+    {
+      "ValueDisplayName": "0Fh Clk",
+      "ValueName": "0Fh Clk"
+    },
+    {
+      "ValueDisplayName": "10h Clk",
+      "ValueName": "10h Clk"
+    },
+    {
+      "ValueDisplayName": "11h Clk",
+      "ValueName": "11h Clk"
+    },
+    {
+      "ValueDisplayName": "12h Clk",
+      "ValueName": "12h Clk"
+    },
+    {
+      "ValueDisplayName": "13h Clk",
+      "ValueName": "13h Clk"
+    },
+    {
+      "ValueDisplayName": "14h Clk",
+      "ValueName": "14h Clk"
+    },
+    {
+      "ValueDisplayName": "15h Clk",
+      "ValueName": "15h Clk"
+    },
+    {
+      "ValueDisplayName": "16h Clk",
+      "ValueName": "16h Clk"
+    },
+    {
+      "ValueDisplayName": "17h Clk",
+      "ValueName": "17h Clk"
+    },
+    {
+      "ValueDisplayName": "18h Clk",
+      "ValueName": "18h Clk"
+    },
+    {
+      "ValueDisplayName": "19h Clk",
+      "ValueName": "19h Clk"
+    },
+    {
+      "ValueDisplayName": "1Ah Clk",
+      "ValueName": "1Ah Clk"
+    },
+    {
+      "ValueDisplayName": "1Bh Clk",
+      "ValueName": "1Bh Clk"
+    }
+  ]
+}

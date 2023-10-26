@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0201",
+  "DefaultValue": "Disabled",
+  "DisplayName": "Log Poison Data from SLINK",
+  "HelpText": "This value specifies whether poison data propagated from SLINK will generate a deferred error.  When set to TRUE, deferred errors are enabled.  When set to FALSE, errors are not generated.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0281",
+  "DefaultValue": 7,
+  "DisplayName": "Combo CBS",
+  "HelpText": "No help string",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 255
+}

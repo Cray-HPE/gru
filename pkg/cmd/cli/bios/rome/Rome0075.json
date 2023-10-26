@@ -1,0 +1,30 @@
+{
+  "AttributeName": "Rome0075",
+  "DefaultValue": "NPS4",
+  "DisplayName": "NUMA nodes per socket",
+  "HelpText": "Specifies the number of desired NUMA nodes per socket.  Zero will attempt to interleave the two sockets together.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "NPS0",
+      "ValueName": "NPS0"
+    },
+    {
+      "ValueDisplayName": "NPS1",
+      "ValueName": "NPS1"
+    },
+    {
+      "ValueDisplayName": "NPS2",
+      "ValueName": "NPS2"
+    },
+    {
+      "ValueDisplayName": "NPS4",
+      "ValueName": "NPS4"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

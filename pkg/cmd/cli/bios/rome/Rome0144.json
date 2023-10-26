@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0144",
+  "DefaultValue": "Auto",
+  "DisplayName": "Address Hash Bank",
+  "HelpText": "Enable or disable bank address hashing",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

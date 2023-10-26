@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0068",
+  "DefaultValue": "Auto",
+  "DisplayName": "System probe filter",
+  "HelpText": "Controls whether or not the probe filter is enabled. Has no effect on parts where the probe filter is fuse disabled.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

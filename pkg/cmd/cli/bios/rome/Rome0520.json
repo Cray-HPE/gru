@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0520",
+  "DefaultValue": "Auto",
+  "DisplayName": "SATA Enable",
+  "HelpText": "Disable or enable OnChip SATA controller",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

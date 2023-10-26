@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0155",
+  "DefaultValue": "Disabled",
+  "DisplayName": "Target Static Lane Control",
+  "HelpText": "Enable or disable target static lane",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

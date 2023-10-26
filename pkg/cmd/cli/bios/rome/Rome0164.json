@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0164",
+  "DefaultValue": "Auto",
+  "DisplayName": "ACS Enable",
+  "HelpText": "AER must be enabled for ACS enable to work",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

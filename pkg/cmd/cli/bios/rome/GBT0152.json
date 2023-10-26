@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0152",
+  "DefaultValue": "Enabled",
+  "DisplayName": "Hardware Autonomous Speed",
+  "HelpText": "If supported by hardware and set to 'Disabled', this will disable the hardware's ability to change link speed except speed rate reduction for the purpose of correcting unstable link operation.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

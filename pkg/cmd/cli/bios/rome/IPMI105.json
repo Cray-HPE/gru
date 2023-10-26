@@ -1,0 +1,26 @@
+{
+  "AttributeName": "IPMI105",
+  "DefaultValue": "Reset",
+  "DisplayName": "OS Wtd Timer Policy",
+  "HelpText": "Configure how the system should respond if the OS Boot Watchdog Timer expires. Not available if OS Boot Watchdog Timer is disabled.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Do Nothing",
+      "ValueName": "Do Nothing"
+    },
+    {
+      "ValueDisplayName": "Reset",
+      "ValueName": "Reset"
+    },
+    {
+      "ValueDisplayName": "Power Down",
+      "ValueName": "Power Down"
+    },
+    {
+      "ValueDisplayName": "Power Cycle",
+      "ValueName": "Power Cycle"
+    }
+  ]
+}

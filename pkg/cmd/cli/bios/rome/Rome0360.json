@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0360",
+  "DefaultValue": 0,
+  "DisplayName": "SOC OVERCLOCK VID",
+  "HelpText": "Specifies the Voltage ID (VID) value for VDDR_SOC to support overclocking.  NOTE:  This is a VID value in hex and not a voltage level and applied if DDR speed is > 2933.   Voltage(V)=1.55V-Hex2Dec(VID)*0.00625V",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 255
+}

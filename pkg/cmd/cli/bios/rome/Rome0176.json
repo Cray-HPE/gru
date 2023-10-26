@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0176",
+  "DefaultValue": "Auto",
+  "DisplayName": "Precision Boost Overdrive Scalar",
+  "HelpText": "Disabled:Part runs with a scalar of 1X, i.e. normal operation.    Manual = Part runs with a scalar of customized Value.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    }
+  ]
+}

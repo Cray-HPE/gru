@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0199",
+  "DefaultValue": "Disabled",
+  "DisplayName": "SLINK Read Response OK",
+  "HelpText": "This value specifies whether SLINK read response errors are converted to an Okay response.  When this value is set to TRUE, read response errors are converted to Okay responses with data of all FFs.  When set to FALSE read response errors are not converted.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

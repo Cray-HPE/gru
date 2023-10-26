@@ -1,0 +1,30 @@
+{
+  "AttributeName": "GBT0149",
+  "DefaultValue": "Auto",
+  "DisplayName": "Target Link Speed",
+  "HelpText": "If supported by hardware and set to 'Force to X.X GT/s' for Downstream Ports, this sets an upper limit on Link operational speed by restricting the values advertised by the Upstream component in its training sequences. When 'Auto' is selected HW initialized data will be used.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Force to 2.5 GT/s",
+      "ValueName": "Force to 2.5 GT/s"
+    },
+    {
+      "ValueDisplayName": "Force to 5.0 GT/s",
+      "ValueName": "Force to 5.0 GT/s"
+    },
+    {
+      "ValueDisplayName": "Force to 8.0 GT/s",
+      "ValueName": "Force to 8.0 GT/s"
+    },
+    {
+      "ValueDisplayName": "Force to 16.0 GT/s",
+      "ValueName": "Force to 16.0 GT/s"
+    }
+  ]
+}

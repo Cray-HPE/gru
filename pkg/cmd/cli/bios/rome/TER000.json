@@ -1,0 +1,8 @@
+{
+  "AttributeName": "TER000",
+  "DefaultValue": true,
+  "DisplayName": "Console Redirection",
+  "HelpText": "Console Redirection Enable or Disable.",
+  "ReadOnly": false,
+  "Type": "Boolean"
+}

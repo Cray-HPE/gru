@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0190",
+  "DefaultValue": "Auto",
+  "DisplayName": "DF Cstates",
+  "HelpText": "Enable = Enable DF C-states  Disable = Disable DF C-states",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0233",
+  "DefaultValue": "Auto",
+  "DisplayName": "Reset after sync flood",
+  "HelpText": "Enable AB to forward downstream sync-flood message to system  controller.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    },
+    {
+      "ValueDisplayName": "Disable",
+      "ValueName": "Disable"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

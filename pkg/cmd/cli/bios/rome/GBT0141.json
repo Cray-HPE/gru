@@ -1,0 +1,11 @@
+{
+  "AttributeName": "GBT0141",
+  "DefaultValue": 1000,
+  "DisplayName": "Link Training Timeout (uS)",
+  "HelpText": "Defines number of Microseconds software will wait before polling 'Link Training' bit in Link Status register. Value range from 10 to 10000 uS.",
+  "LowerBound": 10,
+  "ReadOnly": false,
+  "ScalarIncrement": 10,
+  "Type": "Integer",
+  "UpperBound": 10000
+}

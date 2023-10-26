@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0185",
+  "DefaultValue": "2",
+  "DisplayName": "xGMI Force Link Width",
+  "HelpText": "0 = Force xGMI link width to x2  1 = Force xGMI link width to x8  2 = Force xGMI link width to x16",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "0",
+      "ValueName": "0"
+    },
+    {
+      "ValueDisplayName": "1",
+      "ValueName": "1"
+    },
+    {
+      "ValueDisplayName": "2",
+      "ValueName": "2"
+    }
+  ]
+}

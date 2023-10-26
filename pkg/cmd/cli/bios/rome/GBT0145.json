@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0145",
+  "DefaultValue": "Disabled",
+  "DisplayName": "AtomicOp Egress Blocking",
+  "HelpText": "If supported by hardware and set to 'Enabled', outbound AtomicOp Requests via Egress Ports will be blocked.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

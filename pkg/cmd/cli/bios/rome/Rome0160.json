@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0160",
+  "DefaultValue": "2",
+  "DisplayName": "Write Voltage Sweep Step Size",
+  "HelpText": "This option determines the step size for write Data Eye voltage sweep, Supported options are 1,2 and 4",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "1",
+      "ValueName": "1"
+    },
+    {
+      "ValueDisplayName": "2",
+      "ValueName": "2"
+    },
+    {
+      "ValueDisplayName": "4",
+      "ValueName": "4"
+    }
+  ]
+}

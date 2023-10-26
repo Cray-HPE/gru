@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0492",
+  "DefaultValue": "Polled",
+  "DisplayName": "CCIX GHES Deferred Err Notify Type",
+  "HelpText": "Notification type for CCIX deferred error",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Polled",
+      "ValueName": "Polled"
+    },
+    {
+      "ValueDisplayName": "SCI",
+      "ValueName": "SCI"
+    }
+  ]
+}

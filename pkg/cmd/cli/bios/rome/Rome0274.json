@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0274",
+  "DefaultValue": "Auto",
+  "DisplayName": "NTB Enable",
+  "HelpText": "Enable NTB",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    }
+  ]
+}

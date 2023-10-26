@@ -1,0 +1,26 @@
+{
+  "AttributeName": "TER002",
+  "DefaultValue": "115200",
+  "DisplayName": "Bits per second",
+  "HelpText": "Selects serial port transmission speed. The speed must be matched on the other side. Long or noisy lines may require lower speeds.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "9600",
+      "ValueName": "9600"
+    },
+    {
+      "ValueDisplayName": "19200",
+      "ValueName": "19200"
+    },
+    {
+      "ValueDisplayName": "57600",
+      "ValueName": "57600"
+    },
+    {
+      "ValueDisplayName": "115200",
+      "ValueName": "115200"
+    }
+  ]
+}

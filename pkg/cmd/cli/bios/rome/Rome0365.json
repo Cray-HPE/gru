@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0365",
+  "DefaultValue": 700,
+  "DisplayName": "CLDO_VDDP voltage",
+  "HelpText": "Warning: user must manually cold reset the system so that the CLDOs get re-latched otherwise the voltage change will not take into effect.    CLDO_VDDP voltage [mV] = (supported range is 700mV to 'VDDIO-100mV').",
+  "LowerBound": 700,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 4294967295
+}
