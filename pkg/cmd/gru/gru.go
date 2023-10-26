@@ -28,17 +28,17 @@ package gru
 
 import (
 	"fmt"
+
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/chassis"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/get"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/set"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/show"
 	"github.com/Cray-HPE/gru/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
-
-var newArgs []string
 
 // NewCommand creates the main command for `gru`.
 func NewCommand(name string) *cobra.Command {
@@ -93,6 +93,7 @@ the YAML file may provide these per host.
 		chassis.NewCommand(),
 		get.NewCommand(),
 		show.NewCommand(),
+		set.NewCommand(),
 	)
 
 	return c
