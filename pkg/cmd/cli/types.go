@@ -42,3 +42,18 @@ type State struct {
 	PowerState redfish.PowerState `json:"powerState"`
 	Error      error              `json:"error,omitempty"`
 }
+
+// Boot represents boot configuration on the BMC. Only Error is emitted on empty.
+type Boot struct {
+	Order []BootDescription `json:"order"`
+	Next  string            `json:"next"`
+	Error error             `json:"error,omitempty"`
+}
+
+type BootDescription map[string]string
+
+// Override represents the result of the boot override.
+type Override struct {
+	Target redfish.BootSourceOverrideTarget `json:"target"`
+	Error  error                            `json:"error,omitempty"`
+}
