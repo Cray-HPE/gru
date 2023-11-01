@@ -50,6 +50,7 @@ type Boot struct {
 	Error error             `json:"error,omitempty"`
 }
 
+// BootDescription is a map of a boot identifier (Boot0001) to a friendly name (PXE Interface 01 IPv4)
 type BootDescription map[string]string
 
 // Override represents the result of the boot override.

@@ -29,6 +29,7 @@ package boot
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/Cray-HPE/gru/pkg/auth"
@@ -76,42 +77,62 @@ func getBootInformation(host string, args ...string) interface{} {
 
 	// get the bootoptions endpoint
 	resp, err := systems[0].Client.Get(bo)
-	if err != nil {
-		return err
-	}
-
-	// store options in a map for easy manipulation
-	opts := make(map[string]interface{})
-	err = json.NewDecoder(resp.Body).Decode(&opts)
-	if err != nil {
-		return err
-	}
-
-	// make a map for the descriptions
-	// boot.Descriptions = make(map[string]string, 0)
-	for _, b := range systems[0].Boot.BootOrder {
-		// the endpoint is BootOptions/NNNN so strip off 'Boot' from the boot order name
-		ep := fmt.Sprintf("%s/%s", bo, strings.TrimPrefix(b, "Boot"))
-		// get the endpoint
-		response, err := systems[0].Client.Get(ep)
+	// GB has this key
+	if err == nil || resp != nil {
+		// store options in a map for easy manipulation
+		opts := make(map[string]interface{})
+		err = json.NewDecoder(resp.Body).Decode(&opts)
 		if err != nil {
 			return err
 		}
-		// decode to a map
+
+		// make a map for the descriptions
+		// boot.Descriptions = make(map[string]string, 0)
+		for _, b := range systems[0].Boot.BootOrder {
+			// the endpoint is BootOptions/NNNN so strip off 'Boot' from the boot order name
+			ep := fmt.Sprintf("%s/%s", bo, strings.TrimPrefix(b, "Boot"))
+			// get the endpoint
+			response, err := systems[0].Client.Get(ep)
+			if err != nil {
+				return err
+			}
+			// decode to a map
+			names := make(map[string]interface{})
+			err = json.NewDecoder(response.Body).Decode(&names)
+			if err != nil {
+				return err
+			}
+
+			bd := cli.BootDescription{}
+			bd[b] = names["Description"].(string)
+			// create a key with the boot option using the friendly name as the value
+			boot.Order = append(boot.Order, bd)
+		}
+		// Intel
+	} else {
+		bo = strings.TrimRight(systems[0].ODataID, "/")
+		// get the bootoptions endpoint
+		response, err := systems[0].Client.Get(bo)
+		if err != nil {
+			return err
+		}
 		names := make(map[string]interface{})
 		err = json.NewDecoder(response.Body).Decode(&names)
 		if err != nil {
 			return err
 		}
 
-		bd := cli.BootDescription{}
-		bd[b] = names["Description"].(string)
-		// create a key with the boot option using the friendly name as the value
-		boot.Order = append(boot.Order, bd)
+		for i, v := range names["BootOrder"].([]interface{}) {
+			k := strconv.Itoa(i)
+			bd := cli.BootDescription{}
+			bd[k] = v.(string)
+			// create a key with the boot option using the friendly name as the value
+			boot.Order = append(boot.Order, bd)
+		}
+
 	}
 
 	boot.Next = systems[0].Boot.BootNext
-	// boot.Order = systems[0].Boot.BootOrder
 
 	return boot
 }
