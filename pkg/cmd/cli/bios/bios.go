@@ -31,8 +31,8 @@ import (
 	"strings"
 )
 
-func makeAttributes(args []string) redfish.BiosAttributes {
-	attributes := redfish.BiosAttributes{}
+func makeAttributes(args []string) redfish.SettingsAttributes {
+	attributes := redfish.SettingsAttributes{}
 	for _, attribute := range args {
 		if key, value, ok := strings.Cut(attribute, "="); ok {
 			attributes[key] = value
