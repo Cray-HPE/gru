@@ -30,7 +30,7 @@ go 1.20
 require (
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.17.0
-	github.com/stmcginnis/gofish v0.13.0
+	github.com/stmcginnis/gofish v0.14.0
 )
 
 require (
