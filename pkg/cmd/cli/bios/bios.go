@@ -44,6 +44,9 @@ var (
 )
 
 // getBiosAttributes returns the computer systems, the bios (for system 0), and an error/nil from an endpoint
+// TODO: return a map of systems to bios objects
+// as-is, we get all systems but only return system[0].Bios, there could be different Bios per system
+// someone could also use the wrong system in the returned slice of systems
 func getBiosAttributes(host string) (systems []*redfish.ComputerSystem, bios *redfish.Bios, err error) {
 	// set up the client
 	c, err := auth.Connection(host)
@@ -60,7 +63,7 @@ func getBiosAttributes(host string) (systems []*redfish.ComputerSystem, bios *re
 	}
 
 	// get the bios for the first system
-	// FIXME: return all?
+	// TODO from above: create map[string]*redfish.Bios (systems[0].HostName)
 	bios, err = systems[0].Bios()
 	if err != nil {
 		return systems, bios, err

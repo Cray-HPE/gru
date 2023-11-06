@@ -140,6 +140,15 @@ func getBIOSSettings(host string, requestedAttributes ...string) interface{} {
 			// use vendor-specific settings, pre-determined and known to work
 			virtAttrs := virtSettings(virt, systems[0].Manufacturer)
 			for k := range virtAttrs {
+				romeAttr, exists := romeMap.Attributes[k]
+				if exists {
+					// convert to a friendly name for non-json
+					if viper.GetBool("json") {
+						k = romeAttr.AttributeName
+					} else {
+						k = fmt.Sprintf("%s (%s)", romeAttr.AttributeName, romeAttr.DisplayName)
+					}
+				}
 				attributes[k] = bios.Attributes[k]
 			}
 		} else {
@@ -192,9 +201,7 @@ func getPendingAttributes(bios *redfish.Bios) map[string]interface{} {
 		return pendingAttrs
 	}
 
-	// Get the times the changes could apply
-	// at := bios.AllowedAttributeUpdateApplyTimes()
-	// intel only stages modified keys
+	// get staged modified keys
 	modified := make(map[string]interface{})
 	for k, v := range staged["Attributes"].(map[string]interface{}) {
 		// if the value does not match the value of the current setting, add it to
@@ -203,10 +210,11 @@ func getPendingAttributes(bios *redfish.Bios) map[string]interface{} {
 			modified[k] = v
 		}
 	}
+	// return a Pending key, this is not a redfish construct, but one that is nice for humans and robots
+	// TODO: might want to add the ApplyTimes so the user knows when the change could take effect
 	pendingAttrs = map[string]interface{}{
 		"Pending": map[string]interface{}{
 			"Attributes": modified,
-			// "UpdateApplyTimes": at,
 		},
 	}
 	return pendingAttrs
