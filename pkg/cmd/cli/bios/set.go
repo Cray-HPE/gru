@@ -39,7 +39,7 @@ func NewSetCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "set attribute=value[,keyN=valueN]",
 		Short: "Sets BIOS attributes",
-		Long:  `Sets BIOS attributes if the attribute is found and the value is valid.`,
+		Long:  `Sets BIOS attributes if the attribute is found and the value is valid`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			a := viper.GetStringSlice("attributes")
@@ -52,7 +52,7 @@ func NewSetCommand() *cobra.Command {
 	c.PersistentFlags().StringSlice(
 		"attributes",
 		[]string{},
-		"Comma delimited list of attributes and values to set them to.",
+		"Comma delimited list of attributes and values to set them to",
 	)
 	return c
 }

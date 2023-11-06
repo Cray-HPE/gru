@@ -38,7 +38,7 @@ func NewShowCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "boot [flags] host [...host]",
 		Short: "Boot information",
-		Long:  `Show the current BootOrder; BootNext, networkRetry, and more.`,
+		Long:  `Show the current BootOrder; BootNext, networkRetry, and more`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := query.Async(getBootInformation, hosts)

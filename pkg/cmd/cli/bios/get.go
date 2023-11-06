@@ -39,7 +39,7 @@ func NewGetCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "get [key[,keyN]]",
 		Short: "Gets BIOS settings by key-name, or get every key",
-		Long:  `Gets BIOS settings.`,
+		Long:  `Gets BIOS settings`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := query.Async(getBIOSSettings, hosts)
@@ -50,7 +50,7 @@ func NewGetCommand() *cobra.Command {
 	c.PersistentFlags().StringSlice(
 		"attributes",
 		[]string{},
-		"Comma delimited list of attributes and values to set them to.",
+		"Comma delimited list of attributes and values to set them to",
 	)
 	return c
 }

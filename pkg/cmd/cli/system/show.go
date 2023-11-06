@@ -38,7 +38,7 @@ func NewShowCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "system [flags] host [...host]",
 		Short: "System information",
-		Long:  `Show the Server Manufacturer, Server Model, System Version, and Firmware Version for the given server(s).`,
+		Long:  `Show the Server Manufacturer, Server Model, System Version, and Firmware Version for the given server(s)`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := query.Async(getSystemInformation, hosts)

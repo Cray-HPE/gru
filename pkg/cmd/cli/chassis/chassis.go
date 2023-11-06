@@ -38,7 +38,7 @@ func NewCommand() *cobra.Command {
 		Use:                   "chassis",
 		DisableFlagsInUseLine: true,
 		Short:                 "Chassis control",
-		Long:                  `Interact with a host's chassis.`,
+		Long:                  `Interact with a host's chassis`,
 		Hidden:                false,
 	}
 	c.AddCommand(

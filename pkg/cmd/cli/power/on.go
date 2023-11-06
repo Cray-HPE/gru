@@ -38,7 +38,7 @@ func NewPowerOnCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "on",
 		Short: "Power on the target machine(s)",
-		Long:  `Powers on the target machines (cold boot).`,
+		Long:  `Powers on the target machines (cold boot)`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := set.Async(Issue, hosts, redfish.OnResetType)

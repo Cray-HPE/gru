@@ -67,7 +67,7 @@ Also allows bypassing the OS shutdown, forcing a warm boot.`,
 		"f",
 		false,
 		fmt.Sprintln(
-			"Immediately restart waiting for the OS (warm boot).",
+			"Immediately restart waiting for the OS (warm boot)",
 		),
 	)
 	return c

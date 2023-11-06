@@ -36,7 +36,7 @@ func NewCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "set",
 		Short: "Set new values in Redfish",
-		Long:  `Sets new values in Redfish based on subcommand.`,
+		Long:  `Sets new values in Redfish based on subcommand`,
 		Run: func(c *cobra.Command, args []string) {
 		},
 	}

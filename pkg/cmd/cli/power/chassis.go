@@ -35,7 +35,7 @@ func NewChassisCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:    "power [flags] host [...host]",
 		Short:  "Power Control",
-		Long:   `Check power status, or power on, off, cycle, or reset a host.`,
+		Long:   `Check power status, or power on, off, cycle, or reset a host`,
 		Hidden: false,
 	}
 	c.AddCommand(
