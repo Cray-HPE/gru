@@ -1,0 +1,26 @@
+{
+  "AttributeName": "IPMI104",
+  "DefaultValue": "10 minutes",
+  "DisplayName": "OS Wtd Timer Timeout",
+  "HelpText": "Configure the length of the OS Boot Watchdog Timer.  Not available if OS Boot Watchdog Timer is disabled.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "5 minutes",
+      "ValueName": "5 minutes"
+    },
+    {
+      "ValueDisplayName": "10 minutes",
+      "ValueName": "10 minutes"
+    },
+    {
+      "ValueDisplayName": "15 minutes",
+      "ValueName": "15 minutes"
+    },
+    {
+      "ValueDisplayName": "20 minutes",
+      "ValueName": "20 minutes"
+    }
+  ]
+}

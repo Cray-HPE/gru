@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0229",
+  "DefaultValue": "Auto",
+  "DisplayName": "Driver Type",
+  "HelpText": "Bios will select MS driver for SD selections.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "AMD eMMC Driver",
+      "ValueName": "AMD eMMC Driver"
+    },
+    {
+      "ValueDisplayName": "MS Driver",
+      "ValueName": "MS Driver"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

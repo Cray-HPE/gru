@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0498",
+  "DefaultValue": 1000,
+  "DisplayName": "SMI Period",
+  "HelpText": "The [SMI Period] defines the polling interval (Default: 1000 dec, Maximum: 32767 dec, 0: Disable, Unit: ms)",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 32767
+}

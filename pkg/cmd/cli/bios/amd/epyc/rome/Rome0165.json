@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0165",
+  "DefaultValue": "Auto",
+  "DisplayName": "PCIe ARI Support",
+  "HelpText": "Enables Alternative Routing-ID Interpretation",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disable",
+      "ValueName": "Disable"
+    },
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

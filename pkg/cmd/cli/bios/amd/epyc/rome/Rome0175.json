@@ -1,0 +1,26 @@
+{
+  "AttributeName": "Rome0175",
+  "DefaultValue": "Auto",
+  "DisplayName": "Precision Boost Overdrive",
+  "HelpText": "Precision Boost Overdrive:    Disabled: stock board values for standard IRM    Enabled: Loads board limits for EDC, TDC and PPT.    Manual: manual setting of PPT, TDC and EDC",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Disable",
+      "ValueName": "Disable"
+    },
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    },
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    }
+  ]
+}

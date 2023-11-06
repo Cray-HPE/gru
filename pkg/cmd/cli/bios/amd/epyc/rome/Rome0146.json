@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0146",
+  "DefaultValue": "Auto",
+  "DisplayName": "Address Hash Rm",
+  "HelpText": "Enable or disable RM address hashing",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

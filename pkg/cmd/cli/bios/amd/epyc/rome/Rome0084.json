@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0084",
+  "DefaultValue": "Auto",
+  "DisplayName": "CAKE CRC perf bounds Control",
+  "HelpText": "Customize the amount of performance loss that is acceptable to enable CRC protection",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "AttributeName": "Rome0054",
+  "DefaultValue": "Auto",
+  "DisplayName": "CCD Control",
+  "HelpText": "Sets the number of CCDs to be used. Once this option has been used to remove any CCDs, a POWER CYCLE is required in order for future selections to take effect.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "2 CCDs",
+      "ValueName": "2 CCDs"
+    },
+    {
+      "ValueDisplayName": "3 CCDs",
+      "ValueName": "3 CCDs"
+    },
+    {
+      "ValueDisplayName": "4 CCDs",
+      "ValueName": "4 CCDs"
+    },
+    {
+      "ValueDisplayName": "6 CCDs",
+      "ValueName": "6 CCDs"
+    }
+  ]
+}

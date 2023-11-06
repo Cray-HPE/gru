@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0511",
+  "DefaultValue": "Auto",
+  "DisplayName": "RCD Parity",
+  "HelpText": "Enable or Disable RCD parity",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

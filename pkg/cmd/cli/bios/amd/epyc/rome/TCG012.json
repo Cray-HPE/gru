@@ -1,0 +1,18 @@
+{
+  "AttributeName": "TCG012",
+  "DefaultValue": "Enabled",
+  "DisplayName": "  Storage Hierarchy",
+  "HelpText": "Enable or Disable Storage Hierarchy",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0150",
+  "DefaultValue": "Auto",
+  "DisplayName": "MBIST Aggressors",
+  "HelpText": "Enable or disable MBIST Aggressor test",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

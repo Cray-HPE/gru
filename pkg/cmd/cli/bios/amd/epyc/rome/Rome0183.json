@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0183",
+  "DefaultValue": "Auto",
+  "DisplayName": "Package Power Limit Control",
+  "HelpText": "Auto = Use the fused PPT  Manual = User can set customized PPT  ***PPT will be used as the ASIC power limit***",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

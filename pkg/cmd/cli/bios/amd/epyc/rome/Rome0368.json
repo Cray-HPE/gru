@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0368",
+  "DefaultValue": 0,
+  "DisplayName": "Low Temperature",
+  "HelpText": "Low Temperature ['C]",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 255
+}

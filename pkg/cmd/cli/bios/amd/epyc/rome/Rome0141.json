@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0141",
+  "DefaultValue": "Auto",
+  "DisplayName": "Chipselect Interleaving",
+  "HelpText": "Interleave memory blocks across the DRAM chip selects for node 0.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

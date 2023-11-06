@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0101",
+  "DefaultValue": "Auto",
+  "DisplayName": "Twr Ctrl",
+  "HelpText": "Specify Twr",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0033",
+  "DefaultValue": "Auto",
+  "DisplayName": "Power Supply Idle Control",
+  "HelpText": "Power Supply Idle Control.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Low Current Idle",
+      "ValueName": "Low Current Idle"
+    },
+    {
+      "ValueDisplayName": "Typical Current Idle",
+      "ValueName": "Typical Current Idle"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

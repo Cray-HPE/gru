@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0072",
+  "DefaultValue": "Auto",
+  "DisplayName": "Poison scrubber control",
+  "HelpText": "Control DF::RedirScrubCtrl[RedirScrubMode[1]]",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

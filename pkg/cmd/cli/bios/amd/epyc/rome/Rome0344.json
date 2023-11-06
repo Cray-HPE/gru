@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0344",
+  "DefaultValue": 312,
+  "DisplayName": "Trfc",
+  "HelpText": "Specifies the Refresh Recovery Delay Time (tRFC1). Valid values 3DEh-3Ch",
+  "LowerBound": 60,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 990
+}

@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0352",
+  "DefaultValue": 0,
+  "DisplayName": "Aggressor Static Lane Select Lower 32 Bits",
+  "HelpText": "Static Lane Select for Lower 32 bits. The bit mask represents the bits to be read",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 4294967295
+}

@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0225",
+  "DefaultValue": "Auto",
+  "DisplayName": "Uart 3 Enable (no HW FC)",
+  "HelpText": "Uart 3 has no HW FC if Uart 1 is enabled",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

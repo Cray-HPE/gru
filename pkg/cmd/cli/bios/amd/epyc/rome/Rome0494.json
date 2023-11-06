@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0494",
+  "DefaultValue": "Disabled",
+  "DisplayName": "DDR4 DRAM Hard Post Package Repair",
+  "HelpText": "This feature allows spare DRAM rows to replace malfunctioning rows via an in-field repair mechanism",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled ",
+      "ValueName": "Enabled "
+    }
+  ]
+}

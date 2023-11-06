@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0379",
+  "DefaultValue": 4294967291,
+  "DisplayName": "Egress Poison Mask Low",
+  "HelpText": "These set the enable mask for masking of errors logged in EGRESS_POISON_STATUS. For each bit set to 1, errors are masked.  For each bit set to 0, errors trigger response actions.",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 4294967295
+}

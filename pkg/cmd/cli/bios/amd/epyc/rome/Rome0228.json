@@ -1,0 +1,62 @@
+{
+  "AttributeName": "Rome0228",
+  "DefaultValue": "Auto",
+  "DisplayName": "eMMC/SD Configure",
+  "HelpText": "No help string",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "SD Normal Speed",
+      "ValueName": "SD Normal Speed"
+    },
+    {
+      "ValueDisplayName": "SD High Speed",
+      "ValueName": "SD High Speed"
+    },
+    {
+      "ValueDisplayName": "SD UHSI-SDR50",
+      "ValueName": "SD UHSI-SDR50"
+    },
+    {
+      "ValueDisplayName": "SD UHSI-DDR50",
+      "ValueName": "SD UHSI-DDR50"
+    },
+    {
+      "ValueDisplayName": "SD UHSI-SDR104",
+      "ValueName": "SD UHSI-SDR104"
+    },
+    {
+      "ValueDisplayName": "eMMC Emmc Backward Compatibility",
+      "ValueName": "eMMC Emmc Backward Compatibility"
+    },
+    {
+      "ValueDisplayName": "eMMC High Speed SDR",
+      "ValueName": "eMMC High Speed SDR"
+    },
+    {
+      "ValueDisplayName": "eMMC High Speed DDR",
+      "ValueName": "eMMC High Speed DDR"
+    },
+    {
+      "ValueDisplayName": "eMMC HS200",
+      "ValueName": "eMMC HS200"
+    },
+    {
+      "ValueDisplayName": "eMMC HS400",
+      "ValueName": "eMMC HS400"
+    },
+    {
+      "ValueDisplayName": "eMMC HS300",
+      "ValueName": "eMMC HS300"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

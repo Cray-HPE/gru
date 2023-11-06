@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0142",
+  "DefaultValue": "Disabled",
+  "DisplayName": "Restore PCIE Registers",
+  "HelpText": "On non-PCI Express aware OS's (Pre Windows Vista) some devices may not be correctly reinitialized after S3. Enabling this restors PCI Express device configurations on S3 resume. Warning: Enabling this may cause issues with other hardware after S3 resume.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

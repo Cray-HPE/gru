@@ -1,0 +1,18 @@
+{
+  "AttributeName": "PCIS003",
+  "DefaultValue": "Enabled",
+  "DisplayName": "Above 4G Decoding",
+  "HelpText": "Enables or Disables 64bit capable Devices to be Decoded in Above 4G Address Space (Only if System Supports 64 bit PCI Decoding).",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

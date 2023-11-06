@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0337",
+  "DefaultValue": 100,
+  "DisplayName": "CAKE CRC perf bounds",
+  "HelpText": "Specify the amount of performance loss that is acceptable to enable CRC protection.  Units are in 0.00001%, Range: disabled (0) - 10% (1000000).",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 1000000
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0195",
+  "DefaultValue": "25kHz",
+  "DisplayName": "Pwm Frequency",
+  "HelpText": "0 = 25kHz  1 = 100Hz",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "100Hz",
+      "ValueName": "100Hz"
+    },
+    {
+      "ValueDisplayName": "25kHz",
+      "ValueName": "25kHz"
+    }
+  ]
+}

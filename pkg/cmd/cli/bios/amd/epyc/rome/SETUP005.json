@@ -1,0 +1,8 @@
+{
+  "AttributeName": "SETUP005",
+  "DefaultValue": true,
+  "DisplayName": "Quiet Boot",
+  "HelpText": "Enables or disables Quiet Boot option",
+  "ReadOnly": false,
+  "Type": "Boolean"
+}

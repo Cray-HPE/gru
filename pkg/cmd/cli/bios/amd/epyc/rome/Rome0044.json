@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0044",
+  "DefaultValue": "Auto",
+  "DisplayName": "PPIN Opt-in",
+  "HelpText": "Turn on PPIN feature",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

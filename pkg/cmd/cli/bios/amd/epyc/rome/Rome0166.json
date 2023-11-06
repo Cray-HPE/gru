@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0166",
+  "DefaultValue": "Auto",
+  "DisplayName": "PCIe Ten Bit Tag Support",
+  "HelpText": "Enables PCIe ten bit tags for supported devices.  Auto = Disabled",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disable",
+      "ValueName": "Disable"
+    },
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

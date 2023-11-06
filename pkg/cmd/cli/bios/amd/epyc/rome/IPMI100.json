@@ -1,0 +1,18 @@
+{
+  "AttributeName": "IPMI100",
+  "DefaultValue": "Enabled",
+  "DisplayName": "FRB-2 Timer",
+  "HelpText": "Enable or Disable FRB-2 timer(POST timer)",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

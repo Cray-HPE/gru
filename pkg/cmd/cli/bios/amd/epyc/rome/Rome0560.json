@@ -1,0 +1,46 @@
+{
+  "AttributeName": "Rome0560",
+  "DefaultValue": "Auto",
+  "DisplayName": "DRAM Maximum Activate Count",
+  "HelpText": "Override DIMM SPD Byte 7 [3:0] Maximum Activate Count (MAC)  Auto: based on SPD setting",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Untested MAC",
+      "ValueName": "Untested MAC"
+    },
+    {
+      "ValueDisplayName": "700 K",
+      "ValueName": "700 K"
+    },
+    {
+      "ValueDisplayName": "600 K",
+      "ValueName": "600 K"
+    },
+    {
+      "ValueDisplayName": "500 K",
+      "ValueName": "500 K"
+    },
+    {
+      "ValueDisplayName": "400 K",
+      "ValueName": "400 K"
+    },
+    {
+      "ValueDisplayName": "300 K",
+      "ValueName": "300 K"
+    },
+    {
+      "ValueDisplayName": "200 K",
+      "ValueName": "200 K"
+    },
+    {
+      "ValueDisplayName": "Unlimited MAC",
+      "ValueName": "Unlimited MAC"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

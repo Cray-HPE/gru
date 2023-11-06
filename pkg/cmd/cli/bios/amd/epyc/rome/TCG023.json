@@ -1,0 +1,18 @@
+{
+  "AttributeName": "TCG023",
+  "DefaultValue": "Disabled",
+  "DisplayName": "  Disable Block Sid",
+  "HelpText": "  Override to allow SID authentication in TCG Storage device",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

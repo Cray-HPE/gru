@@ -1,0 +1,178 @@
+{
+  "AttributeName": "Rome0173",
+  "DefaultValue": "Auto",
+  "DisplayName": "MEMCLK Frequency",
+  "HelpText": "Specifies the MEMCLK frequency.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "667MHz",
+      "ValueName": "667MHz"
+    },
+    {
+      "ValueDisplayName": "800MHz",
+      "ValueName": "800MHz"
+    },
+    {
+      "ValueDisplayName": "933MHz",
+      "ValueName": "933MHz"
+    },
+    {
+      "ValueDisplayName": "1067MHz",
+      "ValueName": "1067MHz"
+    },
+    {
+      "ValueDisplayName": "1200MHz",
+      "ValueName": "1200MHz"
+    },
+    {
+      "ValueDisplayName": "1333MHz",
+      "ValueName": "1333MHz"
+    },
+    {
+      "ValueDisplayName": "1367MHz",
+      "ValueName": "1367MHz"
+    },
+    {
+      "ValueDisplayName": "1400MHz",
+      "ValueName": "1400MHz"
+    },
+    {
+      "ValueDisplayName": "1433MHz",
+      "ValueName": "1433MHz"
+    },
+    {
+      "ValueDisplayName": "1467MHz",
+      "ValueName": "1467MHz"
+    },
+    {
+      "ValueDisplayName": "1500MHz",
+      "ValueName": "1500MHz"
+    },
+    {
+      "ValueDisplayName": "1533MHz",
+      "ValueName": "1533MHz"
+    },
+    {
+      "ValueDisplayName": "1567MHz",
+      "ValueName": "1567MHz"
+    },
+    {
+      "ValueDisplayName": "1600MHz",
+      "ValueName": "1600MHz"
+    },
+    {
+      "ValueDisplayName": "1633MHz",
+      "ValueName": "1633MHz"
+    },
+    {
+      "ValueDisplayName": "1667MHz",
+      "ValueName": "1667MHz"
+    },
+    {
+      "ValueDisplayName": "1700MHz",
+      "ValueName": "1700MHz"
+    },
+    {
+      "ValueDisplayName": "1733MHz",
+      "ValueName": "1733MHz"
+    },
+    {
+      "ValueDisplayName": "1767MHz",
+      "ValueName": "1767MHz"
+    },
+    {
+      "ValueDisplayName": "1800MHz",
+      "ValueName": "1800MHz"
+    },
+    {
+      "ValueDisplayName": "1833MHz",
+      "ValueName": "1833MHz"
+    },
+    {
+      "ValueDisplayName": "1867MHz",
+      "ValueName": "1867MHz"
+    },
+    {
+      "ValueDisplayName": "1900MHz",
+      "ValueName": "1900MHz"
+    },
+    {
+      "ValueDisplayName": "1933MHz",
+      "ValueName": "1933MHz"
+    },
+    {
+      "ValueDisplayName": "1967MHz",
+      "ValueName": "1967MHz"
+    },
+    {
+      "ValueDisplayName": "2000MHz",
+      "ValueName": "2000MHz"
+    },
+    {
+      "ValueDisplayName": "2033MHz",
+      "ValueName": "2033MHz"
+    },
+    {
+      "ValueDisplayName": "2067MHz",
+      "ValueName": "2067MHz"
+    },
+    {
+      "ValueDisplayName": "2100MHz",
+      "ValueName": "2100MHz"
+    },
+    {
+      "ValueDisplayName": "2133MHz",
+      "ValueName": "2133MHz"
+    },
+    {
+      "ValueDisplayName": "2167MHz",
+      "ValueName": "2167MHz"
+    },
+    {
+      "ValueDisplayName": "2200MHz",
+      "ValueName": "2200MHz"
+    },
+    {
+      "ValueDisplayName": "2233MHz",
+      "ValueName": "2233MHz"
+    },
+    {
+      "ValueDisplayName": "2267MHz",
+      "ValueName": "2267MHz"
+    },
+    {
+      "ValueDisplayName": "2300MHz",
+      "ValueName": "2300MHz"
+    },
+    {
+      "ValueDisplayName": "2333MHz",
+      "ValueName": "2333MHz"
+    },
+    {
+      "ValueDisplayName": "2367MHz",
+      "ValueName": "2367MHz"
+    },
+    {
+      "ValueDisplayName": "2400MHz",
+      "ValueName": "2400MHz"
+    },
+    {
+      "ValueDisplayName": "2433MHz",
+      "ValueName": "2433MHz"
+    },
+    {
+      "ValueDisplayName": "2467MHz",
+      "ValueName": "2467MHz"
+    },
+    {
+      "ValueDisplayName": "2500MHz",
+      "ValueName": "2500MHz"
+    }
+  ]
+}

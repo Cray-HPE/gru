@@ -1,0 +1,26 @@
+{
+  "AttributeName": "GBT0090",
+  "DefaultValue": "Auto",
+  "DisplayName": "SATA Port 0",
+  "HelpText": "Change SATA port 0 function. SATA/PCIe x4",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "SATA",
+      "ValueName": "SATA"
+    },
+    {
+      "ValueDisplayName": "PCIe x4",
+      "ValueName": "PCIe x4"
+    }
+  ]
+}

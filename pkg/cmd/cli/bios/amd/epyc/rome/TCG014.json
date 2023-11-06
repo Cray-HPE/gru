@@ -1,0 +1,18 @@
+{
+  "AttributeName": "TCG014",
+  "DefaultValue": "CRB",
+  "DisplayName": "  TPM 20 InterfaceType",
+  "HelpText": "  Select the Communication Interface to TPM 20 Device.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "CRB",
+      "ValueName": "CRB"
+    },
+    {
+      "ValueDisplayName": "TIS",
+      "ValueName": "TIS"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "AttributeName": "Rome0136",
+  "DefaultValue": "Auto",
+  "DisplayName": "DRAM ECC Symbol Size",
+  "HelpText": "DRAM ECC Symbol Size (x4/x8/x16) - UMC_CH::EccCtrl[EccSymbolSize16, EccSymbolSize]",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "x4",
+      "ValueName": "x4"
+    },
+    {
+      "ValueDisplayName": "x8",
+      "ValueName": "x8"
+    },
+    {
+      "ValueDisplayName": "x16",
+      "ValueName": "x16"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

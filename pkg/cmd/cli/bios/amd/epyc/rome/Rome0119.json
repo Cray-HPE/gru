@@ -1,0 +1,86 @@
+{
+  "AttributeName": "Rome0119",
+  "DefaultValue": "Auto",
+  "DisplayName": "ProcODT",
+  "HelpText": "Specifies the Processor ODT",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "High Impedance",
+      "ValueName": "High Impedance"
+    },
+    {
+      "ValueDisplayName": "480 ohm",
+      "ValueName": "480 ohm"
+    },
+    {
+      "ValueDisplayName": "240 ohm",
+      "ValueName": "240 ohm"
+    },
+    {
+      "ValueDisplayName": "160 ohm",
+      "ValueName": "160 ohm"
+    },
+    {
+      "ValueDisplayName": "120 ohm",
+      "ValueName": "120 ohm"
+    },
+    {
+      "ValueDisplayName": "96 ohm",
+      "ValueName": "96 ohm"
+    },
+    {
+      "ValueDisplayName": "80 ohm",
+      "ValueName": "80 ohm"
+    },
+    {
+      "ValueDisplayName": "68.6 ohm",
+      "ValueName": "68.6 ohm"
+    },
+    {
+      "ValueDisplayName": "60 ohm",
+      "ValueName": "60 ohm"
+    },
+    {
+      "ValueDisplayName": "53.3 ohm",
+      "ValueName": "53.3 ohm"
+    },
+    {
+      "ValueDisplayName": "48 ohm",
+      "ValueName": "48 ohm"
+    },
+    {
+      "ValueDisplayName": "43.6 ohm",
+      "ValueName": "43.6 ohm"
+    },
+    {
+      "ValueDisplayName": "40 ohm",
+      "ValueName": "40 ohm"
+    },
+    {
+      "ValueDisplayName": "36.9 ohm",
+      "ValueName": "36.9 ohm"
+    },
+    {
+      "ValueDisplayName": "34.3 ohm",
+      "ValueName": "34.3 ohm"
+    },
+    {
+      "ValueDisplayName": "32 ohm",
+      "ValueName": "32 ohm"
+    },
+    {
+      "ValueDisplayName": "30 ohm",
+      "ValueName": "30 ohm"
+    },
+    {
+      "ValueDisplayName": "28.2 ohm",
+      "ValueName": "28.2 ohm"
+    }
+  ]
+}

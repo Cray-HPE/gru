@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0545",
+  "DefaultValue": "Auto",
+  "DisplayName": "Location of private memory regions",
+  "HelpText": "Controls whether or not the private memory regions (PSP, SMU and CC6) are at the top of DRAM or distributed. Note that distributed requires memory on all dies. Note that it will always be at the top of DRAM if some dies don't have memory regardless of this option's setting.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Distributed",
+      "ValueName": "Distributed"
+    },
+    {
+      "ValueDisplayName": "Consolidated",
+      "ValueName": "Consolidated"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

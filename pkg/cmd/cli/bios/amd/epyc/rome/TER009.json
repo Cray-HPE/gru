@@ -1,0 +1,18 @@
+{
+  "AttributeName": "TER009",
+  "DefaultValue": "80x24",
+  "DisplayName": "Resolution",
+  "HelpText": "On Legacy OS, the Number of Rows and Columns supported redirection",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "80x24",
+      "ValueName": "80x24"
+    },
+    {
+      "ValueDisplayName": "80x25",
+      "ValueName": "80x25"
+    }
+  ]
+}

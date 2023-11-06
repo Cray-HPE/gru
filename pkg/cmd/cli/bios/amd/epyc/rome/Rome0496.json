@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0496",
+  "DefaultValue": 5,
+  "DisplayName": "SMI Threshold",
+  "HelpText": "The [SMI Threshold] limits the number of [MCA Threshold and Deferred Error SMI source] per a Unit time (Defined by [SMI Scale]). (Default: 5 dec interrupts)",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 65535
+}

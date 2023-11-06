@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0140",
+  "DefaultValue": "Auto",
+  "DisplayName": "Data Scramble",
+  "HelpText": "Data scrambling: DataScrambleEn",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

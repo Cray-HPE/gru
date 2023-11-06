@@ -1,0 +1,14 @@
+{
+  "AttributeName": "Rome0567",
+  "DefaultValue": "Unknown Device",
+  "DisplayName": "Output Select",
+  "HelpText": "Output Interface",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Unknown Device",
+      "ValueName": "Unknown Device"
+    }
+  ]
+}

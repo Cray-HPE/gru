@@ -1,0 +1,34 @@
+{
+  "AttributeName": "FBO203",
+  "DefaultValue": "UEFI Hard Disk",
+  "DisplayName": "Boot Option #3",
+  "HelpText": "Sets the system boot order",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "UEFI Network",
+      "ValueName": "UEFI Network"
+    },
+    {
+      "ValueDisplayName": "UEFI USB Device",
+      "ValueName": "UEFI USB Device"
+    },
+    {
+      "ValueDisplayName": "UEFI Hard Disk",
+      "ValueName": "UEFI Hard Disk"
+    },
+    {
+      "ValueDisplayName": "UEFI CD/DVD",
+      "ValueName": "UEFI CD/DVD"
+    },
+    {
+      "ValueDisplayName": "UEFI AP",
+      "ValueName": "UEFI AP"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

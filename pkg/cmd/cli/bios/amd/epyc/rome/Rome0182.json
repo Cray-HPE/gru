@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0182",
+  "DefaultValue": "Auto",
+  "DisplayName": "EfficiencyModeEn",
+  "HelpText": "0 = use performance optimized CCLK DPM settings  1 = use power efficiency optimized CCLK DPM settings",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0148",
+  "DefaultValue": "Disabled",
+  "DisplayName": "End-End TLP Prefix Blocking",
+  "HelpText": "If supported by hardware and set to 'Enabled', this function will block forwarding of TLPs containing End-End TLP Prefixes.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

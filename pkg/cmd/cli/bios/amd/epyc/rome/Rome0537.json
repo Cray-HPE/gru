@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0537",
+  "DefaultValue": "Enabled",
+  "DisplayName": "I2C 1 Enable",
+  "HelpText": "I2C 1 Enable",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "AttributeName": "Rome0085",
+  "DefaultValue": "Auto",
+  "DisplayName": "4-link xGMI max speed",
+  "HelpText": "Max speed for 4-link xGMI",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "10.667Gbps",
+      "ValueName": "10.667Gbps"
+    },
+    {
+      "ValueDisplayName": "13Gbps",
+      "ValueName": "13Gbps"
+    },
+    {
+      "ValueDisplayName": "16Gbps",
+      "ValueName": "16Gbps"
+    },
+    {
+      "ValueDisplayName": "18Gbps",
+      "ValueName": "18Gbps"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "AttributeName": "GBT0077",
+  "DefaultValue": "Auto",
+  "DisplayName": "PCIE_3 Max Link Speed",
+  "HelpText": "Change PCIE_3 Max Link Speed",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Maximum",
+      "ValueName": "Maximum"
+    },
+    {
+      "ValueDisplayName": "Gen1",
+      "ValueName": "Gen1"
+    },
+    {
+      "ValueDisplayName": "Gen2",
+      "ValueName": "Gen2"
+    },
+    {
+      "ValueDisplayName": "Gen3",
+      "ValueName": "Gen3"
+    },
+    {
+      "ValueDisplayName": "Gen4",
+      "ValueName": "Gen4"
+    }
+  ]
+}

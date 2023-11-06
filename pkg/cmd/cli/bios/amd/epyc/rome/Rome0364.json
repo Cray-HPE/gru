@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0364",
+  "DefaultValue": 0,
+  "DisplayName": "cTDP",
+  "HelpText": "cTDP [W] 0 = Invalid value.",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 4294967295
+}

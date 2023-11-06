@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0353",
+  "DefaultValue": 0,
+  "DisplayName": "Aggressor Static Lane Select ECC",
+  "HelpText": "Static Lane Select for ECC Lanes. The bit mask represents the bits to be read",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 10
+}

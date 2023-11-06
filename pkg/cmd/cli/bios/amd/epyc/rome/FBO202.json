@@ -1,0 +1,34 @@
+{
+  "AttributeName": "FBO202",
+  "DefaultValue": "UEFI USB Device",
+  "DisplayName": "Boot Option #2",
+  "HelpText": "Sets the system boot order",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "UEFI Network",
+      "ValueName": "UEFI Network"
+    },
+    {
+      "ValueDisplayName": "UEFI USB Device",
+      "ValueName": "UEFI USB Device"
+    },
+    {
+      "ValueDisplayName": "UEFI Hard Disk",
+      "ValueName": "UEFI Hard Disk"
+    },
+    {
+      "ValueDisplayName": "UEFI CD/DVD",
+      "ValueName": "UEFI CD/DVD"
+    },
+    {
+      "ValueDisplayName": "UEFI AP",
+      "ValueName": "UEFI AP"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

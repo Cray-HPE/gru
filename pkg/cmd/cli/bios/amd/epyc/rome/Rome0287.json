@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0287",
+  "DefaultValue": 8,
+  "DisplayName": "Pstate0 DID",
+  "HelpText": "Specifies the core frequency divisor (DID[0] should zero if DID[5:0]>1Ah).",
+  "LowerBound": 8,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 48
+}

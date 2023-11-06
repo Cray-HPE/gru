@@ -1,0 +1,18 @@
+{
+  "AttributeName": "FBO001",
+  "DefaultValue": "UEFI",
+  "DisplayName": "Boot mode select",
+  "HelpText": "Select boot mode LEGACY/UEFI",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "LEGACY",
+      "ValueName": "LEGACY"
+    },
+    {
+      "ValueDisplayName": "UEFI",
+      "ValueName": "UEFI"
+    }
+  ]
+}

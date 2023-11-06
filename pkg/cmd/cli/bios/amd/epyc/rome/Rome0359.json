@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0359",
+  "DefaultValue": "Manual",
+  "DisplayName": "Preferred IO",
+  "HelpText": "Preferred IO Select Type  Manual: Bus Number manually  Auto: Default",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0103",
+  "DefaultValue": "Auto",
+  "DisplayName": "TrdrdScL Ctrl",
+  "HelpText": "Specify TrdrdScL",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    }
+  ]
+}

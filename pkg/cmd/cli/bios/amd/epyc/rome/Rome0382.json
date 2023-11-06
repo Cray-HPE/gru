@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0382",
+  "DefaultValue": 2600,
+  "DisplayName": "System Hub Watchdog Timer",
+  "HelpText": "This value specifies the timer interval of the SYSHUB Watchdog timer in miliseconds",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 65535
+}

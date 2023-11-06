@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0134",
+  "DefaultValue": "Disable",
+  "DisplayName": "DRAM Post Package Repair",
+  "HelpText": "Enable or Disable DRAM  Post Package Repair.  ",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    },
+    {
+      "ValueDisplayName": "Disable",
+      "ValueName": "Disable"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "TCG010",
+  "DefaultValue": "TCG_2",
+  "DisplayName": "  TPM2.0 UEFI Spec Version",
+  "HelpText": "Select the TCG2 Spec Version Support,     TCG_1_2: the Compatible mode for Win8/Win10,     TCG_2: Support new TCG2 protocol and event format for Win10 or later",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "TCG_1_2",
+      "ValueName": "TCG_1_2"
+    },
+    {
+      "ValueDisplayName": "TCG_2",
+      "ValueName": "TCG_2"
+    }
+  ]
+}

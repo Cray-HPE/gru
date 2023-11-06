@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0211",
+  "DefaultValue": "SD Dump disabled",
+  "DisplayName": "SD Configuration Mode",
+  "HelpText": "Select SD Mode",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "SD Dump disabled",
+      "ValueName": "SD Dump disabled"
+    },
+    {
+      "ValueDisplayName": "SD Dump enabled",
+      "ValueName": "SD Dump enabled"
+    }
+  ]
+}

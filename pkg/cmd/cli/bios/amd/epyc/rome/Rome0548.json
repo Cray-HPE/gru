@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0548",
+  "DefaultValue": "Auto",
+  "DisplayName": "Enable Rcv Err and Bad TLP Mask",
+  "HelpText": "Enables Masking of Receiver Error and Bad TLP at Gen4 x2",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

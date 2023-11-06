@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0139",
+  "DefaultValue": "Disabled",
+  "DisplayName": "Extended Synch",
+  "HelpText": "If ENABLED allows generation of Extended Synchronization patterns.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

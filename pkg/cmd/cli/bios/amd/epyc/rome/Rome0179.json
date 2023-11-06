@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0179",
+  "DefaultValue": "Power",
+  "DisplayName": "Determinism Slider",
+  "HelpText": "Auto = Use default performance determinism settings  Power  Performance",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Power",
+      "ValueName": "Power"
+    },
+    {
+      "ValueDisplayName": "Performance",
+      "ValueName": "Performance"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0339",
+  "DefaultValue": 26,
+  "DisplayName": "Tfaw",
+  "HelpText": "Specifies the Four Activate Window Time. Valid values 36h-6h.",
+  "LowerBound": 6,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 54
+}

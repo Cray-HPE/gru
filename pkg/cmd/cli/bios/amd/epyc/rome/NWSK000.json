@@ -1,0 +1,18 @@
+{
+  "AttributeName": "NWSK000",
+  "DefaultValue": "Enabled",
+  "DisplayName": "Network Stack",
+  "HelpText": "Enable/Disable UEFI Network Stack",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

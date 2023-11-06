@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0367",
+  "DefaultValue": 0,
+  "DisplayName": "BoostFmax",
+  "HelpText": "Specify the boost Fmax frequency limit to apply to all cores (MHz)",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 4294967295
+}

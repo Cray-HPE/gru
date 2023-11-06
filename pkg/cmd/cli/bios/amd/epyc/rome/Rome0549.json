@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0549",
+  "DefaultValue": "Auto",
+  "DisplayName": "HSMP Support",
+  "HelpText": "Select HSMP support enable or disable",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0551",
+  "DefaultValue": "Auto",
+  "DisplayName": "DLWM Support",
+  "HelpText": "Select DLWM support enable or disable",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

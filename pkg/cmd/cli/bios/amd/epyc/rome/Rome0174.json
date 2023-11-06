@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0174",
+  "DefaultValue": "Auto",
+  "DisplayName": "UCLK DIV1 MODE",
+  "HelpText": "If UclkDiv1Mode==1, UCLK==MEMCLK  if UclkDiv1Mode==0, UCLK==MEMCLK/2",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "UCLK==MEMCLK",
+      "ValueName": "UCLK==MEMCLK"
+    },
+    {
+      "ValueDisplayName": "UCLK==MEMCLK/2",
+      "ValueName": "UCLK==MEMCLK/2"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "AttributeName": "Rome0087",
+  "DefaultValue": "Auto",
+  "DisplayName": "xGMI TXEQ Mode",
+  "HelpText": "Select XGMI TXEQ/RX vetting Mode",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "TXEQ_Disabled",
+      "ValueName": "TXEQ_Disabled"
+    },
+    {
+      "ValueDisplayName": "TXEQ_Lane",
+      "ValueName": "TXEQ_Lane"
+    },
+    {
+      "ValueDisplayName": "TXEQ_Link",
+      "ValueName": "TXEQ_Link"
+    },
+    {
+      "ValueDisplayName": "TXEQ_RX_Vet",
+      "ValueName": "TXEQ_RX_Vet"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

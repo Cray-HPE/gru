@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0514",
+  "DefaultValue": "Auto",
+  "DisplayName": "Write CRC Enable",
+  "HelpText": "Enable write CRC generation. UMC::CH::BeqCtrl1[WrCrcEn]",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

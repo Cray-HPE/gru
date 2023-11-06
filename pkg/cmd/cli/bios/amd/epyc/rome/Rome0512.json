@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0512",
+  "DefaultValue": "Auto",
+  "DisplayName": "DRAM Address Command Parity Retry",
+  "HelpText": "UMC_CH::RecCtrl[RecEn][0] and UMC_CH::RecCtrl[MaxParRply]",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

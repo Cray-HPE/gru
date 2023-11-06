@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0318",
+  "DefaultValue": 255,
+  "DisplayName": "Pstate6 VID",
+  "HelpText": "Specifies the core voltage.",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 255
+}

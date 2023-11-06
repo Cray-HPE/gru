@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0203",
+  "DefaultValue": "Disabled",
+  "DisplayName": "Edpc Control",
+  "HelpText": "(0) Disabled; (1) Enabled; (3) Auto",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

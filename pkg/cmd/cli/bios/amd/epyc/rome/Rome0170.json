@@ -1,0 +1,26 @@
+{
+  "AttributeName": "Rome0170",
+  "DefaultValue": "Auto",
+  "DisplayName": "Hot Plug Handling mode",
+  "HelpText": "Control the Hot Plug Handling mode",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "A0 Mode",
+      "ValueName": "A0 Mode"
+    },
+    {
+      "ValueDisplayName": "OS First",
+      "ValueName": "OS First"
+    },
+    {
+      "ValueDisplayName": "Firmware First",
+      "ValueName": "Firmware First"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

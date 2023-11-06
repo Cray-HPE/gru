@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0283",
+  "DefaultValue": 3595,
+  "DisplayName": "MCA error thresh count",
+  "HelpText": "Effective error threshold count = 4095(0xFFF) - <this value> (e.g. the default value of 0xFF5 results in a threshold of 10).",
+  "LowerBound": 1,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 4095
+}

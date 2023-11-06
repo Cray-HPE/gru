@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0168",
+  "DefaultValue": "Auto",
+  "DisplayName": "Enable AER Cap",
+  "HelpText": "Enables Advanced Error Reporting Capability",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

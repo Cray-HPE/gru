@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0154",
+  "DefaultValue": "Disabled",
+  "DisplayName": "Aggressor Static Lane Control",
+  "HelpText": "This option, if enabled, will control the Aggressor Static Lane Controls.  ",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

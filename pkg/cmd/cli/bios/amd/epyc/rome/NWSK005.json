@@ -1,0 +1,11 @@
+{
+  "AttributeName": "NWSK005",
+  "DefaultValue": 1,
+  "DisplayName": "Media detect count",
+  "HelpText": "Number of times the presence of media will be checked. Use either +/- or numeric keys to set the value.",
+  "LowerBound": 1,
+  "ReadOnly": false,
+  "ScalarIncrement": 1,
+  "Type": "Integer",
+  "UpperBound": 50
+}
