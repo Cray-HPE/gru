@@ -38,7 +38,7 @@ func NewChassisCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "boot [flags] host [...host]",
 		Short: "Set next boot device",
-		Long:  `Overrides the next boot device for a one-time override. Only sets UEFI boot modes.`,
+		Long:  `Overrides the next boot device for a one-time override. Only sets UEFI boot modes`,
 		Run: func(c *cobra.Command, args []string) {
 			v := viper.GetViper()
 			bindErr := v.BindPFlags(c.Flags())
@@ -59,7 +59,7 @@ func NewChassisCommand() *cobra.Command {
 		"p",
 		false,
 		fmt.Sprintln(
-			"Override continuously instead of onetime; persistent override.",
+			"Override continuously instead of onetime; persistent override",
 		),
 	)
 
@@ -68,7 +68,7 @@ func NewChassisCommand() *cobra.Command {
 		"n",
 		false,
 		fmt.Sprintln(
-			"Reset the server(s) immediately after applying the boot override.",
+			"Reset the server(s) immediately after applying the boot override",
 		),
 	)
 

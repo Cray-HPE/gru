@@ -38,7 +38,7 @@ func NewShowCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "nics [flags] host [...host]",
 		Short: "Network interface information",
-		Long:  `Show available network interface hardware.`,
+		Long:  `Show available network interface hardware`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := query.Async(getNICInformation, hosts)
@@ -59,7 +59,7 @@ func getNICInformation(host string) interface{} {
 
 	defer c.Logout()
 
-	//service := c.Service
+	// service := c.Service
 
 	if err != nil {
 		nics.Error = err

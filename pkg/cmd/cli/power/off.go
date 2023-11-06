@@ -70,14 +70,14 @@ as well as a power-button emulated shutdown.`,
 		"f",
 		false,
 		fmt.Sprintln(
-			"Immediately power off without waiting for the OS.",
+			"Immediately power off without waiting for the OS",
 		),
 	)
 	c.PersistentFlags().BoolP(
 		"button",
 		"b",
 		false,
-		"Emulate a power-button press.",
+		"Emulate a power-button press",
 	)
 	c.MarkFlagsMutuallyExclusive("button", "force")
 	return c
