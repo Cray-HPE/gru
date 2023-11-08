@@ -121,6 +121,7 @@ func getBIOSSettings(host string, requestedAttributes ...string) interface{} {
 	if len(requestedAttributes) != 0 {
 		// check each requested attribute
 		for _, attribute := range requestedAttributes {
+			attribute = romeDecode(attribute)
 			// check if it the requested key exists
 			v, exists := bios.Attributes[attribute]
 			if exists {
@@ -140,20 +141,13 @@ func getBIOSSettings(host string, requestedAttributes ...string) interface{} {
 			// use vendor-specific settings, pre-determined and known to work
 			virtAttrs := virtSettings(virt, systems[0].Manufacturer)
 			for k := range virtAttrs {
-				romeAttr, exists := romeMap.Attributes[k]
-				if exists {
-					// convert to a friendly name for non-json
-					if viper.GetBool("json") {
-						k = romeAttr.AttributeName
-					} else {
-						k = fmt.Sprintf("%s (%s)", romeAttr.AttributeName, romeAttr.DisplayName)
-					}
-				}
+				k = romeDecode(k)
 				attributes[k] = bios.Attributes[k]
 			}
 		} else {
 			// loop through all keys discovered and add them to the returned map
 			for k, v := range bios.Attributes {
+				k = romeDecode(k)
 				attributes[k] = v
 			}
 		}

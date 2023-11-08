@@ -32,6 +32,8 @@ import (
 	"errors"
 	"fmt"
 	"path"
+
+	"github.com/spf13/viper"
 )
 
 //go:embed amd/epyc/rome/*.json
@@ -111,4 +113,18 @@ func (l *RomeLibrary) RegisterAttribute(attribute Attribute) error {
 
 	l.Attributes[attribute.AttributeName] = attribute
 	return nil
+}
+
+// romeDecode accepts a key and changes it to a friendly name if it exists and json is not requested
+func romeDecode(key string) string {
+	romeAttr, exists := romeMap.Attributes[key]
+	if exists {
+		// convert to a friendly name for non-json
+		if viper.GetBool("json") {
+			key = romeAttr.AttributeName
+		} else {
+			key = fmt.Sprintf("%s (%s)", romeAttr.AttributeName, romeAttr.DisplayName)
+		}
+	}
+	return key
 }
