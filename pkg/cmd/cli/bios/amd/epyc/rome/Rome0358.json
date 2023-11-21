@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0358",
+  "DefaultValue": 0,
+  "DisplayName": "Target Static Lane Value",
+  "HelpText": "Static Lane value. Range 0-0xA",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 10
+}

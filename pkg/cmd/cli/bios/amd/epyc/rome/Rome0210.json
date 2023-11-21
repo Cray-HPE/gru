@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0210",
+  "DefaultValue": "Auto",
+  "DisplayName": "USB ecc SMI Enable",
+  "HelpText": "Enable or disable USB ecc SMI",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enable",
+      "ValueName": "Enable"
+    },
+    {
+      "ValueDisplayName": "Off",
+      "ValueName": "Off"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

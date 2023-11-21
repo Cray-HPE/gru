@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0208",
+  "DefaultValue": "Auto",
+  "DisplayName": "Aggresive SATA Device Sleep Port 0",
+  "HelpText": "Enable or disable aggresive SATA device sleep on port 0",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

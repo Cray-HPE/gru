@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0121",
+  "DefaultValue": "Auto",
+  "DisplayName": "Gear Down Mode",
+  "HelpText": "Enable or Disable Gear Down Mode",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "TCG020",
+  "DefaultValue": "Disabled",
+  "DisplayName": "  SHA512 PCR Bank",
+  "HelpText": "Enable or Disable SHA512 PCR Bank",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

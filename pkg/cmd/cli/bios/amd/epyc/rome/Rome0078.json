@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0078",
+  "DefaultValue": "Auto",
+  "DisplayName": "1TB remap",
+  "HelpText": "Attempt to remap DRAM out of the space just below the 1TB boundary.  The ability to remap depends on DRAM configuration, NPS, and interleaving selection, and may not always be possible.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Do not remap",
+      "ValueName": "Do not remap"
+    },
+    {
+      "ValueDisplayName": "Attempt to remap",
+      "ValueName": "Attempt to remap"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

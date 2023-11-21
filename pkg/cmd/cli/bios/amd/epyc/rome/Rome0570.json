@@ -1,0 +1,26 @@
+{
+  "AttributeName": "Rome0570",
+  "DefaultValue": "20 sec",
+  "DisplayName": "Device reset time-out",
+  "HelpText": "USB mass storage device Start Unit command time-out.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "10 sec",
+      "ValueName": "10 sec"
+    },
+    {
+      "ValueDisplayName": "20 sec",
+      "ValueName": "20 sec"
+    },
+    {
+      "ValueDisplayName": "30 sec",
+      "ValueName": "30 sec"
+    },
+    {
+      "ValueDisplayName": "40 sec",
+      "ValueName": "40 sec"
+    }
+  ]
+}

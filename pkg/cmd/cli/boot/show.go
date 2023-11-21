@@ -48,7 +48,7 @@ func NewShowCommand() *cobra.Command {
 	return c
 }
 
-func getBootInformation(host string) interface{} {
+func getBootInformation(host string, args ...string) interface{} {
 	boot := Boot{}
 	c, err := auth.Connection(host)
 	if err != nil {

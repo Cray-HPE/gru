@@ -1,0 +1,74 @@
+{
+  "AttributeName": "Rome0115",
+  "DefaultValue": "Auto",
+  "DisplayName": "TwrwrDd",
+  "HelpText": "Specifies the Write to Write turnaround timing in a different DIMM.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "1 Clk",
+      "ValueName": "1 Clk"
+    },
+    {
+      "ValueDisplayName": "2 Clk",
+      "ValueName": "2 Clk"
+    },
+    {
+      "ValueDisplayName": "3 Clk",
+      "ValueName": "3 Clk"
+    },
+    {
+      "ValueDisplayName": "4 Clk",
+      "ValueName": "4 Clk"
+    },
+    {
+      "ValueDisplayName": "5 Clk",
+      "ValueName": "5 Clk"
+    },
+    {
+      "ValueDisplayName": "6 Clk",
+      "ValueName": "6 Clk"
+    },
+    {
+      "ValueDisplayName": "7 Clk",
+      "ValueName": "7 Clk"
+    },
+    {
+      "ValueDisplayName": "8 Clk",
+      "ValueName": "8 Clk"
+    },
+    {
+      "ValueDisplayName": "9 Clk",
+      "ValueName": "9 Clk"
+    },
+    {
+      "ValueDisplayName": "0Ah Clk",
+      "ValueName": "0Ah Clk"
+    },
+    {
+      "ValueDisplayName": "0Bh Clk",
+      "ValueName": "0Bh Clk"
+    },
+    {
+      "ValueDisplayName": "0Ch Clk",
+      "ValueName": "0Ch Clk"
+    },
+    {
+      "ValueDisplayName": "0Dh Clk",
+      "ValueName": "0Dh Clk"
+    },
+    {
+      "ValueDisplayName": "0Eh Clk",
+      "ValueName": "0Eh Clk"
+    },
+    {
+      "ValueDisplayName": "0Fh Clk",
+      "ValueName": "0Fh Clk"
+    }
+  ]
+}

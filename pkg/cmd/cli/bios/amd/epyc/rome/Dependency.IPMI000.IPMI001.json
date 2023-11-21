@@ -1,0 +1,17 @@
+{
+  "Dependency": {
+    "MapFrom": [
+      {
+        "MapFromAttribute": "IPMI000",
+        "MapFromCondition": "EQU",
+        "MapFromProperty": "CurrentValue",
+        "MapFromValue": "Disabled"
+      }
+    ],
+    "MapToAttribute": "IPMI001",
+    "MapToProperty": "GrayOut",
+    "MapToValue": "true"
+  },
+  "DependencyFor": "IPMI000",
+  "Type": "Map"
+}

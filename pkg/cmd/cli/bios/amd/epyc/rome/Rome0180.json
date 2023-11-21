@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0180",
+  "DefaultValue": "Auto",
+  "DisplayName": "cTDP Control",
+  "HelpText": "Auto = Use the fused TDP  Manual = User can set customized TDP  ***TDP is used to define the RC thermal model only***",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "AttributeName": "Rome0177",
+  "DefaultValue": "2X",
+  "DisplayName": "customized Precision Boost Overdrive Scalar",
+  "HelpText": "Precision Boost Overdrive increases the maximum boost voltage used (runs above parts specified maximum) and the amount of time spent at that voltage. The larger the value entered the larger the boost voltage used and the longer that voltage will be maintained. ",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "1X",
+      "ValueName": "1X"
+    },
+    {
+      "ValueDisplayName": "2X",
+      "ValueName": "2X"
+    },
+    {
+      "ValueDisplayName": "3X",
+      "ValueName": "3X"
+    },
+    {
+      "ValueDisplayName": "4X",
+      "ValueName": "4X"
+    },
+    {
+      "ValueDisplayName": "5X",
+      "ValueName": "5X"
+    },
+    {
+      "ValueDisplayName": "6X",
+      "ValueName": "6X"
+    },
+    {
+      "ValueDisplayName": "7X",
+      "ValueName": "7X"
+    },
+    {
+      "ValueDisplayName": "8X",
+      "ValueName": "8X"
+    },
+    {
+      "ValueDisplayName": "9X",
+      "ValueName": "9X"
+    },
+    {
+      "ValueDisplayName": "10X",
+      "ValueName": "10X"
+    }
+  ]
+}

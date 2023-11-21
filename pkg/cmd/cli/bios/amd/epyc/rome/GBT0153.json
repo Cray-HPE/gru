@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0153",
+  "DefaultValue": "Disabled",
+  "DisplayName": "BME DMA Mitigation",
+  "HelpText": "Re-enable Bus Master Attribute disabled during Pci enumeration for PCI Bridges after SMM Locked ",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

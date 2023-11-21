@@ -1,0 +1,11 @@
+{
+  "AttributeName": "SETUP003",
+  "DefaultValue": 2,
+  "DisplayName": "Setup Prompt Timeout",
+  "HelpText": "Number of seconds to wait for setup activation key. 65535(0xFFFF) means indefinite waiting.",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 1,
+  "Type": "Integer",
+  "UpperBound": 65535
+}

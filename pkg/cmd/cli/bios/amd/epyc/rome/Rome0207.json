@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0207",
+  "DefaultValue": "Auto",
+  "DisplayName": "Sata Disabled AHCI Prefetch Function",
+  "HelpText": "Disable or enable Sata Disabled AHCI Prefetch Function",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

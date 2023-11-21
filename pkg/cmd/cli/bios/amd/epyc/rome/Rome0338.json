@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0338",
+  "DefaultValue": 57,
+  "DisplayName": "Trc",
+  "HelpText": "Specifies Active to Active/Refresh Delay Time. Valid values 87h-1Dh.",
+  "LowerBound": 29,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 135
+}

@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0158",
+  "DefaultValue": "2",
+  "DisplayName": "Read Voltage Sweep Step Size",
+  "HelpText": "This option determines the step size for Read Data Eye voltage sweep, Supported options are 1,2 and 4",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "1",
+      "ValueName": "1"
+    },
+    {
+      "ValueDisplayName": "2",
+      "ValueName": "2"
+    },
+    {
+      "ValueDisplayName": "4",
+      "ValueName": "4"
+    }
+  ]
+}

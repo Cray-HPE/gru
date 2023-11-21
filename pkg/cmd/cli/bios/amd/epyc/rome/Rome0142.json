@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0142",
+  "DefaultValue": "Auto",
+  "DisplayName": "BankGroupSwap",
+  "HelpText": "BankGroupSwapAlt default = Enabled in BIOS, which has priority than BankGroupSwap.  BIOS equation: If BankGroupSwapAlt == Enabled Then BankGroupSwap = Disabled Endif    Please set BankGroupSwapAlt to Disabled while set BankGroupSwap to Enabled.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

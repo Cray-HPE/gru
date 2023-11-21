@@ -1,0 +1,18 @@
+{
+  "AttributeName": "TCG011",
+  "DefaultValue": "Enabled",
+  "DisplayName": "  Platform Hierarchy",
+  "HelpText": "Enable or Disable Platform Hierarchy",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

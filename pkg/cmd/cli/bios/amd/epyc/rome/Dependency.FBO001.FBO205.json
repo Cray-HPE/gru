@@ -1,0 +1,23 @@
+{
+  "Dependency": {
+    "MapFrom": [
+      {
+        "MapFromAttribute": "FBO001",
+        "MapFromCondition": "EQU",
+        "MapFromProperty": "CurrentValue",
+        "MapFromValue": "LEGACY"
+      },
+      {
+        "MapFromAttribute": "FBO001",
+        "MapFromCondition": "EQU",
+        "MapFromProperty": "CurrentValue",
+        "MapTerms": "OR"
+      }
+    ],
+    "MapToAttribute": "FBO205",
+    "MapToProperty": "Hidden",
+    "MapToValue": "true"
+  },
+  "DependencyFor": "FBO001",
+  "Type": "Map"
+}

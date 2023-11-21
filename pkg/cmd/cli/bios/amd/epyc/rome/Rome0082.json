@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0082",
+  "DefaultValue": "Auto",
+  "DisplayName": "GMI encryption control",
+  "HelpText": "Control GMI link encryption",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

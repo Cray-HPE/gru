@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0565",
+  "DefaultValue": "Enabled",
+  "DisplayName": "SVM Mode",
+  "HelpText": "Enable/disable CPU Virtualization",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "AttributeName": "Rome0045",
+  "DefaultValue": "Customized",
+  "DisplayName": "OC Mode",
+  "HelpText": "Can be used to modify the number of core/CCD.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Normal Operation",
+      "ValueName": "Normal Operation"
+    },
+    {
+      "ValueDisplayName": "OC1",
+      "ValueName": "OC1"
+    },
+    {
+      "ValueDisplayName": "OC2",
+      "ValueName": "OC2"
+    },
+    {
+      "ValueDisplayName": "OC3",
+      "ValueName": "OC3"
+    },
+    {
+      "ValueDisplayName": "Customized",
+      "ValueName": "Customized"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0540",
+  "DefaultValue": "Enabled",
+  "DisplayName": "Uart 0 Enable",
+  "HelpText": "Uart 0 Enable",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

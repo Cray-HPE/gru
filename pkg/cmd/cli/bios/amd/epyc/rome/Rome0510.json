@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0510",
+  "DefaultValue": 32,
+  "DisplayName": "ACPI SLIT remote socket distance",
+  "HelpText": "Specify the distance to domains on the remote socket.",
+  "LowerBound": 10,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 255
+}

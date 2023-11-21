@@ -1,0 +1,26 @@
+{
+  "AttributeName": "IPMI101",
+  "DefaultValue": "6 minutes",
+  "DisplayName": "FRB-2 Timer timeout",
+  "HelpText": "Enter value Between 3 to 6 min for FRB-2 Timer Expiration value",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "3 minutes",
+      "ValueName": "3 minutes"
+    },
+    {
+      "ValueDisplayName": "4 minutes",
+      "ValueName": "4 minutes"
+    },
+    {
+      "ValueDisplayName": "5 minutes",
+      "ValueName": "5 minutes"
+    },
+    {
+      "ValueDisplayName": "6 minutes",
+      "ValueName": "6 minutes"
+    }
+  ]
+}

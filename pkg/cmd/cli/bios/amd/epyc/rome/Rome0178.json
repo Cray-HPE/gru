@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0178",
+  "DefaultValue": "Manual",
+  "DisplayName": "Determinism Control",
+  "HelpText": "Auto = Use the fused Determinism  Manual = User can set customized Determinism  ",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

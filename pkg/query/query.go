@@ -28,13 +28,14 @@ package query
 
 import (
 	"fmt"
-	"github.com/spf13/viper"
 	"sync"
+
+	"github.com/spf13/viper"
 )
 
 // Async runs an async query (fn) against a list of hosts. Returns a map of each host with their
 // respective query results.
-func Async(fn func(host string) interface{}, hosts []string) map[string]any {
+func Async(fn func(host string, args ...string) interface{}, hosts []string) map[string]any {
 
 	var wg sync.WaitGroup
 
@@ -49,11 +50,10 @@ func Async(fn func(host string) interface{}, hosts []string) map[string]any {
 
 	for _, host := range hosts {
 
-		go func(host string) {
+		go func(host string, args ...string) {
 
 			defer wg.Done()
-			sm[host] = fn(host)
-
+			sm[host] = fn(host, args...)
 		}(host)
 	}
 	wg.Wait()

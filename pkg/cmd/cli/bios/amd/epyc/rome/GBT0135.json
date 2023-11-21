@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0135",
+  "DefaultValue": "Enabled",
+  "DisplayName": "Relaxed Ordering",
+  "HelpText": "Enables or Disables PCI Express Device Relaxed Ordering.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

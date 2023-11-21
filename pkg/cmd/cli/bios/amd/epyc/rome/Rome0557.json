@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0557",
+  "DefaultValue": "Auto",
+  "DisplayName": "Periodic Directory Rinse",
+  "HelpText": "Control Periodic Directory Rinse Mode.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "AttributeName": "Rome0108",
+  "DefaultValue": "Auto",
+  "DisplayName": "Tcwl",
+  "HelpText": "Specifies the CAS Write Latency",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "9 Clk",
+      "ValueName": "9 Clk"
+    },
+    {
+      "ValueDisplayName": "0Ah Clk",
+      "ValueName": "0Ah Clk"
+    },
+    {
+      "ValueDisplayName": "0Bh Clk",
+      "ValueName": "0Bh Clk"
+    },
+    {
+      "ValueDisplayName": "0Ch Clk",
+      "ValueName": "0Ch Clk"
+    },
+    {
+      "ValueDisplayName": "0Eh Clk",
+      "ValueName": "0Eh Clk"
+    },
+    {
+      "ValueDisplayName": "10h Clk",
+      "ValueName": "10h Clk"
+    },
+    {
+      "ValueDisplayName": "12h Clk",
+      "ValueName": "12h Clk"
+    },
+    {
+      "ValueDisplayName": "14h Clk",
+      "ValueName": "14h Clk"
+    }
+  ]
+}

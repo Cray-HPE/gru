@@ -1,0 +1,18 @@
+{
+  "AttributeName": "USB003",
+  "DefaultValue": "Enabled",
+  "DisplayName": "XHCI Hand-off",
+  "HelpText": "This is a workaround for OSes without XHCI hand-off support. The XHCI ownership change should be claimed by XHCI driver.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

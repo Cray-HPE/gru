@@ -1,0 +1,18 @@
+{
+  "AttributeName": "SECB002",
+  "DefaultValue": "Custom",
+  "DisplayName": "Secure Boot Mode",
+  "HelpText": "Secure Boot mode options:  Standard or Custom.  In Custom mode, Secure Boot Policy variables can be configured by a physically present user without full authentication",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Standard",
+      "ValueName": "Standard"
+    },
+    {
+      "ValueDisplayName": "Custom",
+      "ValueName": "Custom"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "AttributeName": "TER006",
+  "DefaultValue": "None",
+  "DisplayName": "Flow Control",
+  "HelpText": "Flow control can prevent data loss from buffer overflow. When sending data, if the receiving buffers are full, a 'stop' signal can be sent to stop the data flow. Once the buffers are empty, a 'start' signal can be sent to re-start the flow. Hardware flow control uses two wires to send start/stop signals.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "None",
+      "ValueName": "None"
+    },
+    {
+      "ValueDisplayName": "Hardware RTS/CTS",
+      "ValueName": "Hardware RTS/CTS"
+    },
+    {
+      "ValueDisplayName": "Software Xon/Xoff",
+      "ValueName": "Software Xon/Xoff"
+    }
+  ]
+}

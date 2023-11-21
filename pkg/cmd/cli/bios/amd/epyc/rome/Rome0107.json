@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0107",
+  "DefaultValue": "Auto",
+  "DisplayName": "Trfc4 Ctrl",
+  "HelpText": "Specify Trfc4",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    }
+  ]
+}

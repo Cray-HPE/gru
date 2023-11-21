@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0042",
+  "DefaultValue": "Auto",
+  "DisplayName": "SMU and PSP Debug Mode",
+  "HelpText": "When this option is enabled, specific uncorrected errors detected by the PSP FW or SMU FW will hang and not reset the system",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0039",
+  "DefaultValue": "Auto",
+  "DisplayName": "Local APIC Mode",
+  "HelpText": "Select local APIC mode: Compatibility, xAPIC or x2APIC",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "xAPIC",
+      "ValueName": "xAPIC"
+    },
+    {
+      "ValueDisplayName": "x2APIC",
+      "ValueName": "x2APIC"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

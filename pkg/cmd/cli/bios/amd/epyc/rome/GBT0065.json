@@ -1,0 +1,38 @@
+{
+  "AttributeName": "GBT0065",
+  "DefaultValue": "Auto",
+  "DisplayName": "PCIE_1 Lanes",
+  "HelpText": "Change PCIE 1 PCIe lanes.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "x16",
+      "ValueName": "x16"
+    },
+    {
+      "ValueDisplayName": "x8 x8",
+      "ValueName": "x8 x8"
+    },
+    {
+      "ValueDisplayName": "x8 x4 x4",
+      "ValueName": "x8 x4 x4"
+    },
+    {
+      "ValueDisplayName": "x4 x4 x8",
+      "ValueName": "x4 x4 x8"
+    },
+    {
+      "ValueDisplayName": "x4 x4 x4 x4",
+      "ValueName": "x4 x4 x4 x4"
+    }
+  ]
+}

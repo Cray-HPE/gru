@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0120",
+  "DefaultValue": "Auto",
+  "DisplayName": "Cmd2T",
+  "HelpText": "Select between 1T and 2T mode on ADDR/CMD",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "1T",
+      "ValueName": "1T"
+    },
+    {
+      "ValueDisplayName": "2T",
+      "ValueName": "2T"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

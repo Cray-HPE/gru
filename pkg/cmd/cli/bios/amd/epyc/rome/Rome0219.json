@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0219",
+  "DefaultValue": "Auto",
+  "DisplayName": "Uart 0 Enable",
+  "HelpText": "Uart 0 has no HW FC if Uart 2 is enabled",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

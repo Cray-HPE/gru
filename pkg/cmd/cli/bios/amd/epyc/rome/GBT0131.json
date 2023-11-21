@@ -1,0 +1,26 @@
+{
+  "AttributeName": "GBT0131",
+  "DefaultValue": "Do Nothing",
+  "DisplayName": "Select NCSI and Dedicated LAN",
+  "HelpText": "Select to configure LAN channel parameters statically or dynamically(DHCP). Do nothing option will not modify any BMC network parameters during BIOS phase",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Do Nothing",
+      "ValueName": "Do Nothing"
+    },
+    {
+      "ValueDisplayName": "Mode1 (Dedicated)",
+      "ValueName": "Mode1 (Dedicated)"
+    },
+    {
+      "ValueDisplayName": "Mode2 (NCSI)",
+      "ValueName": "Mode2 (NCSI)"
+    },
+    {
+      "ValueDisplayName": "Mode3 (Failover)",
+      "ValueName": "Mode3 (Failover)"
+    }
+  ]
+}

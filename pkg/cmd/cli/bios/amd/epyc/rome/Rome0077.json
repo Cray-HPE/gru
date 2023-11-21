@@ -1,0 +1,30 @@
+{
+  "AttributeName": "Rome0077",
+  "DefaultValue": "Auto",
+  "DisplayName": "Memory interleaving size",
+  "HelpText": "Controls the memory interleaving size. The valid values are AUTO, 256 bytes, 512 bytes, 1 Kbytes or 2Kbytes. This determines the starting address of the interleave (bit 8, 9, 10 or 11).",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "256 Bytes",
+      "ValueName": "256 Bytes"
+    },
+    {
+      "ValueDisplayName": "512 Bytes",
+      "ValueName": "512 Bytes"
+    },
+    {
+      "ValueDisplayName": "1 KB",
+      "ValueName": "1 KB"
+    },
+    {
+      "ValueDisplayName": "2 KB",
+      "ValueName": "2 KB"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

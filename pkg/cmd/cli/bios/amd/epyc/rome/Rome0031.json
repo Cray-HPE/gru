@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0031",
+  "DefaultValue": "Auto",
+  "DisplayName": "Core Performance Boost",
+  "HelpText": "Disable CPB",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

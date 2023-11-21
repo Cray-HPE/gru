@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0507",
+  "DefaultValue": "Auto",
+  "DisplayName": "Disable DF sync flood propagation",
+  "HelpText": "Control DF::PIEConfig[DisSyncFloodProp]",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Sync flood disabled",
+      "ValueName": "Sync flood disabled"
+    },
+    {
+      "ValueDisplayName": "Sync flood enabled",
+      "ValueName": "Sync flood enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

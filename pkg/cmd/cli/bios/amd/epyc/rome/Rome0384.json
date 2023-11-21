@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0384",
+  "DefaultValue": 0,
+  "DisplayName": "DevSleep1 Port Number",
+  "HelpText": "DEVSLP port 1",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 7
+}

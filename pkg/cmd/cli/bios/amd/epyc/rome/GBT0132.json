@@ -1,0 +1,42 @@
+{
+  "AttributeName": "GBT0132",
+  "DefaultValue": "64 PCI Bus Clocks",
+  "DisplayName": "PCI-X Latency Timer",
+  "HelpText": "Value to be programmed into PCI Latency Timer Register.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "32 PCI Bus Clocks",
+      "ValueName": "32 PCI Bus Clocks"
+    },
+    {
+      "ValueDisplayName": "64 PCI Bus Clocks",
+      "ValueName": "64 PCI Bus Clocks"
+    },
+    {
+      "ValueDisplayName": "96 PCI Bus Clocks",
+      "ValueName": "96 PCI Bus Clocks"
+    },
+    {
+      "ValueDisplayName": "128 PCI Bus Clocks",
+      "ValueName": "128 PCI Bus Clocks"
+    },
+    {
+      "ValueDisplayName": "160 PCI Bus Clocks",
+      "ValueName": "160 PCI Bus Clocks"
+    },
+    {
+      "ValueDisplayName": "192 PCI Bus Clocks",
+      "ValueName": "192 PCI Bus Clocks"
+    },
+    {
+      "ValueDisplayName": "224 PCI Bus Clocks",
+      "ValueName": "224 PCI Bus Clocks"
+    },
+    {
+      "ValueDisplayName": "248 PCI Bus Clocks",
+      "ValueName": "248 PCI Bus Clocks"
+    }
+  ]
+}

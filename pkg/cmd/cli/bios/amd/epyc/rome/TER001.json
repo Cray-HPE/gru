@@ -1,0 +1,26 @@
+{
+  "AttributeName": "TER001",
+  "DefaultValue": "VT-UTF8",
+  "DisplayName": "Terminal Type",
+  "HelpText": "VT-UTF8 is the preferred terminal type for out-of-band management. The next best choice is VT100+ and then VT100. See above, in Console Redirection Settings page, for more Help with Terminal Type/Emulation.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "VT100",
+      "ValueName": "VT100"
+    },
+    {
+      "ValueDisplayName": "VT100+",
+      "ValueName": "VT100+"
+    },
+    {
+      "ValueDisplayName": "VT-UTF8",
+      "ValueName": "VT-UTF8"
+    },
+    {
+      "ValueDisplayName": "ANSI",
+      "ValueName": "ANSI"
+    }
+  ]
+}

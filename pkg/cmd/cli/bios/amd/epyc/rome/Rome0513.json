@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0513",
+  "DefaultValue": 8,
+  "DisplayName": "Max Parity Error Replay",
+  "HelpText": "Value in hex, 1, 2 or 3 is invalid",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 63
+}

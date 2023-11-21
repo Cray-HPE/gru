@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0189",
+  "DefaultValue": "Auto",
+  "DisplayName": "APBDIS",
+  "HelpText": "0 = not APBDIS (mission mode)  1 = APBDIS",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "0",
+      "ValueName": "0"
+    },
+    {
+      "ValueDisplayName": "1",
+      "ValueName": "1"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

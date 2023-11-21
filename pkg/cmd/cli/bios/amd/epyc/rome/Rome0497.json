@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0497",
+  "DefaultValue": 1000,
+  "DisplayName": "SMI Scale",
+  "HelpText": "The [SMI Scale] defines the time scale. (Default: 1000 dec)",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 32767
+}

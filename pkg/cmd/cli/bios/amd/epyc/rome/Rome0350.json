@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0350",
+  "DefaultValue": 3,
+  "DisplayName": "Pattern Length",
+  "HelpText": "This token helps to determine the pattern length. The possible options are N=3...12",
+  "LowerBound": 3,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 12
+}

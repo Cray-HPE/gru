@@ -1,0 +1,54 @@
+{
+  "AttributeName": "Rome0109",
+  "DefaultValue": "Auto",
+  "DisplayName": "Trtp",
+  "HelpText": "Specifies the Read CAS# to Precharge Delay Time.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "5 Clk",
+      "ValueName": "5 Clk"
+    },
+    {
+      "ValueDisplayName": "6 Clk",
+      "ValueName": "6 Clk"
+    },
+    {
+      "ValueDisplayName": "7 Clk",
+      "ValueName": "7 Clk"
+    },
+    {
+      "ValueDisplayName": "8 Clk",
+      "ValueName": "8 Clk"
+    },
+    {
+      "ValueDisplayName": "9 Clk",
+      "ValueName": "9 Clk"
+    },
+    {
+      "ValueDisplayName": "0Ah Clk",
+      "ValueName": "0Ah Clk"
+    },
+    {
+      "ValueDisplayName": "0Bh Clk",
+      "ValueName": "0Bh Clk"
+    },
+    {
+      "ValueDisplayName": "0Ch Clk",
+      "ValueName": "0Ch Clk"
+    },
+    {
+      "ValueDisplayName": "0Dh Clk",
+      "ValueName": "0Dh Clk"
+    },
+    {
+      "ValueDisplayName": "0Eh Clk",
+      "ValueName": "0Eh Clk"
+    }
+  ]
+}

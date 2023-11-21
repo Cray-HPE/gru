@@ -1,0 +1,18 @@
+{
+  "AttributeName": "TCG006",
+  "DefaultValue": "None",
+  "DisplayName": "Pending operation",
+  "HelpText": "Schedule an Operation for the Security Device. NOTE: Your Computer will reboot during restart in order to change State of Security Device.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "None",
+      "ValueName": "None"
+    },
+    {
+      "ValueDisplayName": "TPM Clear",
+      "ValueName": "TPM Clear"
+    }
+  ]
+}

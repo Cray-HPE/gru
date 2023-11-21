@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0124",
+  "DefaultValue": "Auto",
+  "DisplayName": "CAD Bus Drive Strength User Controls",
+  "HelpText": "Drive Strength on CAD bus signals to Auto or Manual",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    }
+  ]
+}

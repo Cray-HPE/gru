@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0227",
+  "DefaultValue": "Auto",
+  "DisplayName": "ESPI Enable",
+  "HelpText": "No help string",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

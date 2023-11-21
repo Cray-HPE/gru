@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0563",
+  "DefaultValue": "No",
+  "DisplayName": "Disable NVDIMM-N Feature",
+  "HelpText": "Disable NVDIMM-N feature for memory margin tool",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "No",
+      "ValueName": "No"
+    },
+    {
+      "ValueDisplayName": "Yes",
+      "ValueName": "Yes"
+    }
+  ]
+}

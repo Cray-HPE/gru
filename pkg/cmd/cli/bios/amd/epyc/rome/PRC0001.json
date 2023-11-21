@@ -1,0 +1,18 @@
+{
+  "AttributeName": "PRC0001",
+  "DefaultValue": "Enabled",
+  "DisplayName": "Post Error Message",
+  "HelpText": "Post Error Message Support Enabled/Disabled",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

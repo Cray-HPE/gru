@@ -1,0 +1,8 @@
+{
+  "AttributeName": "TER008",
+  "DefaultValue": true,
+  "DisplayName": "Resolution 100x31",
+  "HelpText": "Enables or disables extended terminal resolution",
+  "ReadOnly": false,
+  "Type": "Boolean"
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "SECB008",
+  "DefaultValue": "Disabled",
+  "DisplayName": "Factory Key Provision",
+  "HelpText": "Install factory default Secure Boot keys after the platform reset and while the System is in Setup mode",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

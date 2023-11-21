@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0037",
+  "DefaultValue": "Auto",
+  "DisplayName": "SEV-ES ASID Space Limit Control",
+  "HelpText": "Customize SEV-ES ASID space limit",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    }
+  ]
+}

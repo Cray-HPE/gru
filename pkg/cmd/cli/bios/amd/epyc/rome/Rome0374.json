@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0374",
+  "DefaultValue": 0,
+  "DisplayName": "High Pwm",
+  "HelpText": "High Pwm [0-100]",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 100
+}

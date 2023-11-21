@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0343",
+  "DefaultValue": 3,
+  "DisplayName": "TwrwrScL",
+  "HelpText": "Specifies the CAS to CAS Delay Time, same bank group. Valid values 3Fh-1h",
+  "LowerBound": 1,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 63
+}

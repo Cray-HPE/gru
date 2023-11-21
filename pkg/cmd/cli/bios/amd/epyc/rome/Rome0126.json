@@ -1,0 +1,38 @@
+{
+  "AttributeName": "Rome0126",
+  "DefaultValue": "Auto",
+  "DisplayName": "AddrCmdDrvStren",
+  "HelpText": "No help string",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "120.0 Ohm",
+      "ValueName": "120.0 Ohm"
+    },
+    {
+      "ValueDisplayName": "60.0 Ohm",
+      "ValueName": "60.0 Ohm"
+    },
+    {
+      "ValueDisplayName": "40.0 Ohm",
+      "ValueName": "40.0 Ohm"
+    },
+    {
+      "ValueDisplayName": "30.0 Ohm",
+      "ValueName": "30.0 Ohm"
+    },
+    {
+      "ValueDisplayName": "24.0 Ohm",
+      "ValueName": "24.0 Ohm"
+    },
+    {
+      "ValueDisplayName": "20.0 Ohm",
+      "ValueName": "20.0 Ohm"
+    }
+  ]
+}

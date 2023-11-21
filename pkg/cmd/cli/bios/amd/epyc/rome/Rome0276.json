@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0276",
+  "DefaultValue": "Auto",
+  "DisplayName": "NTB active on PCIeCore",
+  "HelpText": "NTB enable on PCIe Core",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Core0",
+      "ValueName": "Core0"
+    },
+    {
+      "ValueDisplayName": "Core1",
+      "ValueName": "Core1"
+    }
+  ]
+}

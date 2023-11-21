@@ -1,0 +1,18 @@
+{
+  "AttributeName": "REDF001",
+  "DefaultValue": "Basic Authentication",
+  "DisplayName": "Authentication mode",
+  "HelpText": "Select authentication mode",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Basic Authentication",
+      "ValueName": "Basic Authentication"
+    },
+    {
+      "ValueDisplayName": "Session Authentication",
+      "ValueName": "Session Authentication"
+    }
+  ]
+}

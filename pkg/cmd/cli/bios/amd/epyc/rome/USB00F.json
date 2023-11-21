@@ -1,0 +1,18 @@
+{
+  "AttributeName": "USB00F",
+  "DefaultValue": "Enabled",
+  "DisplayName": "USB Mass Storage Driver Support",
+  "HelpText": "Enable/Disable USB Mass Storage Driver Support.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

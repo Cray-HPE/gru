@@ -1,0 +1,18 @@
+{
+  "AttributeName": "TER00F",
+  "DefaultValue": "Always Enable",
+  "DisplayName": "Redirect After POST",
+  "HelpText": "When Bootloader is selected, then Legacy Console Redirection is disabled before booting to legacy OS. When Always Enable is selected, then Legacy Console Redirection is enabled for legacy OS. Default setting for this option is set to Always Enable.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Always Enable",
+      "ValueName": "Always Enable"
+    },
+    {
+      "ValueDisplayName": "BootLoader",
+      "ValueName": "BootLoader"
+    }
+  ]
+}

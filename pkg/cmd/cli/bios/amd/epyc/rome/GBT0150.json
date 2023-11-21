@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0150",
+  "DefaultValue": "Disabled",
+  "DisplayName": "Clock Power Management",
+  "HelpText": "If supported by hardware and set to 'Enabled', the device is permitted to use CLKREQ# signal for power management of Link clock in accordance to protocol defined in appropriate form factor specification.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

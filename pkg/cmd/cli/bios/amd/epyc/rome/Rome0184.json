@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0184",
+  "DefaultValue": "Auto",
+  "DisplayName": "xGMI Link Width Control",
+  "HelpText": "Auto = Use default xGMI link width controller settings  Manual = User can set custom xGMI link width controller settings",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

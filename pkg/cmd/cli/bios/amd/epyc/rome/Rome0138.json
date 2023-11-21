@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0138",
+  "DefaultValue": "Auto",
+  "DisplayName": "DRAM UECC Retry",
+  "HelpText": "Use this option to enable / disable DRAM UECC Retry.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0562",
+  "DefaultValue": "Disabled",
+  "DisplayName": "Self-Refresh Exit Staggering",
+  "HelpText": "Tcksrx += (Trfc/n * (UMC_Number % 4)), here n = 3 or 4  Disabled: does not apply the extra addition",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Trfc / 3",
+      "ValueName": "Trfc / 3"
+    },
+    {
+      "ValueDisplayName": "Trfc / 4",
+      "ValueName": "Trfc / 4"
+    }
+  ]
+}

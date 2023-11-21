@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0481",
+  "DefaultValue": "Onboard",
+  "DisplayName": "OnBrd/Ext VGA Select",
+  "HelpText": "Select between onboard or external VGA support.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Onboard",
+      "ValueName": "Onboard"
+    },
+    {
+      "ValueDisplayName": "External",
+      "ValueName": "External"
+    }
+  ]
+}

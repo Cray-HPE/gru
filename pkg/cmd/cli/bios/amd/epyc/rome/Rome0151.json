@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0151",
+  "DefaultValue": "Auto",
+  "DisplayName": "MBIST Per Bit Slave Die Reporting",
+  "HelpText": "Reports 2D Data Eye Results in ABL Log for each DQ, Chipselect, and Channel",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "AttributeName": "Rome0102",
+  "DefaultValue": "Auto",
+  "DisplayName": "Trcpage Ctrl",
+  "HelpText": "Specify Trcpage",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Manual",
+      "ValueName": "Manual"
+    }
+  ]
+}

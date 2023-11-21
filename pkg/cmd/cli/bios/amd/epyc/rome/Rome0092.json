@@ -1,0 +1,94 @@
+{
+  "AttributeName": "Rome0092",
+  "DefaultValue": "Auto",
+  "DisplayName": "Trcdwr",
+  "HelpText": "Specifies the RAS# Active to CAS# Write Delay Time.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "8 Clk",
+      "ValueName": "8 Clk"
+    },
+    {
+      "ValueDisplayName": "9 Clk",
+      "ValueName": "9 Clk"
+    },
+    {
+      "ValueDisplayName": "0A Clk",
+      "ValueName": "0A Clk"
+    },
+    {
+      "ValueDisplayName": "0B Clk",
+      "ValueName": "0B Clk"
+    },
+    {
+      "ValueDisplayName": "0C Clk",
+      "ValueName": "0C Clk"
+    },
+    {
+      "ValueDisplayName": "0D Clk",
+      "ValueName": "0D Clk"
+    },
+    {
+      "ValueDisplayName": "0E Clk",
+      "ValueName": "0E Clk"
+    },
+    {
+      "ValueDisplayName": "0F Clk",
+      "ValueName": "0F Clk"
+    },
+    {
+      "ValueDisplayName": "10h Clk",
+      "ValueName": "10h Clk"
+    },
+    {
+      "ValueDisplayName": "11h Clk",
+      "ValueName": "11h Clk"
+    },
+    {
+      "ValueDisplayName": "12h Clk",
+      "ValueName": "12h Clk"
+    },
+    {
+      "ValueDisplayName": "13h Clk",
+      "ValueName": "13h Clk"
+    },
+    {
+      "ValueDisplayName": "14h Clk",
+      "ValueName": "14h Clk"
+    },
+    {
+      "ValueDisplayName": "15h Clk",
+      "ValueName": "15h Clk"
+    },
+    {
+      "ValueDisplayName": "16h Clk",
+      "ValueName": "16h Clk"
+    },
+    {
+      "ValueDisplayName": "17h Clk",
+      "ValueName": "17h Clk"
+    },
+    {
+      "ValueDisplayName": "18h Clk",
+      "ValueName": "18h Clk"
+    },
+    {
+      "ValueDisplayName": "19h Clk",
+      "ValueName": "19h Clk"
+    },
+    {
+      "ValueDisplayName": "1Ah Clk",
+      "ValueName": "1Ah Clk"
+    },
+    {
+      "ValueDisplayName": "1Bh Clk",
+      "ValueName": "1Bh Clk"
+    }
+  ]
+}

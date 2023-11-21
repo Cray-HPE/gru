@@ -1,0 +1,30 @@
+{
+  "AttributeName": "Rome0074",
+  "DefaultValue": "Auto",
+  "DisplayName": "Redirect scrubber limit",
+  "HelpText": "Control DF::RedirScrubCtrl[RedirScrubReqLmt]",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "2",
+      "ValueName": "2"
+    },
+    {
+      "ValueDisplayName": "4",
+      "ValueName": "4"
+    },
+    {
+      "ValueDisplayName": "8",
+      "ValueName": "8"
+    },
+    {
+      "ValueDisplayName": "Infinite",
+      "ValueName": "Infinite"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

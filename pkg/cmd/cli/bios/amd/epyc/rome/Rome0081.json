@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0081",
+  "DefaultValue": "Auto",
+  "DisplayName": "ACPI SLIT remote relative distance",
+  "HelpText": "Set the remote socket distance for 2P systems as near (2.8) or far (3.2).",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Near",
+      "ValueName": "Near"
+    },
+    {
+      "ValueDisplayName": "Far",
+      "ValueName": "Far"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

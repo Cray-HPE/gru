@@ -1,0 +1,18 @@
+{
+  "AttributeName": "TER007",
+  "DefaultValue": "COM1/SOL",
+  "DisplayName": "Out-of-Band Mgmt Port",
+  "HelpText": "Microsoft Windows Emergency Management Services (EMS) allows for remote management of a Windows Server OS through a serial port.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "COM1/SOL",
+      "ValueName": "COM1/SOL"
+    },
+    {
+      "ValueDisplayName": "COM2",
+      "ValueName": "COM2"
+    }
+  ]
+}

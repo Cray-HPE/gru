@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0380",
+  "DefaultValue": 196608,
+  "DisplayName": "Uncorrected Converted to Poison Enable Mask High",
+  "HelpText": "These set the enable mask for masking of uncorrectable parity errors on internal arrays.  For each bit set to 1, a system fatal error event is triggered for UCP errors on arrays associated with that egress port.  For each bit set to 0, errors are masked.",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 4294967295
+}

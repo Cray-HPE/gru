@@ -1,0 +1,26 @@
+{
+  "AttributeName": "Rome0163",
+  "DefaultValue": "Auto",
+  "DisplayName": "System Configuration",
+  "HelpText": "Warning: Select System Configuration may cause the system to hang, as some System Configuration may not be supported by your OPN.  ",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "65W POR Configuration",
+      "ValueName": "65W POR Configuration"
+    },
+    {
+      "ValueDisplayName": "45W POR Configuration",
+      "ValueName": "45W POR Configuration"
+    },
+    {
+      "ValueDisplayName": "35W POR Configuration",
+      "ValueName": "35W POR Configuration"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

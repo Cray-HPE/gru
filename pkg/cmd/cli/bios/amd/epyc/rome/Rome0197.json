@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0197",
+  "DefaultValue": "Auto",
+  "DisplayName": "NBIO SyncFlood Generation",
+  "HelpText": "This value may be used to mask SyncFlood caused by NBIO RAS options.  When set to TRUE SyncFlood from NBIO is masked.  When set to FALSE NBIO is capable of generating SyncFlood.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

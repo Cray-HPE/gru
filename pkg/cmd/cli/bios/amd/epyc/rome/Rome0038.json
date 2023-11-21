@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0038",
+  "DefaultValue": "Auto",
+  "DisplayName": "Streaming Stores Control",
+  "HelpText": "Enables or disables the streaming stores functionality",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0483",
+  "DefaultValue": 1,
+  "DisplayName": "VGA Slot",
+  "HelpText": "For external VGA, select VGA on which slot to be enabled.",
+  "LowerBound": 1,
+  "ReadOnly": false,
+  "ScalarIncrement": 1,
+  "Type": "Integer",
+  "UpperBound": 8
+}

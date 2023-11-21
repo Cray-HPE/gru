@@ -1,0 +1,26 @@
+{
+  "AttributeName": "Rome0541",
+  "DefaultValue": "Error code",
+  "DisplayName": "Log EFI Status Codes",
+  "HelpText": "Disable the logging of EFI Status Codes or log only error code or only progress code or both.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Both",
+      "ValueName": "Both"
+    },
+    {
+      "ValueDisplayName": "Error code",
+      "ValueName": "Error code"
+    },
+    {
+      "ValueDisplayName": "Progress code",
+      "ValueName": "Progress code"
+    }
+  ]
+}

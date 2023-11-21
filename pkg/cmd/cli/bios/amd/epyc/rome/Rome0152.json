@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0152",
+  "DefaultValue": "PRBS",
+  "DisplayName": "Pattern Select",
+  "HelpText": "Select pattern",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "PRBS",
+      "ValueName": "PRBS"
+    },
+    {
+      "ValueDisplayName": "SSO",
+      "ValueName": "SSO"
+    },
+    {
+      "ValueDisplayName": "Both",
+      "ValueName": "Both"
+    }
+  ]
+}

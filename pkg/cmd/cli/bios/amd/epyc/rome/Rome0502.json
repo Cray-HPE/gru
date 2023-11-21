@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0502",
+  "DefaultValue": 0,
+  "DisplayName": "PCIe Device Corr Err Mask Reg",
+  "HelpText": "Initialize the PCIe AER Corrected Error Mask register of PCIe Device",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 4294967295
+}

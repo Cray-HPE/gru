@@ -1,0 +1,11 @@
+{
+  "AttributeName": "Rome0369",
+  "DefaultValue": 0,
+  "DisplayName": "Medium Temperature",
+  "HelpText": "Medium Temperature ['C]",
+  "LowerBound": 0,
+  "ReadOnly": false,
+  "ScalarIncrement": 0,
+  "Type": "Integer",
+  "UpperBound": 255
+}

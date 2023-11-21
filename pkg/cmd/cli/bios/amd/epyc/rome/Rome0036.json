@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0036",
+  "DefaultValue": "Auto",
+  "DisplayName": "SEV ASID Count",
+  "HelpText": "This fields specifies the maximum valid ASID, which affects the maximum system physical address space. 16TB of physical address space is available for systems that support 253 ASIDs, while 8TB of physical address space is available for systems that support 509 ASIDs.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "253 ASIDs",
+      "ValueName": "253 ASIDs"
+    },
+    {
+      "ValueDisplayName": "509 ASIDs",
+      "ValueName": "509 ASIDs"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

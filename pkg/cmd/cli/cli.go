@@ -36,6 +36,8 @@ import (
 	"unicode/utf8"
 
 	"github.com/spf13/viper"
+	"github.com/stmcginnis/gofish/common"
+	"github.com/stmcginnis/gofish/redfish"
 )
 
 func isInputFromPipe() bool {
@@ -133,28 +135,60 @@ func MapPrint(content map[string]interface{}) {
 		}
 		fmt.Printf("%s\n", string(JSON))
 	} else {
-		keys := make([]string, 0, len(content))
-		for k := range content {
-			keys = append(keys, k)
+		hosts := make([]string, 0, len(content))
+		for host := range content {
+			hosts = append(hosts, host)
 		}
-		sort.Strings(keys)
-		for _, k := range keys {
-			fmt.Printf("%s:\n", k)
-
-			// Warning, the struct fields must be exported!
-			s := content[k]
-			v := reflect.ValueOf(s)
-			typeOfS := v.Type()
-			for i := 0; i < v.NumField(); i++ {
-				if v.Field(i).Interface() != nil {
-					fmt.Printf(
-						"\t%-20s: %-60s\n",
-						typeOfS.Field(i).Name,
-						v.Field(i).Interface(),
-					)
+		sort.Strings(hosts)
+		for _, h := range hosts {
+			if content[h] != nil {
+				v := reflect.ValueOf(content[h])
+				typeOfS := v.Type()
+				// print the host
+				fmt.Printf("%s:\n", h)
+				// print the content dependent upon its type
+				switch t := content[h].(type) {
+				case redfish.SettingsAttributes:
+					for setting, value := range t {
+						fmt.Printf("\t%-40s: %+v\n", setting, value)
+					}
+				case State:
+					for i := 0; i < v.NumField(); i++ {
+						if v.Field(i).Interface() != nil {
+							fmt.Printf(
+								"\t%-20s: %-60s\n",
+								typeOfS.Field(i).Name,
+								v.Field(i).Interface(),
+							)
+						}
+					}
+				case StateChange:
+					for i := 0; i < v.NumField(); i++ {
+						if v.Field(i).Interface() != nil {
+							fmt.Printf(
+								"\t%-20s: %-60s\n",
+								typeOfS.Field(i).Name,
+								v.Field(i).Interface(),
+							)
+						}
+					}
+				case []common.ApplyTime:
+					// use json.Marshal to make a nice, quoted, comma-separated string
+					b, _ := json.Marshal(t)
+					fmt.Printf("\t%s: %-40v\n", "BIOS change(s) may be applied at", string(b))
+				case map[string]interface{}:
+					for key, val := range t {
+						fmt.Printf("\t%-20s: %-60s\n", key, val)
+					}
+					// FIXME: import cycle
+				// case boot.Override:
+				// 	fmt.Printf("\t%-20s: %-60s\n", h, t.Target)
+				case error:
+					fmt.Printf("\tERROR: %-40v\n", content[h])
+				default:
+					fmt.Printf("\tUNKNOWN TYPE: %-40T\n", t)
 				}
 			}
-
 		}
 	}
 }

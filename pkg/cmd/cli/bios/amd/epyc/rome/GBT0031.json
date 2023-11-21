@@ -1,0 +1,18 @@
+{
+  "AttributeName": "GBT0031",
+  "DefaultValue": "Enabled",
+  "DisplayName": "SATA_1 I/O ROM",
+  "HelpText": "Enable/Disable SATA_1 I/O ROM.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

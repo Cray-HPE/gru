@@ -1,0 +1,18 @@
+{
+  "AttributeName": "NWSK006",
+  "DefaultValue": "Enabled",
+  "DisplayName": "Ipv4 HTTP Support",
+  "HelpText": "Enable/Disable IPv4 HTTP boot support. If disabled, IPv4 HTTP boot support will not be available.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    }
+  ]
+}

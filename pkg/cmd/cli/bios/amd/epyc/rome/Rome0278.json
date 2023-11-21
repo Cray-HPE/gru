@@ -1,0 +1,34 @@
+{
+  "AttributeName": "Rome0278",
+  "DefaultValue": "Auto",
+  "DisplayName": "Link Speed",
+  "HelpText": "Select Link Speed for NTB Mode (Core 0, Port 0)",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Max Speed",
+      "ValueName": "Max Speed"
+    },
+    {
+      "ValueDisplayName": "Gen 1",
+      "ValueName": "Gen 1"
+    },
+    {
+      "ValueDisplayName": "Gen 2",
+      "ValueName": "Gen 2"
+    },
+    {
+      "ValueDisplayName": "Gen 3",
+      "ValueName": "Gen 3"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    },
+    {
+      "ValueDisplayName": "Gen 4",
+      "ValueName": "Gen 4"
+    }
+  ]
+}

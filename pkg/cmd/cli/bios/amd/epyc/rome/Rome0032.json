@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0032",
+  "DefaultValue": "Auto",
+  "DisplayName": "Global C-state Control",
+  "HelpText": "Controls IO based C-state generation and DF C-states.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

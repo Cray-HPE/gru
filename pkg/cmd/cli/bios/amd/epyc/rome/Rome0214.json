@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0214",
+  "DefaultValue": "Auto",
+  "DisplayName": "I2C 1 Enable",
+  "HelpText": "Enable or disable I2C 1",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}

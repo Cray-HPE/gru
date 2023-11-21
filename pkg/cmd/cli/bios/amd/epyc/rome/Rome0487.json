@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0487",
+  "DefaultValue": "millisecond",
+  "DisplayName": "SMI Scale Unit",
+  "HelpText": "The [SMI Scale Unit] defines the unit of time scale. (Default: ms)",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "millisecond",
+      "ValueName": "millisecond"
+    },
+    {
+      "ValueDisplayName": "second",
+      "ValueName": "second"
+    },
+    {
+      "ValueDisplayName": "minute",
+      "ValueName": "minute"
+    }
+  ]
+}

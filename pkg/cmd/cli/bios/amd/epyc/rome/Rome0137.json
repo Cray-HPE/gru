@@ -1,0 +1,22 @@
+{
+  "AttributeName": "Rome0137",
+  "DefaultValue": "Auto",
+  "DisplayName": "DRAM ECC Enable",
+  "HelpText": "Use this option to enable / disable DRAM ECC. Auto will set ECC to enable.",
+  "ReadOnly": false,
+  "Type": "Enumeration",
+  "Value": [
+    {
+      "ValueDisplayName": "Disabled",
+      "ValueName": "Disabled"
+    },
+    {
+      "ValueDisplayName": "Enabled",
+      "ValueName": "Enabled"
+    },
+    {
+      "ValueDisplayName": "Auto",
+      "ValueName": "Auto"
+    }
+  ]
+}
