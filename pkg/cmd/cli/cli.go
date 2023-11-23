@@ -162,11 +162,11 @@ func MapPrint(content map[string]interface{}) {
 							)
 						}
 					}
-				case StateChange:
+				case StateChange, Boot, Override:
 					for i := 0; i < v.NumField(); i++ {
 						if v.Field(i).Interface() != nil {
 							fmt.Printf(
-								"\t%-20s: %-60s\n",
+								"\t%-20s: %-v\n",
 								typeOfS.Field(i).Name,
 								v.Field(i).Interface(),
 							)
@@ -180,9 +180,6 @@ func MapPrint(content map[string]interface{}) {
 					for key, val := range t {
 						fmt.Printf("\t%-20s: %-60s\n", key, val)
 					}
-					// FIXME: import cycle
-				// case boot.Override:
-				// 	fmt.Printf("\t%-20s: %-60s\n", h, t.Target)
 				case error:
 					fmt.Printf("\tERROR: %-40v\n", content[h])
 				default:
