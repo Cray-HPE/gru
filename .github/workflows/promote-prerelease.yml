@@ -53,6 +53,7 @@ jobs:
           goos: ${{ matrix.goos }}
           goarch: ${{ matrix.goarch }}
           goversion: ${{ env.GO_VERSION }}
+          pre_command: "rm -f go-*.tar.gz"
           build_command: "make ${{ env.REPO_NAME }}"
           release_tag: ${{ env.TAG }}
           md5sum: 'FALSE'
