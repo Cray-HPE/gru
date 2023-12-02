@@ -24,24 +24,44 @@
 
 */
 
-package get
+package bios
 
+/* Maintainer Note:
+Every new decoder will need to be imported, and added to `var AttributeDecoderMaps`.
+*/
 import (
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios"
-	"github.com/spf13/cobra"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios/amd/epyc/rome"
 )
 
-// NewCommand creates the `get` subcommand.
-func NewCommand() *cobra.Command {
-	c := &cobra.Command{
-		Use:   "get",
-		Short: "Shortcut for getting certain information from RedFish",
-		Long:  `Shortcut for getting certain information from RedFish`,
-		Run: func(c *cobra.Command, args []string) {
-		},
+// Decoder is an interface for decoding keys (strings) against translated BIOS attributes.
+type Decoder interface {
+	Decode(key string) string
+}
+
+// DecoderMap maps a token to a decoder.
+type DecoderMap struct {
+	Token   string
+	Decoder Decoder
+}
+
+// Decode decodes a given key against a DecoderMap of tokens and returns the decoded string.
+func (d *DecoderMap) Decode(key string) string {
+	return d.Decoder.Decode(key)
+}
+
+// DecoderMaps is a DecoderMap slice.
+type DecoderMaps []*DecoderMap
+
+// Decode invokes Decode for each DecoderMap.
+func (d DecoderMaps) Decode(key string) string {
+	var value string
+	for _, dec := range d {
+		value = dec.Decode(key)
 	}
-	c.AddCommand(
-		bios.NewGetCommand(),
-	)
-	return c
+	return value
+}
+
+// AttributeDecoderMaps represents the available DecoderMaps.
+var AttributeDecoderMaps = DecoderMaps{
+	&DecoderMap{Token: rome.ProcessorToken, Decoder: rome.DecoderMap{Map: rome.Map}},
 }

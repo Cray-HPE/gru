@@ -21,14 +21,14 @@
 # ARISING FROM, OUT OF OR IN CONNECTIoff WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-Describe 'gru set bios'
+Describe 'gru bios set'
 
 BeforeAll use_valid_config
 
 # FIXME: the simulator has a limitation and returns 405 for PATCH ops
 # # setting specific keys should work
 # It "--config ${GRU_CONF} --attributes ProcessorHyperThreadingDisable=0,SRIOVEnable=0 127.0.0.1:5000"
-#   When call ./gru set bios --config "${GRU_CONF}" --attributes ProcessorHyperThreadingDisable=0,SRIOVEnable=0 127.0.0.1:5000
+#   When call ./gru bios set --config "${GRU_CONF}" --attributes ProcessorHyperThreadingDisable=0,SRIOVEnable=0 127.0.0.1:5000
 #   The status should equal 0
 #   The stdout should include 'BIOS change(s) may be applied at: ["Immediate","OnReset","AtMaintenanceWindowStart","InMaintenanceWindowOnReset"]'
 #   The lines of stdout should equal 3
@@ -37,7 +37,7 @@ BeforeAll use_valid_config
 # TODO: restore when args work with piping
 # # it should error if no attributes are passed to the flag
 # It "--config ${GRU_CONF} --attributes 127.0.0.1:5000"
-#   When call ./gru set bios --config "${GRU_CONF}" --attributes 127.0.0.1:5000
+#   When call ./gru bios set --config "${GRU_CONF}" --attributes 127.0.0.1:5000
 #   The status should equal 1
 #   The stderr should include 'requires at least 1 arg(s), only received 0'
 # End

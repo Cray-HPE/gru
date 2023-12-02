@@ -28,12 +28,10 @@ package gru
 
 import (
 	"fmt"
-
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/chassis"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/get"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/set"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/show"
 	"github.com/Cray-HPE/gru/pkg/version"
 	"github.com/spf13/cobra"
@@ -90,10 +88,9 @@ the YAML file may provide these per host.
 		"Output results in JSON",
 	)
 	c.AddCommand(
+		bios.NewCommand(),
 		chassis.NewCommand(),
-		get.NewCommand(),
 		show.NewCommand(),
-		set.NewCommand(),
 	)
 
 	return c

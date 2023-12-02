@@ -22,14 +22,14 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 
 
-Describe 'gru set bios'
+Describe 'gru bios set'
 
 BeforeAll use_valid_config
 BeforeAll use_valid_bios_attributes_file
 
 # setting without flags should fail
 It "--config ${GRU_CONF} 127.0.0.1:5000"
-  When call ./gru set bios --config "${GRU_CONF}" 127.0.0.1:5000
+  When call ./gru bios set --config "${GRU_CONF}" 127.0.0.1:5000
   The status should equal 1
   The stderr should include 'An error occurred: at least one of the flags in the group [attributes from-file virt defaults] is required'
 End
@@ -37,7 +37,7 @@ End
 # TODO: restore when args work with piping
 # # neglecting to add a host as an arg should fail with instructions
 # It "--config ${GRU_CONF}"
-#   When call ./gru --config "${GRU_CONF}" set bios
+#   When call ./gru --config "${GRU_CONF}" bios set
 #   The status should equal 1
 #   The stderr should include 'Error: requires at least 1 arg(s), only received 0'
 # End
@@ -45,7 +45,7 @@ End
 # FIXME: the emulator does not support PATCH ops.  Once it does, uncomment, adjust if needed
 # # restoring defaults
 # It "--config ${GRU_CONF} --defaults 127.0.0.1:5000"
-#   When call ./gru set bios --config "${GRU_CONF}" --defaults 127.0.0.1:5000
+#   When call ./gru bios set --config "${GRU_CONF}" --defaults 127.0.0.1:5000
 #   The status should equal 0
 #   The stdout should include 'Error'
 #   The stdout should include 'BIOS reset failure: unable to execute request, no target provided'
@@ -54,7 +54,7 @@ End
 
 # # restoring defaults and be valid json
 # It "--config ${GRU_CONF} --defaults 127.0.0.1:5000 --json"
-#   When call ./gru set bios --config "${GRU_CONF}" --defaults 127.0.0.1:5000 --json
+#   When call ./gru bios set --config "${GRU_CONF}" --defaults 127.0.0.1:5000 --json
 #   The status should equal 0
 #   The stdout should include 'Error'
 #   The stdout should include 'BIOS reset failure: unable to execute request, no target provided'
@@ -63,7 +63,7 @@ End
 
 # # setting keys from a file should return those keys
 # It "--config ${GRU_CONF} --from-file ${GRU_BIOS_KV} 127.0.0.1:5000"
-#   When call ./gru set bios --config "${GRU_CONF}" --from-file "${GRU_BIOS_KV}" 127.0.0.1:5000
+#   When call ./gru bios set --config "${GRU_CONF}" --from-file "${GRU_BIOS_KV}" 127.0.0.1:5000
 #   The status should equal 0
 #   The stdout should include 'Pending'
 #   The stdout should include 'Attributes'
@@ -80,7 +80,7 @@ End
 
 # # setting keys from a file should return those keys and be valid json
 # It "--config ${GRU_CONF} --from-file ${GRU_BIOS_KV} 127.0.0.1:5000 --json"
-#   When call ./gru set bios --config "${GRU_CONF}" --from-file "${GRU_BIOS_KV}" 127.0.0.1:5000 --json
+#   When call ./gru bios set --config "${GRU_CONF}" --from-file "${GRU_BIOS_KV}" 127.0.0.1:5000 --json
 #   The status should equal 0
 #   The stdout should include 'Pending'
 #   The stdout should include 'Attributes'
@@ -96,8 +96,8 @@ End
 # End
 
 # # passing a shortcut should return a limited set of pre-defined keys
-# It "--config ${GRU_CONF} --virt 127.0.0.1:5000"
-#   When call ./gru set bios --config "${GRU_CONF}" --virt 127.0.0.1:5000
+# It "--config ${GRU_CONF} --virtualization 127.0.0.1:5000"
+#   When call ./gru bios set --config "${GRU_CONF}" --virtualization 127.0.0.1:5000
 #   The status should equal 0
 #   The stdout should include 'BootMode'
 #   The stdout should include 'ProcessorHyperThreadingDisable'
@@ -109,8 +109,8 @@ End
 # End
 
 # # passing a shortcut should return a limited set of pre-defined keys and be valid json
-# It "--config ${GRU_CONF} --virt 127.0.0.1:5000 --json"
-#   When call ./gru set bios --config "${GRU_CONF}" --virt 127.0.0.1:5000 --json
+# It "--config ${GRU_CONF} --virtualization 127.0.0.1:5000 --json"
+#   When call ./gru bios set --config "${GRU_CONF}" --virtualization 127.0.0.1:5000 --json
 #   The status should equal 0
 #   The stdout should include 'BootMode'
 #   The stdout should include 'ProcessorHyperThreadingDisable'
