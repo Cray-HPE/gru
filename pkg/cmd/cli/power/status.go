@@ -27,6 +27,7 @@
 package power
 
 import (
+	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/Cray-HPE/gru/pkg/query"
 	"github.com/spf13/cobra"
@@ -46,4 +47,29 @@ func NewPowerStatusCommand() *cobra.Command {
 		Hidden: false,
 	}
 	return c
+}
+
+// status retrieves the redfish.PowerState for a machine..
+func status(host string) interface{} {
+	s := State{}
+	c, err := auth.Connection(host)
+	if err != nil {
+		s.Error = err
+		return s
+	}
+	defer c.Logout()
+
+	service := c.Service
+
+	systems, err := service.Systems()
+	if err != nil {
+		s.Error = err
+		return s
+	}
+	s.PowerState = systems[0].PowerState
+	if err != nil {
+		s.Error = err
+	}
+
+	return s
 }

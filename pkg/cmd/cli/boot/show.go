@@ -54,7 +54,7 @@ func NewShowCommand() *cobra.Command {
 }
 
 func getBootInformation(host string, args ...string) interface{} {
-	boot := cli.Boot{}
+	boot := Boot{}
 	c, err := auth.Connection(host)
 	if err != nil {
 		boot.Error = err
@@ -103,7 +103,7 @@ func getBootInformation(host string, args ...string) interface{} {
 				return err
 			}
 
-			bd := cli.BootDescription{}
+			bd := Description{}
 			bd[b] = names["Description"].(string)
 			// create a key with the boot option using the friendly name as the value
 			boot.Order = append(boot.Order, bd)
@@ -124,7 +124,7 @@ func getBootInformation(host string, args ...string) interface{} {
 
 		for i, v := range names["BootOrder"].([]interface{}) {
 			k := strconv.Itoa(i)
-			bd := cli.BootDescription{}
+			bd := Description{}
 			bd[k] = v.(string)
 			// create a key with the boot option using the friendly name as the value
 			boot.Order = append(boot.Order, bd)

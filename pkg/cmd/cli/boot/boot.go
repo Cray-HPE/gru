@@ -28,14 +28,29 @@ package boot
 
 import (
 	"github.com/Cray-HPE/gru/pkg/auth"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/spf13/viper"
 	"github.com/stmcginnis/gofish/redfish"
 )
 
+// Boot represents boot configuration on the BMC. Only Error is emitted on empty.
+type Boot struct {
+	Order []Description `json:"order"`
+	Next  string        `json:"next"`
+	Error error         `json:"error,omitempty"`
+}
+
+// Description is a map of a boot identifier (Boot0001) to a friendly name (PXE Interface 01 IPv4)
+type Description map[string]string
+
+// Override represents the result of the boot override.
+type Override struct {
+	Target redfish.BootSourceOverrideTarget `json:"target"`
+	Error  error                            `json:"error,omitempty"`
+}
+
 // issueOverride issues a boot override action against a host.
 func issueOverride(host string, override interface{}) interface{} {
-	o := cli.Override{}
+	o := Override{}
 	v := viper.GetViper()
 
 	c, err := auth.Connection(host)
