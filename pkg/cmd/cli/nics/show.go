@@ -49,7 +49,7 @@ func NewShowCommand() *cobra.Command {
 	return c
 }
 
-func getNICInformation(host string, args ...string) interface{} {
+func getNICInformation(host string) interface{} {
 	nics := NIC{}
 	c, err := auth.Connection(host)
 	if err != nil {

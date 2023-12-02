@@ -53,7 +53,7 @@ func NewShowCommand() *cobra.Command {
 	return c
 }
 
-func getBootInformation(host string, args ...string) interface{} {
+func getBootInformation(host string) interface{} {
 	boot := Boot{}
 	c, err := auth.Connection(host)
 	if err != nil {
@@ -75,7 +75,6 @@ func getBootInformation(host string, args ...string) interface{} {
 	// rather than modify a stable external package, do some work here to get the friendly names
 	bo := fmt.Sprintf("%s/%s", strings.TrimRight(systems[0].ODataID, "/"), "BootOptions")
 
-	// get the bootoptions endpoint
 	resp, err := systems[0].Client.Get(bo)
 	// GB has this key
 	if err == nil || resp != nil {
@@ -87,16 +86,12 @@ func getBootInformation(host string, args ...string) interface{} {
 		}
 
 		// make a map for the descriptions
-		// boot.Descriptions = make(map[string]string, 0)
 		for _, b := range systems[0].Boot.BootOrder {
-			// the endpoint is BootOptions/NNNN so strip off 'Boot' from the boot order name
 			ep := fmt.Sprintf("%s/%s", bo, strings.TrimPrefix(b, "Boot"))
-			// get the endpoint
 			response, err := systems[0].Client.Get(ep)
 			if err != nil {
 				return err
 			}
-			// decode to a map
 			names := make(map[string]interface{})
 			err = json.NewDecoder(response.Body).Decode(&names)
 			if err != nil {
@@ -108,10 +103,8 @@ func getBootInformation(host string, args ...string) interface{} {
 			// create a key with the boot option using the friendly name as the value
 			boot.Order = append(boot.Order, bd)
 		}
-		// Intel
 	} else {
 		bo = strings.TrimRight(systems[0].ODataID, "/")
-		// get the bootoptions endpoint
 		response, err := systems[0].Client.Get(bo)
 		if err != nil {
 			return err

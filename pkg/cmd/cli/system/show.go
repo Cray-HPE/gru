@@ -48,7 +48,7 @@ func NewShowCommand() *cobra.Command {
 	return c
 }
 
-func getSystemInformation(host string, args ...string) interface{} {
+func getSystemInformation(host string) interface{} {
 	system := System{}
 	c, err := auth.Connection(host)
 	if err != nil {
