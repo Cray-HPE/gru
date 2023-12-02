@@ -30,6 +30,7 @@ package system
 type System struct {
 	BIOSVersion     string `json:"biosVersion"`
 	FirmwareVersion string `json:"firmwareVersion"`
+	ProcessorModel  string `json:"processorModel"`
 	Manufacturer    string `json:"manufacturer"`
 	Model           string `json:"model"`
 	Error           error  `json:"error,omitempty"`

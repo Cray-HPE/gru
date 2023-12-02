@@ -73,5 +73,6 @@ func getSystemInformation(host string) interface{} {
 	system.Manufacturer = systems[0].Manufacturer
 	system.Model = systems[0].Model
 	system.BIOSVersion = systems[0].BIOSVersion
+	system.ProcessorModel = systems[0].ProcessorSummary.Model
 	return system
 }
