@@ -68,13 +68,10 @@ func getBootInformation(host string) interface{} {
 	systems, err := service.Systems()
 	if err != nil {
 		boot.Error = err
+		return boot
 	}
 
-	// BootOptions in gofish is unexported, so get it here manually
-	// could also modify the vendored dir to expose it, making it easier here
-	// rather than modify a stable external package, do some work here to get the friendly names
 	bo := fmt.Sprintf("%s/%s", strings.TrimRight(systems[0].ODataID, "/"), "BootOptions")
-
 	resp, err := systems[0].Client.Get(bo)
 	// GB has this key
 	if err == nil || resp != nil {
@@ -82,20 +79,23 @@ func getBootInformation(host string) interface{} {
 		opts := make(map[string]interface{})
 		err = json.NewDecoder(resp.Body).Decode(&opts)
 		if err != nil {
-			return err
+			boot.Error = err
+			return boot
 		}
 
 		// make a map for the descriptions
 		for _, b := range systems[0].Boot.BootOrder {
 			ep := fmt.Sprintf("%s/%s", bo, strings.TrimPrefix(b, "Boot"))
-			response, err := systems[0].Client.Get(ep)
+			resp, err := systems[0].Client.Get(ep)
 			if err != nil {
-				return err
+				boot.Error = err
+				return boot
 			}
 			names := make(map[string]interface{})
-			err = json.NewDecoder(response.Body).Decode(&names)
+			err = json.NewDecoder(resp.Body).Decode(&names)
 			if err != nil {
-				return err
+				boot.Error = err
+				return boot
 			}
 
 			bd := Description{}
@@ -107,14 +107,16 @@ func getBootInformation(host string) interface{} {
 		bo = strings.TrimRight(systems[0].ODataID, "/")
 		response, err := systems[0].Client.Get(bo)
 		if err != nil {
-			return err
+			boot.Error = err
+			return boot
 		}
 		names := make(map[string]interface{})
 		err = json.NewDecoder(response.Body).Decode(&names)
 		if err != nil {
-			return err
+			boot.Error = err
+			return boot
 		}
-
+		fmt.Print(names["BootOrder"])
 		for i, v := range names["BootOrder"].([]interface{}) {
 			k := strconv.Itoa(i)
 			bd := Description{}
