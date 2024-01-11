@@ -1,0 +1,7 @@
+---
+FBO001: "UEFI"      # Boot mode
+PCIS007: "Enabled"  # SR-IOV Support
+Rome0039: "Auto"    # Local APIC Mode
+Rome0059: "Auto"    # SMT Control
+Rome0162: "Enabled" # IOMMU
+Rome0565: "Enabled" # SVM Mode

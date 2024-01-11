@@ -1,0 +1,7 @@
+---
+AutoPowerOn: "AlwaysPowerOff"
+BootMode: "Uefi"
+ProcAmdIOMMU: "Enabled"
+ProcAmdVirtualization: "Enabled"
+ProcX2Apic: "Auto"
+Sriov: "Enabled"
