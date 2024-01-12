@@ -28,13 +28,28 @@ package boot
 
 import (
 	"fmt"
+	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/stmcginnis/gofish/redfish"
 )
 
-// NewChassisCommand creates the `boot` subcommand for `chassis`.
-func NewChassisCommand() *cobra.Command {
+// Boot represents boot configuration on the BMC. Only Error is emitted on empty.
+type Boot struct {
+	Order []string `json:"order,omitempty"`
+	Next  string   `json:"next,omitempty"`
+	Error error    `json:"error,omitempty"`
+}
+
+// Override represents the result of the boot override.
+type Override struct {
+	Target redfish.BootSourceOverrideTarget `json:"target"`
+	Error  error                            `json:"error,omitempty"`
+}
+
+// NewCommand creates the `boot` subcommand for `chassis`.
+func NewCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "boot [flags] host [...host]",
 		Short: "Set next boot device",
@@ -47,11 +62,11 @@ func NewChassisCommand() *cobra.Command {
 		Hidden: false,
 	}
 	c.AddCommand(
-		NewBootBiosOverrideCommand(),
-		NewBootHddOverrideCommand(),
-		NewBootPxeOverrideCommand(),
-		NewBootUEFIHttpOverrideCommand(),
-		NewBootNoneOverrideCommand(),
+		NewBiosOverrideCommand(),
+		NewHddOverrideCommand(),
+		NewPxeOverrideCommand(),
+		NewUEFIHttpOverrideCommand(),
+		NewNoneOverrideCommand(),
 	)
 
 	c.PersistentFlags().BoolP(
@@ -73,4 +88,45 @@ func NewChassisCommand() *cobra.Command {
 	)
 
 	return c
+}
+
+// issueOverride issues a boot override action against a host.
+func issueOverride(host string, override interface{}) interface{} {
+	o := Override{}
+	v := viper.GetViper()
+
+	c, err := auth.Connection(host)
+	if err != nil {
+		o.Error = err
+		return o
+	}
+
+	defer c.Logout()
+
+	service := c.Service
+
+	systems, err := service.Systems()
+	if err != nil {
+		o.Error = err
+		return o
+	}
+
+	boot := redfish.Boot{
+		BootSourceOverrideTarget: override.(redfish.BootSourceOverrideTarget),
+		BootSourceOverrideMode:   redfish.UEFIBootSourceOverrideMode,
+	}
+
+	if v.GetBool("persist") {
+		boot.BootSourceOverrideEnabled = redfish.ContinuousBootSourceOverrideEnabled
+	} else {
+		boot.BootSourceOverrideEnabled = redfish.OnceBootSourceOverrideEnabled
+	}
+
+	err = systems[0].SetBoot(boot)
+	o.Target = override.(redfish.BootSourceOverrideTarget)
+	if err != nil {
+		o.Error = err
+	}
+
+	return o
 }

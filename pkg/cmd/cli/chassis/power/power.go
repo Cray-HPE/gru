@@ -27,11 +27,13 @@
 package power
 
 import (
+	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/spf13/cobra"
+	"github.com/stmcginnis/gofish/redfish"
 )
 
-// NewChassisCommand creates the `power` subcommand for `chassis`.
-func NewChassisCommand() *cobra.Command {
+// NewCommand creates the `power` subcommand for `chassis`.
+func NewCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:    "power [flags] host [...host]",
 		Short:  "Power Control",
@@ -47,4 +49,44 @@ func NewChassisCommand() *cobra.Command {
 		NewPowerNMICommand(),
 	)
 	return c
+}
+
+// StateChange represents a change in power states.
+type StateChange struct {
+	PreviousPowerState redfish.PowerState `json:"previousPowerState,omitempty"`
+	ResetType          redfish.ResetType  `json:"resetType,omitempty"`
+	Error              error              `json:"error,omitempty"`
+}
+
+// State represents a single power state.
+type State struct {
+	PowerState redfish.PowerState `json:"powerState"`
+	Error      error              `json:"error,omitempty"`
+}
+
+// Issue issues an action against a host.
+func Issue(host string, action interface{}) interface{} {
+	sc := StateChange{}
+	c, err := auth.Connection(host)
+	if err != nil {
+		sc.Error = err
+		return sc
+	}
+	defer c.Logout()
+
+	service := c.Service
+
+	systems, err := service.Systems()
+	if err != nil {
+		sc.Error = err
+		return sc
+	}
+	sc.PreviousPowerState = systems[0].PowerState
+	sc.ResetType = action.(redfish.ResetType)
+	err = systems[0].Reset(sc.ResetType)
+	if err != nil {
+		sc.Error = err
+	}
+
+	return sc
 }

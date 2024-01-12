@@ -29,7 +29,8 @@ package boot
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"
+	"github.com/stmcginnis/gofish/redfish"
+	"io"
 	"strings"
 
 	"github.com/Cray-HPE/gru/pkg/auth"
@@ -54,7 +55,7 @@ func NewShowCommand() *cobra.Command {
 }
 
 func getBootInformation(host string) interface{} {
-	boot := Boot{}
+	boot := Boot{Order: []string{}}
 	c, err := auth.Connection(host)
 	if err != nil {
 		boot.Error = err
@@ -73,9 +74,10 @@ func getBootInformation(host string) interface{} {
 
 	bo := fmt.Sprintf("%s/%s", strings.TrimRight(systems[0].ODataID, "/"), "BootOptions")
 	resp, err := systems[0].Client.Get(bo)
-	// GB has this key
+
+	// GigaByte has this key
 	if err == nil || resp != nil {
-		// store options in a map for easy manipulation
+
 		opts := make(map[string]interface{})
 		err = json.NewDecoder(resp.Body).Decode(&opts)
 		if err != nil {
@@ -83,7 +85,6 @@ func getBootInformation(host string) interface{} {
 			return boot
 		}
 
-		// make a map for the descriptions
 		for _, b := range systems[0].Boot.BootOrder {
 			ep := fmt.Sprintf("%s/%s", bo, strings.TrimPrefix(b, "Boot"))
 			resp, err := systems[0].Client.Get(ep)
@@ -98,31 +99,40 @@ func getBootInformation(host string) interface{} {
 				return boot
 			}
 
-			bd := Description{}
-			bd[b] = names["Description"].(string)
-			// create a key with the boot option using the friendly name as the value
-			boot.Order = append(boot.Order, bd)
+			boot.Order = append(boot.Order, strings.TrimSpace(names["Description"].(string)))
 		}
 	} else {
+
 		bo = strings.TrimRight(systems[0].ODataID, "/")
 		response, err := systems[0].Client.Get(bo)
 		if err != nil {
 			boot.Error = err
 			return boot
 		}
+
 		names := make(map[string]interface{})
-		err = json.NewDecoder(response.Body).Decode(&names)
+		body, err := io.ReadAll(response.Body)
+		err = json.Unmarshal(body, &names)
 		if err != nil {
 			boot.Error = err
 			return boot
 		}
-		fmt.Print(names["BootOrder"])
-		for i, v := range names["BootOrder"].([]interface{}) {
-			k := strconv.Itoa(i)
-			bd := Description{}
-			bd[k] = v.(string)
-			// create a key with the boot option using the friendly name as the value
-			boot.Order = append(boot.Order, bd)
+
+		bootMap := redfish.Boot{}
+		bootJSON, err := json.Marshal(names["Boot"])
+		if err != nil {
+			boot.Error = err
+			return boot
+		}
+
+		err = bootMap.UnmarshalJSON(bootJSON)
+		if err != nil {
+			boot.Error = err
+			return boot
+		}
+
+		for _, v := range bootMap.BootOrder {
+			boot.Order = append(boot.Order, strings.TrimSpace(v))
 		}
 
 	}

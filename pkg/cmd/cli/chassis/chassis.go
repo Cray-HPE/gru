@@ -27,8 +27,8 @@
 package chassis
 
 import (
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/boot"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/power"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/chassis/boot"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/chassis/power"
 	"github.com/spf13/cobra"
 )
 
@@ -42,8 +42,8 @@ func NewCommand() *cobra.Command {
 		Hidden:                false,
 	}
 	c.AddCommand(
-		boot.NewChassisCommand(),
-		power.NewChassisCommand(),
+		boot.NewCommand(),
+		power.NewCommand(),
 	)
 	return c
 }

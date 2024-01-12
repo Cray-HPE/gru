@@ -29,15 +29,15 @@ package boot
 import (
 	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/power"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/chassis/power"
 	"github.com/Cray-HPE/gru/pkg/set"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stmcginnis/gofish/redfish"
 )
 
-// NewBootBiosOverrideCommand creates the `bios` subcommand for `boot`.
-func NewBootBiosOverrideCommand() *cobra.Command {
+// NewBiosOverrideCommand creates the `bios` subcommand for `boot`.
+func NewBiosOverrideCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "bios host [...host]",
 		Short: "Boot to BIOS",
@@ -60,8 +60,8 @@ func NewBootBiosOverrideCommand() *cobra.Command {
 	return c
 }
 
-// NewBootPxeOverrideCommand creates the `pxe` subcommand for `boot`.
-func NewBootPxeOverrideCommand() *cobra.Command {
+// NewPxeOverrideCommand creates the `pxe` subcommand for `boot`.
+func NewPxeOverrideCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "pxe host [...host]",
 		Short: "Boot with PXE",
@@ -75,8 +75,8 @@ func NewBootPxeOverrideCommand() *cobra.Command {
 	return c
 }
 
-// NewBootHddOverrideCommand creates the `hdd` subcommand for `boot`.
-func NewBootHddOverrideCommand() *cobra.Command {
+// NewHddOverrideCommand creates the `hdd` subcommand for `boot`.
+func NewHddOverrideCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "hdd host [...host]",
 		Short: "Boot from the HDD",
@@ -90,8 +90,8 @@ func NewBootHddOverrideCommand() *cobra.Command {
 	return c
 }
 
-// NewBootUEFIHttpOverrideCommand creates the `http` subcommand for `boot`.
-func NewBootUEFIHttpOverrideCommand() *cobra.Command {
+// NewUEFIHttpOverrideCommand creates the `http` subcommand for `boot`.
+func NewUEFIHttpOverrideCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "http host [...host]",
 		Short: "Boot with HTTP",
@@ -105,8 +105,8 @@ func NewBootUEFIHttpOverrideCommand() *cobra.Command {
 	return c
 }
 
-// NewBootNoneOverrideCommand creates the `none` subcommand for `boot`.
-func NewBootNoneOverrideCommand() *cobra.Command {
+// NewNoneOverrideCommand creates the `none` subcommand for `boot`.
+func NewNoneOverrideCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "none host [...host]",
 		Short: "Clear the boot override",
