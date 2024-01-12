@@ -29,13 +29,13 @@ package boot
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/Cray-HPE/gru/internal/query"
 	"github.com/stmcginnis/gofish/redfish"
 	"io"
 	"strings"
 
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/Cray-HPE/gru/pkg/query"
 	"github.com/spf13/cobra"
 )
 

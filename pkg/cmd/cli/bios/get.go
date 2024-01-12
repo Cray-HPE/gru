@@ -29,9 +29,9 @@ package bios
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/Cray-HPE/gru/internal/query"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios/collections"
-	"github.com/Cray-HPE/gru/pkg/query"
 	"github.com/spf13/cobra"
 	"github.com/stmcginnis/gofish/redfish"
 	"log"
@@ -146,7 +146,7 @@ func getBiosAttributes(host string) interface{} {
 			attributes.Error = fmt.Errorf("no matching keys found in: %v", requestedAttributes)
 		}
 	} else {
-		// loop through all keys discovered and add them to the returned map
+
 		for k, v := range bios.Attributes {
 			if biosDecoder != nil {
 				k = biosDecoder.Decode(k)

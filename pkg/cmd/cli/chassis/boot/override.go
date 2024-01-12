@@ -27,10 +27,10 @@
 package boot
 
 import (
+	"github.com/Cray-HPE/gru/internal/set"
 	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/chassis/power"
-	"github.com/Cray-HPE/gru/pkg/set"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stmcginnis/gofish/redfish"

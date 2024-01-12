@@ -27,8 +27,8 @@
 package power
 
 import (
+	"github.com/Cray-HPE/gru/internal/set"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/Cray-HPE/gru/pkg/set"
 	"github.com/spf13/cobra"
 	"github.com/stmcginnis/gofish/redfish"
 )
