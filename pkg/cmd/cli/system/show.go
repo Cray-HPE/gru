@@ -36,9 +36,10 @@ import (
 // NewShowCommand creates the `system` subcommand for `show`.
 func NewShowCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "system [flags] host [...host]",
+		Use:   "system host [...host]",
 		Short: "System information",
 		Long:  `Show the Server Manufacturer, Server Model, System Version, and Firmware Version for the given server(s)`,
+		Args:  cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := query.Async(getSystemInformation, hosts)

@@ -35,11 +35,10 @@ import (
 // NewCommand creates the `chassis` subcommand.
 func NewCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:                   "chassis",
-		DisableFlagsInUseLine: true,
-		Short:                 "Chassis control",
-		Long:                  `Interact with a host's chassis`,
-		Hidden:                false,
+		Use:    "chassis",
+		Short:  "Chassis control",
+		Long:   `Interact with a host's chassis`,
+		Hidden: false,
 	}
 	c.AddCommand(
 		boot.NewCommand(),

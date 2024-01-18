@@ -48,11 +48,10 @@ type Attributes struct {
 // NewCommand creates the `bios` subcommand.
 func NewCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:                   "bios",
-		DisableFlagsInUseLine: true,
-		Short:                 "BIOS interaction",
-		Long:                  `Interact with a host's bios`,
-		Hidden:                false,
+		Use:    "bios",
+		Short:  "BIOS interaction",
+		Long:   `Interact with a host's bios`,
+		Hidden: false,
 	}
 
 	c.PersistentFlags().StringSliceP(

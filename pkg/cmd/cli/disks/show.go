@@ -33,9 +33,10 @@ import (
 // NewShowCommand creates the `disk` subcommand for `show`.
 func NewShowCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "disks [flags] host [...host]",
+		Use:   "disks host [...host]",
 		Short: "Disk device information",
 		Long:  `Show available disk devices`,
+		Args:  cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 		},
 		Hidden: true, // TODO: Remove or set to false once implemented.

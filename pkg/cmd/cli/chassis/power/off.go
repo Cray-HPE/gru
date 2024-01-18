@@ -39,11 +39,12 @@ import (
 // NewPowerOffCommand creates the `off` subcommand for `power`.
 func NewPowerOffCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "off",
+		Use:   "off host [...host]",
 		Short: "Power off the target machine(s)",
 		Long: `Powers off the target machine(s) with an ACPI shutdown.
 Permits forcing a shutdown (without waiting for the OS),
 as well as a power-button emulated shutdown.`,
+		Args: cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			var resetType redfish.ResetType
 

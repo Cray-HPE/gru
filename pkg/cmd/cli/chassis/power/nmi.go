@@ -36,9 +36,10 @@ import (
 // NewPowerNMICommand creates the `nmi` subcommand for `power`.
 func NewPowerNMICommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "nmi",
+		Use:   "nmi host [...host]",
 		Short: "Issue an NMI to the target machine(s)",
 		Long:  `Issue a non-maskable interrupt, triggering a crash/core dump`,
+		Args:  cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := set.Async(Issue, hosts, redfish.NmiResetType)

@@ -36,9 +36,10 @@ import (
 // NewShowCommand creates the `nics` subcommand for `show`.
 func NewShowCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "nics [flags] host [...host]",
+		Use:   "nics host [...host]",
 		Short: "Network interface information",
 		Long:  `Show available network interface hardware`,
+		Args:  cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := query.Async(getNICInformation, hosts)

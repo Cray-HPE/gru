@@ -44,9 +44,10 @@ import (
 // NewBiosGetCommand creates a `get` subcommand for `bios`.
 func NewBiosGetCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "get",
+		Use:   "get host [...host]",
 		Short: "Gets BIOS attributes by key-name, or get all attributes",
 		Long:  `Gets BIOS attributes`,
+		Args:  cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := query.Async(getBiosAttributes, hosts)

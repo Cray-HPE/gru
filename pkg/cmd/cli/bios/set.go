@@ -36,9 +36,10 @@ import (
 // NewBiosSetCommand creates the `set` subcommand for `bios`.
 func NewBiosSetCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "set",
+		Use:   "set host [...host]",
 		Short: "Sets BIOS attributes",
 		Long:  `Sets BIOS attributes if the attribute is found and the value is valid.`,
+		Args:  cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			v := viper.GetViper()
 			hosts := cli.ParseHosts(args)

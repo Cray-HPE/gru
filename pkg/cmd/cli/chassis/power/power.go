@@ -35,7 +35,7 @@ import (
 // NewCommand creates the `power` subcommand for `chassis`.
 func NewCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:    "power [flags] host [...host]",
+		Use:    "power host [...host]",
 		Short:  "Power Control",
 		Long:   `Check power status, or power on, off, cycle, or reset a host`,
 		Hidden: false,

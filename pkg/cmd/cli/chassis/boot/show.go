@@ -42,9 +42,10 @@ import (
 // NewShowCommand creates the `boot` subcommand for `show`.
 func NewShowCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "boot [flags] host [...host]",
+		Use:   "boot host [...host]",
 		Short: "Boot information",
 		Long:  `Show the current BootOrder; BootNext, networkRetry, and more`,
+		Args:  cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := query.Async(getBootInformation, hosts)

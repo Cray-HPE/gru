@@ -29,7 +29,6 @@ package boot
 import (
 	"fmt"
 	"github.com/Cray-HPE/gru/pkg/auth"
-	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stmcginnis/gofish/redfish"
@@ -51,14 +50,9 @@ type Override struct {
 // NewCommand creates the `boot` subcommand for `chassis`.
 func NewCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "boot [flags] host [...host]",
-		Short: "Set next boot device",
-		Long:  `Overrides the next boot device for a one-time override. Only sets UEFI boot modes`,
-		Run: func(c *cobra.Command, args []string) {
-			v := viper.GetViper()
-			bindErr := v.BindPFlags(c.Flags())
-			cmd.CheckError(bindErr)
-		},
+		Use:    "boot",
+		Short:  "Set next boot device",
+		Long:   `Overrides the next boot device for a one-time override. Only sets UEFI boot modes`,
 		Hidden: false,
 	}
 	c.AddCommand(

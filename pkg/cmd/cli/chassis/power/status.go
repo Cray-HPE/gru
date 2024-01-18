@@ -36,9 +36,10 @@ import (
 // NewPowerStatusCommand creates the `status` subcommand for `power`.
 func NewPowerStatusCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "status",
+		Use:   "status host [...host]",
 		Short: "Power status for the target machine(s)",
 		Long:  `Prints the current power status reported by the blade management controller for the target machine(s)`,
+		Args:  cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := query.Async(status, hosts)
