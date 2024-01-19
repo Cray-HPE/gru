@@ -81,7 +81,8 @@ func getBiosAttributes(host string) interface{} {
 
 	systems, bios, err := getSystemBios(host)
 	if err != nil {
-		return err
+		attributes.Error = err
+		return attributes
 	}
 
 	for decoder := range AttributeDecoderMaps {
