@@ -107,7 +107,10 @@ func VirtualizationAttributes(enable bool, manufacturer string) (settings redfis
 			settings = HpeDisableVirtualization
 		}
 	default:
-		err = fmt.Errorf("unable to determine manufaturer for virtualization shortcut")
+		err = fmt.Errorf(
+			"unable to determine manufaturer for attribute collection; manufacturer detected: %s",
+			normalizedManufacturer,
+		)
 	}
 	return settings, err
 }
