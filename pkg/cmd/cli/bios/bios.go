@@ -140,7 +140,7 @@ func unmarshalBiosKeyValFile(file string) (settings map[string]interface{}, err 
 // someone could also use the wrong system in the returned slice of systems.
 // TODO: return a map of systems to bios objects
 func getSystemBios(host string) (systems []*redfish.ComputerSystem, bios *redfish.Bios, err error) {
-	// set up the client
+
 	c, err := auth.Connection(host)
 	if err != nil {
 		return systems, bios, err
