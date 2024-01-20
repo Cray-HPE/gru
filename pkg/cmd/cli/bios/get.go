@@ -132,14 +132,18 @@ func getBiosAttributes(host string) interface{} {
 
 	attributes.Attributes = redfish.SettingsAttributes{}
 
+	var decodedAttribute string
+
+	// Loop through requestedAttributes if defined, otherwise loop through all.
 	if len(requestedAttributes) != 0 {
-		// check each requested attribute
+
 		for _, attribute := range requestedAttributes {
+
 			if biosDecoder != nil {
-				attribute = biosDecoder.Decode(attribute)
+				decodedAttribute = biosDecoder.Decode(attribute)
 			}
 			if v, exists := bios.Attributes[attribute]; exists {
-				attributes.Attributes[attribute] = v
+				attributes = updateAttributeMap(attributes, attribute, v, decodedAttribute)
 			} else {
 				attributes.Attributes[attribute] = nil
 			}
@@ -150,13 +154,22 @@ func getBiosAttributes(host string) interface{} {
 	} else {
 
 		for k, v := range bios.Attributes {
+
 			if biosDecoder != nil {
-				k = biosDecoder.Decode(k)
-				attributes.Attributes[k] = v
-			} else {
-				attributes.Attributes[k] = v
+				decodedAttribute = biosDecoder.Decode(k)
 			}
+
+			attributes = updateAttributeMap(attributes, k, v, decodedAttribute)
 		}
+	}
+	return attributes
+}
+
+func updateAttributeMap(attributes Attributes, attribute string, value any, decodedAttribute string) Attributes {
+	if decodedAttribute != "" {
+		attributes.Attributes[decodedAttribute] = value
+	} else {
+		attributes.Attributes[attribute] = value
 	}
 	return attributes
 }

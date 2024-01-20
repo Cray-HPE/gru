@@ -34,8 +34,6 @@ import (
 	"os"
 	"path"
 	"strings"
-
-	"github.com/spf13/viper"
 )
 
 //go:embed *.json
@@ -131,14 +129,8 @@ func (l *Library) RegisterAttribute(attribute Attribute) error {
 
 // Decode accepts a key and changes it to a friendly name if it exists and json is not requested
 func (d DecoderMap) Decode(key string) string {
-	romeAttr, exists := d.Map.Attributes[key]
-	if exists {
-		// convert to a friendly name for non-json
-		if viper.GetBool("json") {
-			key = strings.TrimLeft(romeAttr.DisplayName, " ")
-		} else {
-			key = fmt.Sprintf("%s (%s)", romeAttr.AttributeName, strings.TrimLeft(romeAttr.DisplayName, " "))
-		}
+	if romeAttr, exists := d.Map.Attributes[key]; exists {
+		key = fmt.Sprintf("%s (%s)", romeAttr.AttributeName, strings.TrimLeft(romeAttr.DisplayName, " "))
 	}
 	return key
 }

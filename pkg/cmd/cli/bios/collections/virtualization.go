@@ -94,7 +94,7 @@ func VirtualizationAttributes(enable bool, manufacturer string) (settings redfis
 		} else {
 			settings = IntelDisableVirtualization
 		}
-	case "GIGABYTE":
+	case "GIGABYTE", "CRAY INC.":
 		if enable {
 			settings = GigabyteEnableVirtualization
 		} else {
