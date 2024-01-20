@@ -53,9 +53,9 @@ func NewCommand() *cobra.Command {
 
 // StateChange represents a change in power states.
 type StateChange struct {
-	PreviousPowerState redfish.PowerState `json:"previousPowerState,omitempty"`
-	ResetType          redfish.ResetType  `json:"resetType,omitempty"`
-	Error              error              `json:"error,omitempty"`
+	PreviousPowerState  redfish.PowerState `json:"previousPowerState,omitempty"`
+	RequestedPowerState redfish.ResetType  `json:"requestedPowerState,omitempty"`
+	Error               error              `json:"error,omitempty"`
 }
 
 // State represents a single power state.
@@ -82,8 +82,8 @@ func Issue(host string, action interface{}) interface{} {
 		return sc
 	}
 	sc.PreviousPowerState = systems[0].PowerState
-	sc.ResetType = action.(redfish.ResetType)
-	err = systems[0].Reset(sc.ResetType)
+	sc.RequestedPowerState = action.(redfish.ResetType)
+	err = systems[0].Reset(sc.RequestedPowerState)
 	if err != nil {
 		sc.Error = err
 	}
