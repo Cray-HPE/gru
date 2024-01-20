@@ -103,7 +103,6 @@ func getBiosAttributes(host string) interface{} {
 		return attributes
 	}
 
-	// if the values are coming from a file
 	fromFile := v.GetString("from-file")
 	if fromFile != "" {
 		attrsFromFile, err := unmarshalBiosKeyValFile(fromFile)
@@ -114,7 +113,6 @@ func getBiosAttributes(host string) interface{} {
 			requestedAttributes = append(requestedAttributes, k)
 		}
 	} else {
-		// get the keys from the attributes flags
 		requestedAttributes = viper.GetStringSlice("attributes")
 	}
 
