@@ -150,6 +150,11 @@ func MapPrint(content map[string]interface{}) {
 					continue
 				} else if _, ok := v.Field(i).Interface().(map[string]interface{}); ok {
 					keys := v.Field(i).MapKeys()
+					if len(keys) != 0 {
+						fmt.Printf("\t%v:\n", typeOfS.Field(i).Name)
+					} else {
+						continue
+					}
 
 					sortedKeys := make([]string, 0, len(keys))
 
@@ -160,7 +165,7 @@ func MapPrint(content map[string]interface{}) {
 					sort.Strings(sortedKeys)
 					for key := range sortedKeys {
 						fmt.Printf(
-							"\t%-40s: %-60v\n",
+							"\t\t%-60s: %-60v\n",
 							sortedKeys[key],
 							v.Field(i).MapIndex(reflect.ValueOf(sortedKeys[key])),
 						)
@@ -181,7 +186,7 @@ func MapPrint(content map[string]interface{}) {
 						continue
 					}
 					fmt.Printf(
-						"\t%-40s: %-60s\n",
+						"\t%-60s: %-60s\n",
 						typeOfS.Field(i).Name,
 						v.Field(i).Interface(),
 					)
