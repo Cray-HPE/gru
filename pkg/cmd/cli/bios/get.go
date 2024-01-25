@@ -70,7 +70,7 @@ func getBiosAttributes(host string) interface{} {
 	v := viper.GetViper()
 	var biosDecoder Decoder
 	var requestedAttributes []string
-	attributes := Attributes{}
+	attributes := Settings{}
 
 	if v.GetBool("pending") {
 		pendingAttributes := getPendingBiosAttributes(host)
@@ -163,7 +163,7 @@ func getBiosAttributes(host string) interface{} {
 	return attributes
 }
 
-func updateAttributeMap(attributes Attributes, attribute string, value any, decodedAttribute string) Attributes {
+func updateAttributeMap(attributes Settings, attribute string, value any, decodedAttribute string) Settings {
 	if decodedAttribute != "" {
 		attributes.Attributes[decodedAttribute] = value
 	} else {
@@ -173,8 +173,8 @@ func updateAttributeMap(attributes Attributes, attribute string, value any, deco
 }
 
 // getPendingBiosAttributes gets the staged bios attributes from Bios/Settings
-func getPendingBiosAttributes(host string) Attributes {
-	attributes := Attributes{}
+func getPendingBiosAttributes(host string) Settings {
+	attributes := Settings{}
 
 	_, bios, err := getSystemBios(host)
 	if err != nil {
@@ -196,7 +196,7 @@ func getPendingBiosAttributes(host string) Attributes {
 	}
 
 	/*
-		make a simple map for checking the existence of the "Attributes" key
+		make a simple map for checking the existence of the "Settings" key
 		if it does not exist, ``bios.UpdateBiosAttributes`` still returns 200
 		even though no changes can actually take place
 	*/
@@ -207,14 +207,14 @@ func getPendingBiosAttributes(host string) Attributes {
 		return attributes
 	}
 
-	_, exists := staged["Attributes"]
-	if staged["Attributes"] == nil || !exists {
+	_, exists := staged["Settings"]
+	if staged["Settings"] == nil || !exists {
 		attributes.Error = fmt.Errorf("\"Attributes\" does not exist or is null, the BIOS/firmware may need to updated for proper Attributes support")
 		return attributes
 	}
 
 	modified := make(map[string]interface{})
-	for k, v := range staged["Attributes"].(map[string]interface{}) {
+	for k, v := range staged["Settings"].(map[string]interface{}) {
 		if v != bios.Attributes[k] {
 			modified[k] = v
 		}

@@ -32,6 +32,9 @@ import (
 	"strings"
 )
 
+// Virtualization denotes whether to use this collection.
+var Virtualization bool
+
 var (
 	// IntelEnableVirtualization defines Intel Corporation BIOS settings for enabling virtualization with Intel processors.
 	IntelEnableVirtualization = redfish.SettingsAttributes{

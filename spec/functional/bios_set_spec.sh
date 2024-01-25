@@ -31,7 +31,16 @@ BeforeAll use_valid_bios_attributes_file
 It "--config ${GRU_CONF} 127.0.0.1:5000"
   When call ./gru bios set --config "${GRU_CONF}" 127.0.0.1:5000
   The status should equal 1
-  The stderr should include 'An error occurred: at least one of the flags in the group [attributes from-file virt defaults] is required'
+  The stderr should include 'an error occurred: at least one of the flags in the group [attributes from-file virtualization clear-cmos] is required'
+  The stdout should include "Usage:"
+End
+
+# setting with more than one flag should fail
+It "--config ${GRU_CONF} 127.0.0.1:5000"
+  When call ./gru bios set --config "${GRU_CONF}" --attributes foo --from-file ./baz.txt 127.0.0.1:5000
+  The status should equal 1
+  The stderr should include 'an error occurred: only one of the flags in the group [attributes from-file virtualization clear-cmos] can be specified at a time'
+  The stdout should include "Usage:"
 End
 
 # TODO: restore when args work with piping

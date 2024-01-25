@@ -29,6 +29,7 @@ package bios
 import (
 	"fmt"
 	"github.com/Cray-HPE/gru/pkg/auth"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios/collections"
 	"github.com/spf13/cobra"
 	"github.com/stmcginnis/gofish/redfish"
 	"gopkg.in/yaml.v3"
@@ -38,37 +39,50 @@ import (
 	"strings"
 )
 
-// Attributes is a structure for holding current BIOS attributes, pending attributes, and errors.
-type Attributes struct {
+// Settings is a structure for holding current BIOS attributes, pending attributes, and errors.
+type Settings struct {
 	Attributes map[string]interface{} `json:"attributes,omitempty"`
 	Pending    map[string]interface{} `json:"pending,omitempty"`
 	Error      error                  `json:"error,omitempty"`
 }
 
+// Attributes are an array of attribute names (and optionally values).
+var Attributes []string
+
+// FromFile is a path to a file to read attributes from.
+var FromFile string
+
 // NewCommand creates the `bios` subcommand.
 func NewCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:    "bios",
-		Short:  "BIOS interaction",
-		Long:   `Interact with a host's bios`,
-		Hidden: false,
+		Use:              "bios",
+		Short:            "BIOS interaction",
+		Long:             `Interact with a host's bios`,
+		TraverseChildren: true,
+		Args:             cobra.MinimumNArgs(1),
+		Hidden:           false,
+		Run: func(c *cobra.Command, args []string) {
+		},
 	}
 
-	c.PersistentFlags().StringSliceP(
+	c.PersistentFlags().StringArrayVarP(
+		&Attributes,
 		"attributes",
 		"a",
 		[]string{},
 		"Comma delimited list of attributes and values: [key[,keyN]]",
 	)
 
-	c.PersistentFlags().StringP(
+	c.PersistentFlags().StringVarP(
+		&FromFile,
 		"from-file",
 		"f",
 		"",
 		"Path to an INI or YAML file with bios attributes (value(s) for key(s) will be ignored)",
 	)
 
-	c.PersistentFlags().BoolP(
+	c.PersistentFlags().BoolVarP(
+		&collections.Virtualization,
 		"virtualization",
 		"V",
 		false,
@@ -85,8 +99,8 @@ func NewCommand() *cobra.Command {
 // makeAttributes makes a “map[string]interface“ out of a comma separate slice of
 // key=values, which are split on on '='.  the resultant value is a string,
 // which does not work for all attributes.
-func makeAttributes(args []string) Attributes {
-	attributes := Attributes{}
+func makeAttributes(args []string) Settings {
+	attributes := Settings{}
 	attributes.Attributes = make(map[string]interface{})
 
 	var a interface{}

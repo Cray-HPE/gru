@@ -41,8 +41,9 @@ import (
 // NewCommand creates the main command for `gru`.
 func NewCommand(name string) *cobra.Command {
 	c := &cobra.Command{
-		Use:   name,
-		Short: fmt.Sprintf("Go Redfish Utility (%s)", name),
+		Use:              name,
+		TraverseChildren: true,
+		Short:            fmt.Sprintf("Go Redfish Utility (%s)", name),
 		Long: fmt.Sprintf(
 			`
 %[1]s is a tool for interacting with Redfish devices. %[1]s provides a

@@ -42,7 +42,7 @@ It "--config ${GRU_CONF} 127.0.0.1:5000"
   The line 3 of stdout should include 'PreviousPowerState'
   # powerstate can vary depending when test runs so more logic needed
   # The line 3 of stdout should include 'Off' 
-  The line 4 of stdout should include 'ResetType'
+  The line 4 of stdout should include 'RequestedPowerState'
   The line 4 of stdout should include 'GracefulShutdown'
 End
 

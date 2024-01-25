@@ -25,13 +25,18 @@ OTHER DEALINGS IN THE SOFTWARE.
 package bios
 
 import (
+	"fmt"
 	"github.com/Cray-HPE/gru/internal/set"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios/collections"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stmcginnis/gofish/redfish"
+	"os"
 )
+
+// ClearCmos determins whether or not to clear the CMOS values.
+var ClearCmos bool
 
 // NewBiosSetCommand creates the `set` subcommand for `bios`.
 func NewBiosSetCommand() *cobra.Command {
@@ -41,6 +46,29 @@ func NewBiosSetCommand() *cobra.Command {
 		Long:  `Sets BIOS attributes if the attribute is found and the value is valid.`,
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
+			if len(Attributes) == 0 && FromFile == "" && !collections.Virtualization && !ClearCmos {
+				_, err := fmt.Fprintln(
+					os.Stderr,
+					fmt.Errorf("an error occurred: at least one of the flags in the group [attributes from-file virtualization clear-cmos] is required"),
+				)
+				err = c.Help()
+				if err != nil {
+					return
+				}
+				os.Exit(1)
+			}
+			if (len(Attributes) == 0) == (FromFile == "") == collections.Virtualization == ClearCmos {
+				_, err := fmt.Fprintln(
+					os.Stderr,
+					fmt.Errorf("an error occurred: only one of the flags in the group [attributes from-file virtualization clear-cmos] can be specified at a time"),
+				)
+				err = c.Help()
+				if err != nil {
+					return
+				}
+				os.Exit(1)
+			}
+
 			v := viper.GetViper()
 			hosts := cli.ParseHosts(args)
 			a := viper.GetStringSlice("attributes")
@@ -58,7 +86,8 @@ func NewBiosSetCommand() *cobra.Command {
 		Hidden: false,
 	}
 
-	c.PersistentFlags().Bool(
+	c.PersistentFlags().BoolVar(
+		&ClearCmos,
 		"clear-cmos",
 		false,
 		"Clear CMOS; set all BIOS attributes to their defaults.",
@@ -68,7 +97,7 @@ func NewBiosSetCommand() *cobra.Command {
 }
 
 func setBios(host string, requestedAttributes map[string]interface{}) interface{} {
-	attributes := Attributes{}
+	attributes := Settings{}
 	v := viper.GetViper()
 
 	systems, bios, err := getSystemBios(host)
@@ -128,7 +157,7 @@ func setBios(host string, requestedAttributes map[string]interface{}) interface{
 }
 
 func resetBios(host string) interface{} {
-	attributes := Attributes{}
+	attributes := Settings{}
 
 	_, bios, err := getSystemBios(host)
 	if err != nil {
