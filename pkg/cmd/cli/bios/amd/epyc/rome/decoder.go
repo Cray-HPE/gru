@@ -31,6 +31,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/spf13/viper"
 	"os"
 	"path"
 	"strings"
@@ -129,8 +130,14 @@ func (l *Library) RegisterAttribute(attribute Attribute) error {
 
 // Decode accepts a key and changes it to a friendly name if it exists and json is not requested
 func (d DecoderMap) Decode(key string) string {
+	v := viper.GetViper()
+
 	if romeAttr, exists := d.Map.Attributes[key]; exists {
-		key = fmt.Sprintf("%s (%s)", romeAttr.AttributeName, strings.TrimLeft(romeAttr.DisplayName, " "))
+		if v.GetBool("json") {
+			key = romeAttr.AttributeName
+		} else {
+			key = fmt.Sprintf("%s (%s)", romeAttr.AttributeName, strings.TrimLeft(romeAttr.DisplayName, " "))
+		}
 	}
 	return key
 }
