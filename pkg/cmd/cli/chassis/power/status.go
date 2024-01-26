@@ -27,24 +27,50 @@
 package power
 
 import (
+	"github.com/Cray-HPE/gru/internal/query"
+	"github.com/Cray-HPE/gru/pkg/auth"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/spf13/cobra"
 )
 
-// NewChassisCommand creates the `power` subcommand for `chassis`.
-func NewChassisCommand() *cobra.Command {
+// NewPowerStatusCommand creates the `status` subcommand for `power`.
+func NewPowerStatusCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:    "power [flags] host [...host]",
-		Short:  "Power Control",
-		Long:   `Check power status, or power on, off, cycle, or reset a host`,
+		Use:   "status host [...host]",
+		Short: "Power status for the target machine(s)",
+		Long:  `Prints the current power status reported by the blade management controller for the target machine(s)`,
+		Args:  cobra.MinimumNArgs(1),
+		Run: func(c *cobra.Command, args []string) {
+			hosts := cli.ParseHosts(args)
+			content := query.Async(status, hosts)
+			cli.MapPrint(content)
+		},
 		Hidden: false,
 	}
-	c.AddCommand(
-		NewPowerOffCommand(),
-		NewPowerResetCommand(),
-		NewPowerOnCommand(),
-		NewPowerCycleCommand(),
-		NewPowerStatusCommand(),
-		NewPowerNMICommand(),
-	)
 	return c
+}
+
+// status retrieves the redfish.PowerState for a machine..
+func status(host string) interface{} {
+	s := State{}
+	c, err := auth.Connection(host)
+	if err != nil {
+		s.Error = err
+		return s
+	}
+	defer c.Logout()
+
+	service := c.Service
+
+	systems, err := service.Systems()
+	if err != nil {
+		s.Error = err
+		return s
+	}
+	s.PowerState = systems[0].PowerState
+	if err != nil {
+		s.Error = err
+	}
+
+	return s
 }

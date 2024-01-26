@@ -27,24 +27,59 @@
 package power
 
 import (
+	"fmt"
+	"github.com/Cray-HPE/gru/internal/set"
+	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/Cray-HPE/gru/pkg/set"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"github.com/stmcginnis/gofish/redfish"
 )
 
-// NewPowerNMICommand creates the `nmi` subcommand for `power`.
-func NewPowerNMICommand() *cobra.Command {
+// NewPowerOffCommand creates the `off` subcommand for `power`.
+func NewPowerOffCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "nmi",
-		Short: "Issue an NMI to the target machine(s)",
-		Long:  `Issue a non-maskable interrupt, triggering a crash/core dump`,
+		Use:   "off host [...host]",
+		Short: "Power off the target machine(s)",
+		Long: `Powers off the target machine(s) with an ACPI shutdown.
+Permits forcing a shutdown (without waiting for the OS),
+as well as a power-button emulated shutdown.`,
+		Args: cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
+			var resetType redfish.ResetType
+
 			hosts := cli.ParseHosts(args)
-			content := set.Async(Issue, hosts, redfish.NmiResetType)
+
+			v := viper.GetViper()
+			bindErr := v.BindPFlags(c.Flags())
+			cmd.CheckError(bindErr)
+
+			resetType = redfish.GracefulShutdownResetType
+			if v.GetBool("force") {
+				resetType = redfish.ForceOffResetType
+			}
+			if v.GetBool("button") {
+				resetType = redfish.PushPowerButtonResetType
+			}
+
+			content := set.Async(Issue, hosts, resetType)
 			cli.MapPrint(content)
 		},
-		Hidden: false,
 	}
+	c.PersistentFlags().BoolP(
+		"force",
+		"f",
+		false,
+		fmt.Sprintln(
+			"Immediately power off without waiting for the OS",
+		),
+	)
+	c.PersistentFlags().BoolP(
+		"button",
+		"b",
+		false,
+		"Emulate a power-button press",
+	)
+	c.MarkFlagsMutuallyExclusive("button", "force")
 	return c
 }

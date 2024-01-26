@@ -1,164 +1,175 @@
 /*
+MIT License
 
- MIT License
+(C) Copyright 2023 Hewlett Packard Enterprise Development LP
 
- (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
 
- Permission is hereby granted, free of charge, to any person obtaining a
- copy of this software and associated documentation files (the "Software"),
- to deal in the Software without restriction, including without limitation
- the rights to use, copy, modify, merge, publish, distribute, sublicense,
- and/or sell copies of the Software, and to permit persons to whom the
- Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
 
- The above copyright notice and this permission notice shall be included
- in all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
- THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
- OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
- ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- OTHER DEALINGS IN THE SOFTWARE.
-
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
 */
 
 package bios
 
 import (
 	"fmt"
-
+	"github.com/Cray-HPE/gru/internal/set"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/Cray-HPE/gru/pkg/set"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios/collections"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stmcginnis/gofish/redfish"
+	"os"
 )
 
-// NewSetCommand creates the `bios` subcommand for `set`.
-func NewSetCommand() *cobra.Command {
+// ClearCmos determins whether or not to clear the CMOS values.
+var ClearCmos bool
+
+// NewBiosSetCommand creates the `set` subcommand for `bios`.
+func NewBiosSetCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "bios",
-		Short: "Sets BIOS attributes.",
-		// Args:  cobra.MinimumNArgs(1),
-		Long: `Sets BIOS attributes if the attribute is found and the value is valid.`,
+		Use:   "set host [...host]",
+		Short: "Sets BIOS attributes",
+		Long:  `Sets BIOS attributes if the attribute is found and the value is valid.`,
+		Args:  cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
-			fromfile, _ = c.PersistentFlags().GetString("from-file")
-			defaults, _ = c.PersistentFlags().GetBool("defaults")
+			if len(Attributes) == 0 && FromFile == "" && !collections.Virtualization && !ClearCmos {
+				_, err := fmt.Fprintln(
+					os.Stderr,
+					fmt.Errorf("an error occurred: at least one of the flags in the group [attributes from-file virtualization clear-cmos] is required"),
+				)
+				err = c.Help()
+				if err != nil {
+					return
+				}
+				os.Exit(1)
+			}
+			if (len(Attributes) == 0) == (FromFile == "") == collections.Virtualization == ClearCmos {
+				_, err := fmt.Fprintln(
+					os.Stderr,
+					fmt.Errorf("an error occurred: only one of the flags in the group [attributes from-file virtualization clear-cmos] can be specified at a time"),
+				)
+				err = c.Help()
+				if err != nil {
+					return
+				}
+				os.Exit(1)
+			}
+
+			v := viper.GetViper()
 			hosts := cli.ParseHosts(args)
-			virt = viper.GetBool("virt")
 			a := viper.GetStringSlice("attributes")
 			attributes := makeAttributes(a)
-			content := set.AsyncMap(setBIOSSettings, hosts, attributes)
+			var content map[string]interface{}
+
+			if v.GetBool("clear-cmos") {
+				content = set.AsyncCall(resetBios, hosts)
+			} else {
+				content = set.AsyncMap(setBios, hosts, attributes.Attributes)
+			}
+
 			cli.MapPrint(content)
 		},
 		Hidden: false,
 	}
-	c.PersistentFlags().StringSlice(
-		"attributes",
-		[]string{},
-		"Comma delimited list of attributes and values to set them to: attribute=value[,keyN=valueN].",
-	)
-	c.PersistentFlags().String(
-		"from-file",
-		"",
-		"Path to a key/value YML file with bios attributes and their desired value(s)",
-	)
-	c.PersistentFlags().Bool(
-		"virt",
+
+	c.PersistentFlags().BoolVar(
+		&ClearCmos,
+		"clear-cmos",
 		false,
-		"Enable virtualization using pre-determined, per-vendor settings",
+		"Clear CMOS; set all BIOS attributes to their defaults.",
 	)
-	c.PersistentFlags().Bool(
-		"defaults",
-		false,
-		"Reset all BIOS attributes to vendor defaults",
-	)
-	c.MarkFlagsMutuallyExclusive("attributes", "from-file", "virt", "defaults")
-	c.Root().MarkFlagsOneRequired("attributes", "from-file", "virt", "defaults")
+
 	return c
 }
 
-// setBIOSSettings sets bios settings on the host
-func setBIOSSettings(host string, requestedAttributes map[string]interface{}) interface{} {
-	var pendingAttrs = map[string]interface{}{}
+func setBios(host string, requestedAttributes map[string]interface{}) interface{} {
+	attributes := Settings{}
+	v := viper.GetViper()
 
-	systems, bios, err := getBiosAttributes(host)
+	systems, bios, err := getSystemBios(host)
 	if err != nil {
-		pendingAttrs = map[string]interface{}{
-			"Error": fmt.Sprintf("%v", err),
-		}
-		return pendingAttrs
+		attributes.Error = err
+		return attributes
 	}
 
-	// Restore default BIOS values
-	if defaults {
-		err = bios.ResetBios()
+	attributes.Attributes = redfish.SettingsAttributes{}
+
+	if v.GetBool("virtualization") {
+		attributes.Attributes, err = collections.VirtualizationAttributes(true, systems[0].Manufacturer)
 		if err != nil {
-			pendingAttrs = map[string]interface{}{
-				"Error": fmt.Sprintf("BIOS reset failure: %v", err),
-			}
-			return pendingAttrs
+			attributes.Error = err
+			return attributes
 		}
-		return pendingAttrs
-	}
-
-	var attributes = redfish.SettingsAttributes{}
-
-	// if virtualization is requested to be enabled
-	if virt {
-		// use vendor-specific settings, pre-determined and known to work
-		attributes = virtSettings(virt, systems[0].Manufacturer)
 	}
 
 	if len(requestedAttributes) == 0 {
-		// if no attributes are set, check the file
-		if fromfile != "" {
-			settings, err := unmarshalBiosKeyValFile(fromfile)
+
+		fromFile := v.GetString("from-file")
+
+		if fromFile != "" {
+
+			settings, err := unmarshalBiosKeyValFile(fromFile)
 			if err != nil {
-				pendingAttrs = map[string]interface{}{
-					"Error": fmt.Sprintf("%v", err),
-				}
-				return pendingAttrs
+				attributes.Error = err
+				return attributes
 			}
-			// loop through the file's key/values and add them to the map
-			// avoid adding duplicate keys
+
 			for k, v := range settings {
 				_, exists := requestedAttributes[k]
 				if !exists {
-					attributes[k] = v
+					attributes.Attributes[k] = v
 				}
 			}
+
 		}
 	} else {
-		// create a map of all requested attributes
+
 		for k, v := range requestedAttributes {
-			attributes[k] = v
+			attributes.Attributes[k] = v
 		}
+
 	}
 
-	// update the bios settings via redfish
-	err = bios.UpdateBiosAttributes(attributes)
+	err = bios.UpdateBiosAttributes(attributes.Attributes)
 	if err != nil {
-		pendingAttrs = map[string]interface{}{
-			"Error": fmt.Sprintf("could not update BIOS attributes: %v", err),
-		}
-		return pendingAttrs
+		attributes.Error = err
+		return attributes
 	}
 
-	// get the bios object again to check for the pending changes
-	_, biosPost, err := getBiosAttributes(host)
+	pendingAttributes := getPendingBiosAttributes(host)
+	attributes.Pending = pendingAttributes.Pending
+
+	return attributes
+}
+
+func resetBios(host string) interface{} {
+	attributes := Settings{}
+
+	_, bios, err := getSystemBios(host)
 	if err != nil {
-		pendingAttrs = map[string]interface{}{
-			"Error": fmt.Sprintf("%v", err),
-		}
-		return pendingAttrs
+		attributes.Error = err
+		return attributes
 	}
 
-	// get the pending changes
-	pendingAttrs = getPendingAttributes(biosPost)
+	err = bios.ResetBios()
+	if err != nil {
+		attributes.Error = err
+		return attributes
+	}
 
-	// return the entire Pending key
-	return pendingAttrs
+	return attributes
 }

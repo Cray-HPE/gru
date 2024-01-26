@@ -28,41 +28,146 @@ package bios
 
 import (
 	"fmt"
-	"os"
-	"strings"
-
 	"github.com/Cray-HPE/gru/pkg/auth"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios/collections"
+	"github.com/spf13/cobra"
 	"github.com/stmcginnis/gofish/redfish"
 	"gopkg.in/yaml.v3"
+	"os"
+	"path/filepath"
+	"regexp"
+	"strings"
 )
 
-var (
-	fromfile string
-	virt     = false
-	pending  = false
-	defaults = false
-)
+// Settings is a structure for holding current BIOS attributes, pending attributes, and errors.
+type Settings struct {
+	Attributes map[string]interface{} `json:"attributes,omitempty"`
+	Pending    map[string]interface{} `json:"pending,omitempty"`
+	Error      error                  `json:"error,omitempty"`
+}
 
-// getBiosAttributes returns the computer systems, the bios (for system 0), and an error/nil from an endpoint
+// Attributes are an array of attribute names (and optionally values).
+var Attributes []string
+
+// FromFile is a path to a file to read attributes from.
+var FromFile string
+
+// NewCommand creates the `bios` subcommand.
+func NewCommand() *cobra.Command {
+	c := &cobra.Command{
+		Use:              "bios",
+		Short:            "BIOS interaction",
+		Long:             `Interact with a host's bios`,
+		TraverseChildren: true,
+		Args:             cobra.MinimumNArgs(1),
+		Hidden:           false,
+		Run: func(c *cobra.Command, args []string) {
+		},
+	}
+
+	c.PersistentFlags().StringArrayVarP(
+		&Attributes,
+		"attributes",
+		"a",
+		[]string{},
+		"Comma delimited list of attributes and values: [key[,keyN]]",
+	)
+
+	c.PersistentFlags().StringVarP(
+		&FromFile,
+		"from-file",
+		"f",
+		"",
+		"Path to an INI or YAML file with bios attributes (value(s) for key(s) will be ignored)",
+	)
+
+	c.PersistentFlags().BoolVarP(
+		&collections.Virtualization,
+		"virtualization",
+		"V",
+		false,
+		"Shortcut to get all pre-determined, per-vendor settings for virtualization",
+	)
+
+	c.AddCommand(
+		NewBiosGetCommand(),
+		NewBiosSetCommand(),
+	)
+	return c
+}
+
+// makeAttributes makes a “map[string]interface“ out of a comma separate slice of
+// key=values, which are split on on '='.  the resultant value is a string,
+// which does not work for all attributes.
+func makeAttributes(args []string) Settings {
+	attributes := Settings{}
+	attributes.Attributes = make(map[string]interface{})
+
+	var a interface{}
+
+	for _, attribute := range args {
+		if key, value, ok := strings.Cut(attribute, "="); ok {
+			attributes.Attributes[key] = value
+		}
+	}
+
+	b, err := yaml.Marshal(attributes.Attributes)
+	if err != nil {
+		attributes.Error = err
+		return attributes
+	}
+
+	err = yaml.Unmarshal(b, &a)
+	if err != nil {
+		attributes.Error = err
+		return attributes
+	}
+
+	return attributes
+}
+
+// unmarshalBiosKeyValFile unmarshal an INI or YAML file into key/value pairs as a “map[string]interface{}“.
+func unmarshalBiosKeyValFile(file string) (settings map[string]interface{}, err error) {
+	settings = make(map[string]interface{})
+
+	biosKv, err := os.ReadFile(file)
+	if err != nil {
+		return settings, err
+	}
+
+	fileExtension := filepath.Ext(file)
+	re := regexp.MustCompile(`ya?ml`)
+	if re.Match([]byte(fileExtension)) {
+		err = yaml.Unmarshal(biosKv, settings)
+	} else {
+		return settings, fmt.Errorf("invalid filetype: %s", fileExtension)
+	}
+
+	if err != nil {
+		return settings, err
+	}
+	return settings, nil
+}
+
+// getSystemBios returns a slice of “redfish.ComputerSystem“, “redfish.Bios“, and an “error“ (if there was one)
+// from an endpoint as-is, we get all systems but only return system[0].Bios, there could be different Bios per system
+// someone could also use the wrong system in the returned slice of systems.
 // TODO: return a map of systems to bios objects
-// as-is, we get all systems but only return system[0].Bios, there could be different Bios per system
-// someone could also use the wrong system in the returned slice of systems
-func getBiosAttributes(host string) (systems []*redfish.ComputerSystem, bios *redfish.Bios, err error) {
-	// set up the client
+func getSystemBios(host string) (systems []*redfish.ComputerSystem, bios *redfish.Bios, err error) {
+
 	c, err := auth.Connection(host)
 	if err != nil {
 		return systems, bios, err
 	}
 	defer c.Logout()
 
-	// get the sytems
+	// get the systems
 	service := c.Service
 	systems, err = service.Systems()
 	if err != nil {
 		return systems, bios, err
 	}
 
-	// get the bios for the first system
 	// TODO from above: create map[string]*redfish.Bios (systems[0].HostName)
 	bios, err = systems[0].Bios()
 	if err != nil {
@@ -70,80 +175,4 @@ func getBiosAttributes(host string) (systems []*redfish.ComputerSystem, bios *re
 	}
 
 	return systems, bios, nil
-}
-
-// makeAttributes makes a map[string]interface out of a comma separate slice of \
-// key=values, which are split on on '='.  the resultant value is a string,
-// which does not work for all attributes
-func makeAttributes(args []string) map[string]interface{} {
-	attributes := make(map[string]interface{}, 0)
-	var a interface{}
-	// convert string slice to map breaking on '='
-	for _, attribute := range args {
-		if key, value, ok := strings.Cut(attribute, "="); ok {
-			attributes[key] = value
-		}
-	}
-
-	// marshal and unmarshal to get types easier
-	b, err := yaml.Marshal(attributes)
-	if err != nil {
-		attributes["Error"] = fmt.Sprintf("%v", err)
-	}
-	err = yaml.Unmarshal(b, &a)
-	if err != nil {
-		attributes["Error"] = fmt.Sprintf("%v", err)
-	}
-
-	return attributes
-}
-
-// unmarshalBiosKeyValFile unmarshals a yaml file into key/value pairs as a map[string]interface{}
-func unmarshalBiosKeyValFile(file string) (settings map[string]interface{}, err error) {
-	settings = make(map[string]interface{}, 0)
-
-	biosKv, err := os.ReadFile(file)
-	if err != nil {
-		return settings, err
-	}
-	err = yaml.Unmarshal(biosKv, settings)
-	if err != nil {
-		return settings, err
-	}
-
-	return settings, nil
-}
-
-// virtSettings is a shortcut for enabling/disabling virtualization as it often
-// requires more than one setting to be enabled and varies between vendors
-// it takes a bool to determine to enable/disable and the manufacturer name
-// to properly determine the settings (disable is currently not supported)
-func virtSettings(enable bool, manufacturer string) (settings redfish.SettingsAttributes) {
-	settings = redfish.SettingsAttributes{}
-
-	switch manufacturer {
-	case "Intel Corporation":
-		if enable {
-			settings = IntelEnableVirtualization
-		} else {
-			return nil
-		}
-	case "GIGABYTE":
-		if enable {
-			settings = GigabyteEnableVirtualization
-		} else {
-			return nil
-		}
-	case "HPE":
-		if enable {
-			settings = HpeEnableVirtualization
-		} else {
-			return nil
-		}
-	default:
-		fmt.Printf("unable to determine manufaturer for virtualization shortcut")
-		return settings
-	}
-
-	return settings
 }

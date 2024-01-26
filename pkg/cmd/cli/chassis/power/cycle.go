@@ -24,37 +24,52 @@
 
 */
 
-package cli
+package power
 
 import (
+	"fmt"
+	"github.com/Cray-HPE/gru/internal/set"
+	"github.com/Cray-HPE/gru/pkg/cmd"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"github.com/stmcginnis/gofish/redfish"
 )
 
-// StateChange represents a change in power states.
-type StateChange struct {
-	PreviousPowerState redfish.PowerState `json:"previousPowerState,omitempty"`
-	ResetType          redfish.ResetType  `json:"resetType,omitempty"`
-	Error              error              `json:"error,omitempty"`
-}
+// NewPowerCycleCommand creates the `cycle` subcommand for `power`.
+func NewPowerCycleCommand() *cobra.Command {
+	c := &cobra.Command{
+		Use:   "cycle host [...host]",
+		Short: "Power cycle the target machine(s)",
+		Long: `Performs an ACPI shutdown and startup to power cycle the target machine(s).
+Also allows bypassing the OS shutdown, forcing a warm boot.`,
+		Args: cobra.MinimumNArgs(1),
+		Run: func(c *cobra.Command, args []string) {
+			var resetType redfish.ResetType
 
-// State represents a single power state.
-type State struct {
-	PowerState redfish.PowerState `json:"powerState"`
-	Error      error              `json:"error,omitempty"`
-}
+			hosts := cli.ParseHosts(args)
 
-// Boot represents boot configuration on the BMC. Only Error is emitted on empty.
-type Boot struct {
-	Order []BootDescription `json:"order"`
-	Next  string            `json:"next"`
-	Error error             `json:"error,omitempty"`
-}
+			v := viper.GetViper()
+			bindErr := v.BindPFlags(c.Flags())
+			cmd.CheckError(bindErr)
 
-// BootDescription is a map of a boot identifier (Boot0001) to a friendly name (PXE Interface 01 IPv4)
-type BootDescription map[string]string
+			resetType = redfish.GracefulRestartResetType
+			if v.GetBool("force") {
+				resetType = redfish.ForceRestartResetType
+			}
 
-// Override represents the result of the boot override.
-type Override struct {
-	Target redfish.BootSourceOverrideTarget `json:"target"`
-	Error  error                            `json:"error,omitempty"`
+			content := set.Async(Issue, hosts, resetType)
+			cli.MapPrint(content)
+		},
+		Hidden: false,
+	}
+	c.PersistentFlags().BoolP(
+		"force",
+		"f",
+		false,
+		fmt.Sprintln(
+			"Immediately restart waiting for the OS (warm boot)",
+		),
+	)
+	return c
 }

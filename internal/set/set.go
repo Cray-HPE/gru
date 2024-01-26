@@ -32,8 +32,42 @@ import (
 	"sync"
 )
 
-// AsyncMap runs an async function (fn) against a list of hosts. Returns a map of each host with their
-// respective set results.
+// Async calls the given function (fn) asynchronously against each element in a given slice of HTTP/S endpoints. This
+// functional also takes a data argument, which is passed along to each async function. Each async call must return an
+// interface. Finally, this function returns a map for each result for each endpoint's function call.
+func Async(
+	fn func(host string, action any) interface{},
+	hosts []string,
+	data any,
+) map[string]any {
+
+	var wg sync.WaitGroup
+
+	sliceLength := len(hosts)
+	wg.Add(sliceLength)
+
+	v := viper.GetViper()
+	if !v.GetBool("json") {
+		fmt.Printf("Asynchronously updating [%5d] hosts ... \n", len(hosts))
+	}
+
+	sm := make(map[string]interface{})
+
+	for _, host := range hosts {
+
+		go func(host string) {
+
+			defer wg.Done()
+			sm[host] = fn(host, data)
+
+		}(host)
+	}
+	wg.Wait()
+	return sm
+}
+
+// AsyncMap is exactly like Async, however the async function is expected to return a map of interfaces.
+// TODO: Async and AsyncMap could probably be consolidated with some extra brain juice.
 func AsyncMap(
 	fn func(host string, actions map[string]interface{}) interface{},
 	hosts []string,
@@ -65,13 +99,11 @@ func AsyncMap(
 	return sm
 }
 
-// Async runs an async loop against a list of hosts, applying the given function to each. The given function
-// is provided a value to apply to the target host. Returns a map of each host with their
-// respective set results.
-func Async(
-	fn func(host string, action any) interface{},
+// AsyncCall is exactly like Async, however the async function call does not require any arguments be passed to it.
+// This is useful when the async function is simply reading or writing value-less data to an endpoint.
+func AsyncCall(
+	fn func(host string) interface{},
 	hosts []string,
-	data any,
 ) map[string]any {
 
 	var wg sync.WaitGroup
@@ -91,7 +123,7 @@ func Async(
 		go func(host string) {
 
 			defer wg.Done()
-			sm[host] = fn(host, data)
+			sm[host] = fn(host)
 
 		}(host)
 	}

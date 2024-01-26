@@ -24,52 +24,28 @@
 
 */
 
-package boot
+package power
 
 import (
-	"github.com/Cray-HPE/gru/pkg/auth"
+	"github.com/Cray-HPE/gru/internal/set"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/spf13/viper"
+	"github.com/spf13/cobra"
 	"github.com/stmcginnis/gofish/redfish"
 )
 
-// issueOverride issues a boot override action against a host.
-func issueOverride(host string, override interface{}) interface{} {
-	o := cli.Override{}
-	v := viper.GetViper()
-
-	c, err := auth.Connection(host)
-	if err != nil {
-		o.Error = err
-		return o
+// NewPowerNMICommand creates the `nmi` subcommand for `power`.
+func NewPowerNMICommand() *cobra.Command {
+	c := &cobra.Command{
+		Use:   "nmi host [...host]",
+		Short: "Issue an NMI to the target machine(s)",
+		Long:  `Issue a non-maskable interrupt, triggering a crash/core dump`,
+		Args:  cobra.MinimumNArgs(1),
+		Run: func(c *cobra.Command, args []string) {
+			hosts := cli.ParseHosts(args)
+			content := set.Async(Issue, hosts, redfish.NmiResetType)
+			cli.MapPrint(content)
+		},
+		Hidden: false,
 	}
-
-	defer c.Logout()
-
-	service := c.Service
-
-	systems, err := service.Systems()
-	if err != nil {
-		o.Error = err
-		return o
-	}
-
-	boot := redfish.Boot{
-		BootSourceOverrideTarget: override.(redfish.BootSourceOverrideTarget),
-		BootSourceOverrideMode:   redfish.UEFIBootSourceOverrideMode,
-	}
-
-	if v.GetBool("persist") {
-		boot.BootSourceOverrideEnabled = redfish.ContinuousBootSourceOverrideEnabled
-	} else {
-		boot.BootSourceOverrideEnabled = redfish.OnceBootSourceOverrideEnabled
-	}
-
-	err = systems[0].SetBoot(boot)
-	o.Target = override.(redfish.BootSourceOverrideTarget)
-	if err != nil {
-		o.Error = err
-	}
-
-	return o
+	return c
 }

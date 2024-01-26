@@ -28,13 +28,45 @@ package power
 
 import (
 	"github.com/Cray-HPE/gru/pkg/auth"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli"
+	"github.com/spf13/cobra"
 	"github.com/stmcginnis/gofish/redfish"
 )
 
+// NewCommand creates the `power` subcommand for `chassis`.
+func NewCommand() *cobra.Command {
+	c := &cobra.Command{
+		Use:    "power host [...host]",
+		Short:  "Power Control",
+		Long:   `Check power status, or power on, off, cycle, or reset a host`,
+		Hidden: false,
+	}
+	c.AddCommand(
+		NewPowerOffCommand(),
+		NewPowerResetCommand(),
+		NewPowerOnCommand(),
+		NewPowerCycleCommand(),
+		NewPowerStatusCommand(),
+		NewPowerNMICommand(),
+	)
+	return c
+}
+
+// StateChange represents a change in power states.
+type StateChange struct {
+	PreviousPowerState  redfish.PowerState `json:"previousPowerState,omitempty"`
+	RequestedPowerState redfish.ResetType  `json:"requestedPowerState,omitempty"`
+	Error               error              `json:"error,omitempty"`
+}
+
+// State represents a single power state.
+type State struct {
+	PowerState redfish.PowerState `json:"powerState"`
+	Error      error              `json:"error,omitempty"`
+}
+
 // Issue issues an action against a host.
 func Issue(host string, action interface{}) interface{} {
-	sc := cli.StateChange{}
+	sc := StateChange{}
 	c, err := auth.Connection(host)
 	if err != nil {
 		sc.Error = err
@@ -50,36 +82,11 @@ func Issue(host string, action interface{}) interface{} {
 		return sc
 	}
 	sc.PreviousPowerState = systems[0].PowerState
-	sc.ResetType = action.(redfish.ResetType)
-	err = systems[0].Reset(sc.ResetType)
+	sc.RequestedPowerState = action.(redfish.ResetType)
+	err = systems[0].Reset(sc.RequestedPowerState)
 	if err != nil {
 		sc.Error = err
 	}
 
 	return sc
-}
-
-// status retrieves the redfish.PowerState for a machine..
-func status(host string, args ...string) interface{} {
-	s := cli.State{}
-	c, err := auth.Connection(host)
-	if err != nil {
-		s.Error = err
-		return s
-	}
-	defer c.Logout()
-
-	service := c.Service
-
-	systems, err := service.Systems()
-	if err != nil {
-		s.Error = err
-		return s
-	}
-	s.PowerState = systems[0].PowerState
-	if err != nil {
-		s.Error = err
-	}
-
-	return s
 }

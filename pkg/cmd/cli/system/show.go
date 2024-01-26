@@ -27,18 +27,19 @@
 package system
 
 import (
+	"github.com/Cray-HPE/gru/internal/query"
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/Cray-HPE/gru/pkg/query"
 	"github.com/spf13/cobra"
 )
 
 // NewShowCommand creates the `system` subcommand for `show`.
 func NewShowCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "system [flags] host [...host]",
+		Use:   "system host [...host]",
 		Short: "System information",
 		Long:  `Show the Server Manufacturer, Server Model, System Version, and Firmware Version for the given server(s)`,
+		Args:  cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := query.Async(getSystemInformation, hosts)
@@ -48,7 +49,7 @@ func NewShowCommand() *cobra.Command {
 	return c
 }
 
-func getSystemInformation(host string, args ...string) interface{} {
+func getSystemInformation(host string) interface{} {
 	system := System{}
 	c, err := auth.Connection(host)
 	if err != nil {
@@ -73,5 +74,6 @@ func getSystemInformation(host string, args ...string) interface{} {
 	system.Manufacturer = systems[0].Manufacturer
 	system.Model = systems[0].Model
 	system.BIOSVersion = systems[0].BIOSVersion
+	system.ProcessorModel = systems[0].ProcessorSummary.Model
 	return system
 }

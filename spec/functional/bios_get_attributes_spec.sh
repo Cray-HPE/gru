@@ -21,21 +21,21 @@
 # ARISING FROM, OUT OF OR IN CONNECTIoff WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-Describe 'gru get bios'
+Describe 'gru bios get'
 
 BeforeAll use_valid_config
 
 # getting a single key should return only those key
 It "--config ${GRU_CONF} --attributes BootTimeout 127.0.0.1:5000"
-  When call ./gru get bios --config "${GRU_CONF}" --attributes BootTimeout 127.0.0.1:5000
+  When call ./gru bios get --config "${GRU_CONF}" --attributes BootTimeout 127.0.0.1:5000
   The status should equal 0
   The stdout should include 'BootTimeout'
-  The lines of stdout should equal 3
+  The lines of stdout should equal 4
 End
 
 # getting a single key should return only those key in json
 It "--config ${GRU_CONF} --attributes BootTimeout 127.0.0.1:5000 --json"
-  When call ./gru get bios --config "${GRU_CONF}" --attributes BootTimeout 127.0.0.1:5000 --json
+  When call ./gru bios get --config "${GRU_CONF}" --attributes BootTimeout 127.0.0.1:5000 --json
   The status should equal 0
   The stdout should include 'BootTimeout'
   The stdout should be_json
@@ -43,7 +43,7 @@ End
 
 # getting multiple keys should return only those keys
 It "--config ${GRU_CONF} --attributes ProcessorHyperThreadingDisable,SRIOVEnable 127.0.0.1:5000"
-  When call ./gru get bios --config "${GRU_CONF}" --attributes ProcessorHyperThreadingDisable,SRIOVEnable 127.0.0.1:5000
+  When call ./gru bios get --config "${GRU_CONF}" --attributes ProcessorHyperThreadingDisable,SRIOVEnable 127.0.0.1:5000
   The status should equal 0
   The stdout should include 'ProcessorHyperThreadingDisable'
   The stdout should include 'SRIOVEnable'
@@ -52,7 +52,7 @@ End
 
 # getting specific keys should return only those keys and should be json
 It "--config ${GRU_CONF} --attributes ProcessorHyperThreadingDisable,SRIOVEnable 127.0.0.1:5000 --json"
-  When call ./gru get bios --config "${GRU_CONF}" --attributes ProcessorHyperThreadingDisable,SRIOVEnable 127.0.0.1:5000 --json
+  When call ./gru bios get --config "${GRU_CONF}" --attributes ProcessorHyperThreadingDisable,SRIOVEnable 127.0.0.1:5000 --json
   The status should equal 0
   The stdout should include 'ProcessorHyperThreadingDisable'
   The stdout should include 'SRIOVEnable'
@@ -61,36 +61,36 @@ End
 
 # it should error if no matching keys were found
 It "--config ${GRU_CONF} --attributes junk 127.0.0.1:5000"
-  When call ./gru get bios --config "${GRU_CONF}" --attributes junk 127.0.0.1:5000
+  When call ./gru bios get --config "${GRU_CONF}" --attributes junk 127.0.0.1:5000
   The status should equal 0
-  The line 3 of stdout should include 'junk'
-  The line 3 of stdout should include '<nil>'
-  The lines of stdout should equal 3
+  The line 4 of stdout should include 'junk'
+  The line 4 of stdout should include '<nil>'
+  The lines of stdout should equal 4
 End
 
 # TODO: restore when args work with piping
 # # it should error if no attributes are passed to the flag
 # It "--config ${GRU_CONF} --attributes 127.0.0.1:5000"
-#   When call ./gru get bios --config "${GRU_CONF}" --attributes 127.0.0.1:5000
+#   When call ./gru bios get --config "${GRU_CONF}" --attributes 127.0.0.1:5000
 #   The status should equal 1
 #   The stderr should include 'requires at least 1 arg(s), only received 0'
 # End
 
-# --virt shortcut should return only virtualization attributes (Gigabyte)
-It "--config ${GRU_CONF} --virt 127.0.0.1:5001"
-  When call ./gru get bios --config "${GRU_CONF}" --virt 127.0.0.1:5001
+# --virtualization shortcut should return only virtualization attributes (Gigabyte)
+It "--config ${GRU_CONF} --virtualization 127.0.0.1:5001"
+  When call ./gru bios get --config "${GRU_CONF}" --virtualization 127.0.0.1:5001
   The status should equal 0
   The stdout should include 'SR-IOV Support'
   The stdout should include 'SMT Control'
   The stdout should include 'Local APIC Mode'
   The stdout should include 'IOMMU'
   The stdout should include 'SVM Mode'
-  The lines of stdout should equal 7
+  The lines of stdout should equal 8
 End
 
-# --virt shortcut should return only virtualization attributes in json format (Gigabyte)
-It "--config ${GRU_CONF} --virt 127.0.0.1:5001 --json"
-  When call ./gru get bios --config "${GRU_CONF}" --virt 127.0.0.1:5001 --json
+# --virtualization shortcut should return only virtualization attributes in json format (Gigabyte)
+It "--config ${GRU_CONF} --virtualization 127.0.0.1:5001 --json"
+  When call ./gru bios get --config "${GRU_CONF}" --virtualization 127.0.0.1:5001 --json
   The status should equal 0
   The stdout should include 'PCIS007' # 'SR-IOV Support'
   The stdout should include 'Rome0039' # 'Local APIC Mode'
@@ -102,19 +102,19 @@ End
 
 # Gigabyte should return friendly names on non-json output
 It "--config ${GRU_CONF} 127.0.0.1:5001"
-  When call ./gru get bios --config "${GRU_CONF}" 127.0.0.1:5001
+  When call ./gru bios get --config "${GRU_CONF}" 127.0.0.1:5001
   The status should equal 0
   # check for some random keys and their friendly names
   The stdout should include 'TCG023'
   The stdout should include 'Disable Block Sid'
   The stdout should include 'Rome0179'
   The stdout should include 'Determinism Slider'
-  The lines of stdout should equal 552
+  The lines of stdout should equal 553
 End
 
 # Gigabyte should not return friendly names on json output
 It "--config ${GRU_CONF} 127.0.0.1:5001 --json"
-  When call ./gru get bios --config "${GRU_CONF}" 127.0.0.1:5001 --json
+  When call ./gru bios get --config "${GRU_CONF}" 127.0.0.1:5001 --json
   The status should equal 0
   # check for some randome keys
   The stdout should include 'TCG023'

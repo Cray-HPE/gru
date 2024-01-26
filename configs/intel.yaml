@@ -1,0 +1,9 @@
+---
+ProcessorHyperThreadingDisable: 0
+ProcessorPowerPolicy: 0
+ProcessorVmxEnable: 1
+ProcessorX2apic: 1
+SRIOVEnable: 1
+SvrMngmntAcpiIpmi: 1
+UEFINetworkStack: 0
+VTdSupport: 1

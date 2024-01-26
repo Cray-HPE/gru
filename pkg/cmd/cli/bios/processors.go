@@ -24,38 +24,44 @@
 
 */
 
-package query
+package bios
 
+/* Maintainer Note:
+Every new decoder will need to be imported, and added to `var AttributeDecoderMaps`.
+*/
 import (
-	"fmt"
-	"sync"
-
-	"github.com/spf13/viper"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios/amd/epyc/rome"
 )
 
-// Async runs an async query (fn) against a list of hosts. Returns a map of each host with their
-// respective query results.
-func Async(fn func(host string, args ...string) interface{}, hosts []string) map[string]any {
+// Decoder is an interface for decoding keys (strings) against translated BIOS attributes.
+type Decoder interface {
+	Decode(key string) string
+}
 
-	var wg sync.WaitGroup
+// DecoderMap maps a token to a decoder.
+type DecoderMap struct {
+	Token   string
+	Decoder Decoder
+}
 
-	sliceLength := len(hosts)
-	wg.Add(sliceLength)
+// Decode decodes a given key against a DecoderMap of tokens and returns the decoded string.
+func (d *DecoderMap) Decode(key string) string {
+	return d.Decoder.Decode(key)
+}
 
-	v := viper.GetViper()
-	if !v.GetBool("json") {
-		fmt.Printf("Asynchronously querying [%5d] hosts ... \n", len(hosts))
+// DecoderMaps is a DecoderMap slice.
+type DecoderMaps []*DecoderMap
+
+// Decode invokes Decode for each DecoderMap.
+func (d DecoderMaps) Decode(key string) string {
+	var value string
+	for _, dec := range d {
+		value = dec.Decode(key)
 	}
-	sm := make(map[string]interface{})
+	return value
+}
 
-	for _, host := range hosts {
-
-		go func(host string, args ...string) {
-
-			defer wg.Done()
-			sm[host] = fn(host, args...)
-		}(host)
-	}
-	wg.Wait()
-	return sm
+// AttributeDecoderMaps represents the available DecoderMaps.
+var AttributeDecoderMaps = DecoderMaps{
+	&DecoderMap{Token: rome.ProcessorToken, Decoder: rome.DecoderMap{Map: rome.Map}},
 }

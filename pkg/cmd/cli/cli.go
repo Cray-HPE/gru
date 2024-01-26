@@ -36,8 +36,6 @@ import (
 	"unicode/utf8"
 
 	"github.com/spf13/viper"
-	"github.com/stmcginnis/gofish/common"
-	"github.com/stmcginnis/gofish/redfish"
 )
 
 func isInputFromPipe() bool {
@@ -135,55 +133,63 @@ func MapPrint(content map[string]interface{}) {
 		}
 		fmt.Printf("%s\n", string(JSON))
 	} else {
-		hosts := make([]string, 0, len(content))
-		for host := range content {
-			hosts = append(hosts, host)
+		keys := make([]string, 0, len(content))
+		for k := range content {
+			keys = append(keys, k)
 		}
-		sort.Strings(hosts)
-		for _, h := range hosts {
-			if content[h] != nil {
-				v := reflect.ValueOf(content[h])
-				typeOfS := v.Type()
-				// print the host
-				fmt.Printf("%s:\n", h)
-				// print the content dependent upon its type
-				switch t := content[h].(type) {
-				case redfish.SettingsAttributes:
-					for setting, value := range t {
-						fmt.Printf("\t%-40s: %+v\n", setting, value)
+		sort.Strings(keys)
+		for _, k := range keys {
+			fmt.Printf("%s:\n", k)
+
+			// Warning; the struct fields must be exported!
+			s := content[k]
+			v := reflect.ValueOf(s)
+			typeOfS := v.Type()
+			for i := 0; i < v.NumField(); i++ {
+				if v.Field(i).Interface() == nil {
+					continue
+				} else if _, ok := v.Field(i).Interface().(map[string]interface{}); ok {
+					keys := v.Field(i).MapKeys()
+					if len(keys) != 0 {
+						fmt.Printf("\t%v:\n", typeOfS.Field(i).Name)
+					} else {
+						continue
 					}
-				case State:
-					for i := 0; i < v.NumField(); i++ {
-						if v.Field(i).Interface() != nil {
-							fmt.Printf(
-								"\t%-20s: %-60s\n",
-								typeOfS.Field(i).Name,
-								v.Field(i).Interface(),
-							)
-						}
+
+					sortedKeys := make([]string, 0, len(keys))
+
+					for key := range keys {
+						sortedKeys = append(sortedKeys, keys[key].String())
 					}
-				case StateChange, Boot, Override:
-					for i := 0; i < v.NumField(); i++ {
-						if v.Field(i).Interface() != nil {
-							fmt.Printf(
-								"\t%-20s: %-v\n",
-								typeOfS.Field(i).Name,
-								v.Field(i).Interface(),
-							)
-						}
+
+					sort.Strings(sortedKeys)
+					for key := range sortedKeys {
+						fmt.Printf(
+							"\t\t%-60s: %-60v\n",
+							sortedKeys[key],
+							v.Field(i).MapIndex(reflect.ValueOf(sortedKeys[key])),
+						)
 					}
-				case []common.ApplyTime:
-					// use json.Marshal to make a nice, quoted, comma-separated string
-					b, _ := json.Marshal(t)
-					fmt.Printf("\t%s: %-40v\n", "BIOS change(s) may be applied at", string(b))
-				case map[string]interface{}:
-					for key, val := range t {
-						fmt.Printf("\t%-20s: %-60s\n", key, val)
+				} else if _, ok := v.Field(i).Interface().([]string); ok {
+					fmt.Printf(
+						"\t%s:\n",
+						typeOfS.Field(i).Name,
+					)
+					for _, v := range v.Field(i).Interface().([]string) {
+						fmt.Printf(
+							"\t\t%-60v\n",
+							v,
+						)
 					}
-				case error:
-					fmt.Printf("\tERROR: %-40v\n", content[h])
-				default:
-					fmt.Printf("\tUNKNOWN TYPE: %-40T\n", t)
+				} else {
+					if v.Field(i).Interface() == nil || v.Field(i).Interface() == "" {
+						continue
+					}
+					fmt.Printf(
+						"\t%-60s: %-60s\n",
+						typeOfS.Field(i).Name,
+						v.Field(i).Interface(),
+					)
 				}
 			}
 		}

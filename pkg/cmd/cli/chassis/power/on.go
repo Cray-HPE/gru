@@ -24,7 +24,27 @@
 
 */
 
-package disks
+package power
 
-// Disk represents a disk on the host.
-type Disk struct{}
+import (
+	"github.com/Cray-HPE/gru/internal/set"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli"
+	"github.com/spf13/cobra"
+	"github.com/stmcginnis/gofish/redfish"
+)
+
+// NewPowerOnCommand creates the `on` subcommand for `power`.
+func NewPowerOnCommand() *cobra.Command {
+	c := &cobra.Command{
+		Use:   "on host [...host]",
+		Short: "Power on the target machine(s)",
+		Long:  `Powers on the target machines (cold boot)`,
+		Args:  cobra.MinimumNArgs(1),
+		Run: func(c *cobra.Command, args []string) {
+			hosts := cli.ParseHosts(args)
+			content := set.Async(Issue, hosts, redfish.OnResetType)
+			cli.MapPrint(content)
+		},
+	}
+	return c
+}

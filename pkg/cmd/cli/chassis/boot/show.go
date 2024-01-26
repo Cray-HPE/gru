@@ -29,21 +29,23 @@ package boot
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"
+	"github.com/Cray-HPE/gru/internal/query"
+	"github.com/stmcginnis/gofish/redfish"
+	"io"
 	"strings"
 
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/Cray-HPE/gru/pkg/query"
 	"github.com/spf13/cobra"
 )
 
 // NewShowCommand creates the `boot` subcommand for `show`.
 func NewShowCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "boot [flags] host [...host]",
+		Use:   "boot host [...host]",
 		Short: "Boot information",
 		Long:  `Show the current BootOrder; BootNext, networkRetry, and more`,
+		Args:  cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := query.Async(getBootInformation, hosts)
@@ -53,8 +55,8 @@ func NewShowCommand() *cobra.Command {
 	return c
 }
 
-func getBootInformation(host string, args ...string) interface{} {
-	boot := cli.Boot{}
+func getBootInformation(host string) interface{} {
+	boot := Boot{Order: []string{}}
 	c, err := auth.Connection(host)
 	if err != nil {
 		boot.Error = err
@@ -68,66 +70,70 @@ func getBootInformation(host string, args ...string) interface{} {
 	systems, err := service.Systems()
 	if err != nil {
 		boot.Error = err
+		return boot
 	}
 
-	// BootOptions in gofish is unexported, so get it here manually
-	// could also modify the vendored dir to expose it, making it easier here
-	// rather than modify a stable external package, do some work here to get the friendly names
 	bo := fmt.Sprintf("%s/%s", strings.TrimRight(systems[0].ODataID, "/"), "BootOptions")
-
-	// get the bootoptions endpoint
 	resp, err := systems[0].Client.Get(bo)
-	// GB has this key
+
+	// GigaByte has this key
 	if err == nil || resp != nil {
-		// store options in a map for easy manipulation
+
 		opts := make(map[string]interface{})
 		err = json.NewDecoder(resp.Body).Decode(&opts)
 		if err != nil {
-			return err
+			boot.Error = err
+			return boot
 		}
 
-		// make a map for the descriptions
-		// boot.Descriptions = make(map[string]string, 0)
 		for _, b := range systems[0].Boot.BootOrder {
-			// the endpoint is BootOptions/NNNN so strip off 'Boot' from the boot order name
 			ep := fmt.Sprintf("%s/%s", bo, strings.TrimPrefix(b, "Boot"))
-			// get the endpoint
-			response, err := systems[0].Client.Get(ep)
+			resp, err := systems[0].Client.Get(ep)
 			if err != nil {
-				return err
+				boot.Error = err
+				return boot
 			}
-			// decode to a map
 			names := make(map[string]interface{})
-			err = json.NewDecoder(response.Body).Decode(&names)
+			err = json.NewDecoder(resp.Body).Decode(&names)
 			if err != nil {
-				return err
+				boot.Error = err
+				return boot
 			}
 
-			bd := cli.BootDescription{}
-			bd[b] = names["Description"].(string)
-			// create a key with the boot option using the friendly name as the value
-			boot.Order = append(boot.Order, bd)
+			boot.Order = append(boot.Order, strings.TrimSpace(names["Description"].(string)))
 		}
-		// Intel
 	} else {
+
 		bo = strings.TrimRight(systems[0].ODataID, "/")
-		// get the bootoptions endpoint
 		response, err := systems[0].Client.Get(bo)
 		if err != nil {
-			return err
-		}
-		names := make(map[string]interface{})
-		err = json.NewDecoder(response.Body).Decode(&names)
-		if err != nil {
-			return err
+			boot.Error = err
+			return boot
 		}
 
-		for i, v := range names["BootOrder"].([]interface{}) {
-			k := strconv.Itoa(i)
-			bd := cli.BootDescription{}
-			bd[k] = v.(string)
-			// create a key with the boot option using the friendly name as the value
-			boot.Order = append(boot.Order, bd)
+		names := make(map[string]interface{})
+		body, err := io.ReadAll(response.Body)
+		err = json.Unmarshal(body, &names)
+		if err != nil {
+			boot.Error = err
+			return boot
+		}
+
+		bootMap := redfish.Boot{}
+		bootJSON, err := json.Marshal(names["Boot"])
+		if err != nil {
+			boot.Error = err
+			return boot
+		}
+
+		err = bootMap.UnmarshalJSON(bootJSON)
+		if err != nil {
+			boot.Error = err
+			return boot
+		}
+
+		for _, v := range bootMap.BootOrder {
+			boot.Order = append(boot.Order, strings.TrimSpace(v))
 		}
 
 	}
