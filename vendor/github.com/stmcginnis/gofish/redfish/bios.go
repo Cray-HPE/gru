@@ -155,12 +155,6 @@ func (bios *Bios) ChangePassword(passwordName, oldPassword, newPassword string) 
 	if passwordName == "" {
 		return fmt.Errorf("password name must be supplied")
 	}
-	if oldPassword == "" {
-		return fmt.Errorf("existing password must be supplied")
-	}
-	if newPassword == "" {
-		return fmt.Errorf("new password must be supplied")
-	}
 
 	t := struct {
 		PasswordName string
@@ -178,7 +172,8 @@ func (bios *Bios) ChangePassword(passwordName, oldPassword, newPassword string) 
 // A system reset may be required for the default values to be applied. This
 // action may impact other resources.
 func (bios *Bios) ResetBios() error {
-	return bios.Post(bios.resetBiosTarget, nil)
+	payload := make(map[string]interface{})
+	return bios.Post(bios.resetBiosTarget, payload)
 }
 
 // AllowedAttributeUpdateApplyTimes returns the set of allowed apply times to request when
@@ -215,7 +210,7 @@ func (bios *Bios) UpdateBiosAttributesApplyAt(attrs SettingsAttributes, applyTim
 		}
 	}
 
-	resp, err := bios.Client.Get(bios.settingsTarget)
+	resp, err := bios.GetClient().Get(bios.settingsTarget)
 	if err != nil {
 		return err
 	}
@@ -234,7 +229,7 @@ func (bios *Bios) UpdateBiosAttributesApplyAt(attrs SettingsAttributes, applyTim
 			header["If-Match"] = resp.Header["Etag"][0]
 		}
 
-		resp, err = bios.Client.PatchWithHeaders(bios.settingsTarget, data, header)
+		resp, err = bios.GetClient().PatchWithHeaders(bios.settingsTarget, data, header)
 		if err != nil {
 			return err
 		}
@@ -256,5 +251,5 @@ func (bios *Bios) GetActiveSoftwareImage() (*SoftwareInventory, error) {
 		return nil, nil
 	}
 
-	return GetSoftwareInventory(bios.Client, bios.activeSoftwareImage)
+	return GetSoftwareInventory(bios.GetClient(), bios.activeSoftwareImage)
 }
