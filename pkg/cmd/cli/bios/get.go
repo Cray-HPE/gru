@@ -189,7 +189,8 @@ func getPendingBiosAttributes(host string) Settings {
 		The library should actually check for this, but this works for now
 	*/
 	staging := fmt.Sprintf("%s/%s", strings.TrimRight(bios.ODataID, "/"), "Settings")
-	resp, err := bios.Client.Get(staging)
+	client := bios.GetClient()
+	resp, err := client.Get(staging)
 	if err != nil {
 		attributes.Error = err
 		return attributes

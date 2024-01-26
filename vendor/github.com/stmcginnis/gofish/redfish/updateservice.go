@@ -36,6 +36,9 @@ type UpdateService struct {
 	TransferProtocol []string
 	// UpdateServiceTarget indicates where theupdate image is to be applied.
 	UpdateServiceTarget string
+	// StartUpdateTarget is the endpoint which starts updating images that have been previously
+	// invoked using an OperationApplyTime value of OnStartUpdateRequest.
+	StartUpdateTarget string
 	// OemActions contains all the vendor specific actions. It is vendor responsibility to parse this field accordingly
 	OemActions json.RawMessage
 	// Oem shall contain the OEM extensions. All values for properties that
@@ -54,6 +57,12 @@ func (updateService *UpdateService) UnmarshalJSON(b []byte) error {
 			AllowableValues []string `json:"TransferProtocol@Redfish.AllowableValues"`
 			Target          string
 		} `json:"#UpdateService.SimpleUpdate"`
+
+		// This action starts updating all images that have been previously
+		// invoked using an OperationApplyTime value of OnStartUpdateRequest.
+		StartUpdate struct {
+			Target string
+		} `json:"#UpdateService.StartUpdate"`
 
 		Oem json.RawMessage // OEM actions will be stored here
 	}
@@ -75,6 +84,7 @@ func (updateService *UpdateService) UnmarshalJSON(b []byte) error {
 	updateService.SoftwareInventory = t.SoftwareInventory.String()
 	updateService.TransferProtocol = t.Actions.SimpleUpdate.AllowableValues
 	updateService.UpdateServiceTarget = t.Actions.SimpleUpdate.Target
+	updateService.StartUpdateTarget = t.Actions.StartUpdate.Target
 	updateService.OemActions = t.Actions.Oem
 	updateService.rawData = b
 
@@ -89,10 +99,10 @@ func GetUpdateService(c common.Client, uri string) (*UpdateService, error) {
 
 // SoftwareInventories gets the collection of software inventories of this update service
 func (updateService *UpdateService) SoftwareInventories() ([]*SoftwareInventory, error) {
-	return ListReferencedSoftwareInventories(updateService.Client, updateService.SoftwareInventory)
+	return ListReferencedSoftwareInventories(updateService.GetClient(), updateService.SoftwareInventory)
 }
 
 // FirmwareInventories gets the collection of firmware inventories of this update service
 func (updateService *UpdateService) FirmwareInventories() ([]*SoftwareInventory, error) {
-	return ListReferencedSoftwareInventories(updateService.Client, updateService.FirmwareInventory)
+	return ListReferencedSoftwareInventories(updateService.GetClient(), updateService.FirmwareInventory)
 }
