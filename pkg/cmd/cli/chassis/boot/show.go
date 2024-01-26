@@ -74,7 +74,8 @@ func getBootInformation(host string) interface{} {
 	}
 
 	bo := fmt.Sprintf("%s/%s", strings.TrimRight(systems[0].ODataID, "/"), "BootOptions")
-	resp, err := systems[0].Client.Get(bo)
+	client := systems[0].GetClient()
+	resp, err := client.Get(bo)
 
 	// GigaByte has this key
 	if err == nil || resp != nil {
@@ -88,7 +89,7 @@ func getBootInformation(host string) interface{} {
 
 		for _, b := range systems[0].Boot.BootOrder {
 			ep := fmt.Sprintf("%s/%s", bo, strings.TrimPrefix(b, "Boot"))
-			resp, err := systems[0].Client.Get(ep)
+			resp, err := client.Get(ep)
 			if err != nil {
 				boot.Error = err
 				return boot
@@ -105,7 +106,7 @@ func getBootInformation(host string) interface{} {
 	} else {
 
 		bo = strings.TrimRight(systems[0].ODataID, "/")
-		response, err := systems[0].Client.Get(bo)
+		response, err := client.Get(bo)
 		if err != nil {
 			boot.Error = err
 			return boot
