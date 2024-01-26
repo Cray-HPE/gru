@@ -47,7 +47,6 @@ func NewBiosGetCommand() *cobra.Command {
 		Use:   "get host [...host]",
 		Short: "Gets BIOS attributes by key-name, or get all attributes",
 		Long:  `Gets BIOS attributes`,
-		Args:  cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := query.Async(getBiosAttributes, hosts)
