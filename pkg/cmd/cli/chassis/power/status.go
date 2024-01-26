@@ -62,7 +62,7 @@ func status(host string) interface{} {
 	service := c.Service
 
 	systems, err := service.Systems()
-	if err != nil {
+	if err != nil || len(systems) < 1 {
 		s.Error = err
 		return s
 	}

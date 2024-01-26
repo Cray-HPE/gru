@@ -77,7 +77,7 @@ func Issue(host string, action interface{}) interface{} {
 	service := c.Service
 
 	systems, err := service.Systems()
-	if err != nil {
+	if err != nil || len(systems) < 1 {
 		sc.Error = err
 		return sc
 	}

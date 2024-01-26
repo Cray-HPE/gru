@@ -60,15 +60,16 @@ func getSystemInformation(host string) interface{} {
 	service := c.Service
 
 	managers, err := service.Managers()
-	if err != nil {
+	if err != nil || len(managers) < 1 {
 		system.Error = err
-	} else {
-		system.FirmwareVersion = managers[0].FirmwareVersion
+		return system
 	}
+	system.FirmwareVersion = managers[0].FirmwareVersion
 
 	systems, err := service.Systems()
-	if err != nil {
+	if err != nil || len(systems) < 1 {
 		system.Error = err
+		return system
 	}
 	system.Manufacturer = systems[0].Manufacturer
 	system.Model = systems[0].Model

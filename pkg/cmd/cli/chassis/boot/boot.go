@@ -100,7 +100,7 @@ func issueOverride(host string, override interface{}) interface{} {
 	service := c.Service
 
 	systems, err := service.Systems()
-	if err != nil {
+	if err != nil || len(systems) < 1 {
 		o.Error = err
 		return o
 	}

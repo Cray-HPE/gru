@@ -100,7 +100,7 @@ func setBios(host string, requestedAttributes map[string]interface{}) interface{
 	v := viper.GetViper()
 
 	systems, bios, err := getSystemBios(host)
-	if err != nil {
+	if err != nil || len(systems) < 1 {
 		attributes.Error = err
 		return attributes
 	}

@@ -163,7 +163,7 @@ func getSystemBios(host string) (systems []*redfish.ComputerSystem, bios *redfis
 	// get the systems
 	service := c.Service
 	systems, err = service.Systems()
-	if err != nil {
+	if err != nil || len(systems) < 1 {
 		return systems, bios, err
 	}
 
