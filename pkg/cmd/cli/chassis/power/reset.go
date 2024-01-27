@@ -39,7 +39,6 @@ func NewPowerResetCommand() *cobra.Command {
 		Use:   "reset host [...host]",
 		Short: "Power reset the target machine(s)",
 		Long:  `Forcefully restart the target machine(s) without a graceful shutdown`,
-		Args:  cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := set.Async(Issue, hosts, redfish.ForceRestartResetType)

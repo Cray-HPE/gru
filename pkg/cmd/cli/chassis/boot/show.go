@@ -45,7 +45,6 @@ func NewShowCommand() *cobra.Command {
 		Use:   "boot host [...host]",
 		Short: "Boot information",
 		Long:  `Show the current BootOrder; BootNext, networkRetry, and more`,
-		Args:  cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := query.Async(getBootInformation, hosts)
@@ -68,7 +67,7 @@ func getBootInformation(host string) interface{} {
 	service := c.Service
 
 	systems, err := service.Systems()
-	if err != nil {
+	if err != nil || len(systems) < 1 {
 		boot.Error = err
 		return boot
 	}

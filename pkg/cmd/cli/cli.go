@@ -121,6 +121,14 @@ func ParseHosts(args []string) []string {
 		}
 		return newArgs
 	}
+	if len(args) < 1 {
+		err := fmt.Errorf("no hosts given")
+		if _, exc := fmt.Fprintln(os.Stderr, err); exc != nil {
+
+			panic(exc)
+		}
+		os.Exit(1)
+	}
 	return args
 }
 

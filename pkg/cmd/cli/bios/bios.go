@@ -59,7 +59,6 @@ func NewCommand() *cobra.Command {
 		Short:            "BIOS interaction",
 		Long:             `Interact with a host's bios`,
 		TraverseChildren: true,
-		Args:             cobra.MinimumNArgs(1),
 		Hidden:           false,
 		Run: func(c *cobra.Command, args []string) {
 		},
@@ -164,7 +163,7 @@ func getSystemBios(host string) (systems []*redfish.ComputerSystem, bios *redfis
 	// get the systems
 	service := c.Service
 	systems, err = service.Systems()
-	if err != nil {
+	if err != nil || len(systems) < 1 {
 		return systems, bios, err
 	}
 

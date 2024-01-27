@@ -44,7 +44,6 @@ func NewBiosSetCommand() *cobra.Command {
 		Use:   "set host [...host]",
 		Short: "Sets BIOS attributes",
 		Long:  `Sets BIOS attributes if the attribute is found and the value is valid.`,
-		Args:  cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			if len(Attributes) == 0 && FromFile == "" && !collections.Virtualization && !ClearCmos {
 				_, err := fmt.Fprintln(
@@ -101,7 +100,7 @@ func setBios(host string, requestedAttributes map[string]interface{}) interface{
 	v := viper.GetViper()
 
 	systems, bios, err := getSystemBios(host)
-	if err != nil {
+	if err != nil || len(systems) < 1 {
 		attributes.Error = err
 		return attributes
 	}
