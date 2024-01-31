@@ -29,10 +29,11 @@ package boot
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Cray-HPE/gru/internal/query"
-	"github.com/stmcginnis/gofish/redfish"
 	"io"
 	"strings"
+
+	"github.com/Cray-HPE/gru/internal/query"
+	"github.com/stmcginnis/gofish/redfish"
 
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
@@ -87,7 +88,11 @@ func getBootInformation(host string) interface{} {
 		}
 
 		for _, b := range systems[0].Boot.BootOrder {
-			ep := fmt.Sprintf("%s/%s", bo, strings.TrimPrefix(b, "Boot"))
+			// trim "Boot" and preceding zeros if they exist on the string
+			ep := fmt.Sprintf("%s/%s", bo, strings.TrimLeft(strings.TrimPrefix(b, "Boot"), "0"))
+
+			// this can still fail.  A boot order was detected as "14", but the simulator only has endpoints 1-5
+			// so there might be more translation to do here for specific vendors
 			resp, err := client.Get(ep)
 			if err != nil {
 				boot.Error = err
@@ -99,8 +104,8 @@ func getBootInformation(host string) interface{} {
 				boot.Error = err
 				return boot
 			}
-
-			boot.Order = append(boot.Order, strings.TrimSpace(names["Description"].(string)))
+			// "Description" may not always be the key.  It may be "DisplayName" or something else
+			boot.Order = append(boot.Order, strings.TrimSpace(names["DisplayName"].(string)))
 		}
 	} else {
 
@@ -113,6 +118,9 @@ func getBootInformation(host string) interface{} {
 
 		names := make(map[string]interface{})
 		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return err
+		}
 		err = json.Unmarshal(body, &names)
 		if err != nil {
 			boot.Error = err
