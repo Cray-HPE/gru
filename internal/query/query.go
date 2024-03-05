@@ -27,6 +27,7 @@
 package query
 
 import (
+	"os"
 	"fmt"
 	"sync"
 
@@ -44,7 +45,7 @@ func Async(fn func(host string) interface{}, hosts []string) map[string]any {
 
 	v := viper.GetViper()
 	if !v.GetBool("json") {
-		fmt.Printf("Asynchronously querying [%5d] hosts ... \n", len(hosts))
+		fmt.Fprintf(os.Stderr, "Asynchronously querying [%5d] hosts ... \n", len(hosts))
 	}
 	sm := make(map[string]interface{})
 
