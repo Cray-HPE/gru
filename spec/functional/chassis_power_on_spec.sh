@@ -28,8 +28,8 @@ Describe 'gru chassis power on'
 It '127.0.0.1:5000 (no config file)'
   When call ./gru chassis power on 127.0.0.1:5000
   The status should equal 1
-  The line 1 of stdout should include 'Asynchronously updating'
-  The stderr should equal "An error occurred: no credentials provided, please provide a config file or environment variables"
+  The line 1 of stderr should include 'Asynchronously updating'
+  The stderr should include "An error occurred: no credentials provided, please provide a config file or environment variables"
 End
 
 # Running against an active host with good credentials should succeed and report the node is on
@@ -37,13 +37,14 @@ It "--config ${GRU_CONF} 127.0.0.1:5000"
   BeforeCall use_valid_config
   When call ./gru chassis power on --config "${GRU_CONF}" 127.0.0.1:5000
   The status should equal 0
-  The line 1 of stdout should include 'Asynchronously updating'
-  The line 2 of stdout should equal '127.0.0.1:5000:'
-  The line 3 of stdout should include 'PreviousPowerState'
+  The line 1 of stderr should include 'Asynchronously updating'
+  The line 1 of stdout should equal '127.0.0.1:5000:'
+  The line 2 of stdout should include 'PreviousPowerState'
   # powerstate can vary depending when test runs so more logic needed
   # The line 3 of stdout should include 'On'
-  The line 4 of stdout should include 'RequestedPowerState'
-  The line 4 of stdout should include 'On'
+  The line 3 of stdout should include 'RequestedPowerState'
+  The line 3 of stdout should include 'On'
+  The lines of stderr should equal 1
 End
 
 # Running against an active host with good credentials should succeed and report the node is on
@@ -51,8 +52,9 @@ It "--config ${GRU_CONF} 127.0.0.1:5000"
   BeforeCall use_valid_config
   When call ./gru chassis power status --config "${GRU_CONF}" 127.0.0.1:5000
   The status should equal 0
-  The line 1 of stdout should include 'Asynchronously querying'
-  The line 2 of stdout should equal '127.0.0.1:5000:' 
+  The line 1 of stderr should include 'Asynchronously querying'
+  The line 1 of stdout should equal '127.0.0.1:5000:'
+  The lines of stderr should equal 1
 End
 
 End

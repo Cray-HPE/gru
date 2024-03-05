@@ -35,7 +35,8 @@ It "--config ${GRU_CONF} 127.0.0.1:5000"
   The stdout should include 'ProcessorHyperThreadingDisable'
   The stdout should include 'SRIOVEnable'
   The stdout should include 'VTdSupport'
-  The lines of stdout should equal 867
+  The lines of stdout should equal 866
+  The lines of stderr should equal 1
 End
 
 # TODO: restore when args work with piping
@@ -52,7 +53,8 @@ It "--config ${GRU_CONF} --pending 127.0.0.1:5000"
   The status should equal 0
   The stdout should include 'Error'
   The stdout should include '"Attributes" does not exist or is null, the BIOS/firmware may need to updated for proper Attributes support'
-  The lines of stdout should equal 3
+  The lines of stdout should equal 2
+  The lines of stderr should equal 1
 End
 
 # TODO: restore when marshaling JSON errors is fixed.
@@ -63,6 +65,7 @@ End
 #  The stdout should include 'error'
 #  The stdout should include '\"Attributes\" does not exist or is null, the BIOS/firmware may need to updated for proper Attributes support'
 #  The stdout should be_json
+#  The lines of stderr should equal 0
 #End
 
 # getting keys from a file should return those keys
@@ -71,7 +74,8 @@ It "--config ${GRU_CONF} --from-file ${GRU_BIOS_KV} 127.0.0.1:5000"
   The status should equal 0
   The stdout should include 'BootTimeout'
   The stdout should include 'SRIOVEnable'
-  The lines of stdout should equal 5
+  The lines of stdout should equal 4
+  The lines of stderr should equal 1
 End
 
 # getting keys from a file should return those keys and be valid json
@@ -81,6 +85,7 @@ It "--config ${GRU_CONF} --from-file ${GRU_BIOS_KV} 127.0.0.1:5000 --json"
   The stdout should include 'BootTimeout'
   The stdout should include 'SRIOVEnable'
   The stdout should be_json
+  The lines of stderr should equal 0
 End
 
 # passing a shortcut should return a limited set of pre-defined keys
@@ -90,7 +95,8 @@ It "--config ${GRU_CONF} --virtualization 127.0.0.1:5003"
   The stdout should include 'ProcAmdIOMMU'
   The stdout should include 'Sriov'
   The stdout should include 'ProcAmdVirtualization'
-  The lines of stdout should equal 7
+  The lines of stdout should equal 6
+  The lines of stderr should equal 1
 End
 
 # passing a shortcut should return a limited set of pre-defined keys and be valid json
@@ -101,6 +107,7 @@ It "--config ${GRU_CONF} --virtualization 127.0.0.1:5003 --json"
   The stdout should include 'ProcAmdVirtualization'
   The stdout should include 'Sriov'
   The stdout should be_json
+  The lines of stderr should equal 0
 End
 
 # piping in hosts should also work
@@ -115,6 +122,7 @@ Describe 'validate STDIN works'
     The stdout should include 'ProcAmdVirtualization'
     The stdout should include 'Sriov'
     The stdout should be_json
+    The lines of stderr should equal 0
   End
 End
 
