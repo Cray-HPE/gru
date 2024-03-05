@@ -30,6 +30,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"gopkg.in/yaml.v3"
 	"os"
 	"reflect"
 	"sort"
@@ -140,6 +141,12 @@ func MapPrint(content map[string]interface{}) {
 			panic(fmt.Errorf("could not create valid JSON from %v", content))
 		}
 		fmt.Printf("%s\n", string(JSON))
+	} else if viper.GetBool("yaml") {
+		YAML, err := yaml.Marshal(content)
+		if err != nil {
+			panic(fmt.Errorf("could not create valid YAML from %v", content))
+		}
+		fmt.Printf("%s\n", string(YAML))
 	} else {
 		keys := make([]string, 0, len(content))
 		for k := range content {

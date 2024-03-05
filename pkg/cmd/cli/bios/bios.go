@@ -41,9 +41,9 @@ import (
 
 // Settings is a structure for holding current BIOS attributes, pending attributes, and errors.
 type Settings struct {
-	Attributes map[string]interface{} `json:"attributes,omitempty"`
-	Pending    map[string]interface{} `json:"pending,omitempty"`
-	Error      error                  `json:"error,omitempty"`
+	Attributes map[string]interface{} `json:"attributes,omitempty" yaml:"attributes,omitempty"`
+	Pending    map[string]interface{} `json:"pending,omitempty" yaml:"pending,omitempty"`
+	Error      error                  `json:"error,omitempty" yaml:"error,omitempty"`
 }
 
 // Attributes are an array of attribute names (and optionally values).

@@ -59,19 +59,19 @@ type Library struct {
 
 // Attribute is a single bios attribute
 type Attribute struct {
-	AttributeName string      `json:"AttributeName"`
-	DefaultValue  interface{} `json:"DefaultValue"` // can be int or string, maybe bool
-	DisplayName   string      `json:"DisplayName"`
-	HelpText      string      `json:"HelpText"`
-	ReadOnly      bool        `json:"ReadOnly"`
-	Type          string      `json:"Type"`
-	Value         []Value     `json:"Value"`
+	AttributeName string      `json:"AttributeName" yaml:"attribute_name"`
+	DefaultValue  interface{} `json:"DefaultValue" yaml:"default_value"` // can be int or string, maybe bool
+	DisplayName   string      `json:"DisplayName" yaml:"display_name"`
+	HelpText      string      `json:"HelpText" yaml:"help_text"`
+	ReadOnly      bool        `json:"ReadOnly" yaml:"read_only"`
+	Type          string      `json:"Type" yaml:"type"`
+	Value         []Value     `json:"Value" yaml:"value"`
 }
 
 // Value is the display name and a name
 type Value struct {
-	ValueDisplayName string `json:"ValueDisplayName"`
-	ValueName        string `json:"ValueName"`
+	ValueDisplayName string `json:"ValueDisplayName" yaml:"value_display_name"`
+	ValueName        string `json:"ValueName" yaml:"value_name"`
 }
 
 // newEmbeddedLibrary embeds JSON files from: sh control.Rome.BiosParameters.sh <BMC> renew_json
@@ -133,7 +133,7 @@ func (d DecoderMap) Decode(key string) string {
 	v := viper.GetViper()
 
 	if romeAttr, exists := d.Map.Attributes[key]; exists {
-		if v.GetBool("json") {
+		if v.GetBool("json") || v.GetBool("yaml") {
 			key = romeAttr.AttributeName
 		} else {
 			key = fmt.Sprintf("%s (%s)", romeAttr.AttributeName, strings.TrimLeft(romeAttr.DisplayName, " "))
