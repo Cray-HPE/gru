@@ -30,7 +30,8 @@ It "--config ${GRU_CONF} --attributes BootTimeout 127.0.0.1:5000"
   When call ./gru bios get --config "${GRU_CONF}" --attributes BootTimeout 127.0.0.1:5000
   The status should equal 0
   The stdout should include 'BootTimeout'
-  The lines of stdout should equal 4
+  The lines of stdout should equal 3
+  The lines of stderr should equal 1
 End
 
 # getting a single key should return only those key in json
@@ -39,6 +40,7 @@ It "--config ${GRU_CONF} --attributes BootTimeout 127.0.0.1:5000 --json"
   The status should equal 0
   The stdout should include 'BootTimeout'
   The stdout should be_json
+  The lines of stderr should equal 0
 End
 
 # getting multiple keys should return only those keys
@@ -47,7 +49,8 @@ It "--config ${GRU_CONF} --attributes ProcessorHyperThreadingDisable,SRIOVEnable
   The status should equal 0
   The stdout should include 'ProcessorHyperThreadingDisable'
   The stdout should include 'SRIOVEnable'
-  The lines of stdout should equal 4
+  The lines of stdout should equal 3
+  The lines of stderr should equal 1
 End
 
 # getting specific keys should return only those keys and should be json
@@ -57,15 +60,17 @@ It "--config ${GRU_CONF} --attributes ProcessorHyperThreadingDisable,SRIOVEnable
   The stdout should include 'ProcessorHyperThreadingDisable'
   The stdout should include 'SRIOVEnable'
   The stdout should be_json
+  The lines of stderr should equal 0
 End
 
 # it should error if no matching keys were found
 It "--config ${GRU_CONF} --attributes junk 127.0.0.1:5000"
   When call ./gru bios get --config "${GRU_CONF}" --attributes junk 127.0.0.1:5000
   The status should equal 0
-  The line 4 of stdout should include 'junk'
-  The line 4 of stdout should include '<nil>'
-  The lines of stdout should equal 4
+  The line 3 of stdout should include 'junk'
+  The line 3 of stdout should include '<nil>'
+  The lines of stdout should equal 3
+  The lines of stderr should equal 1
 End
 
 # TODO: restore when args work with piping
@@ -85,7 +90,8 @@ It "--config ${GRU_CONF} --virtualization 127.0.0.1:5001"
   The stdout should include 'Local APIC Mode'
   The stdout should include 'IOMMU'
   The stdout should include 'SVM Mode'
-  The lines of stdout should equal 8
+  The lines of stdout should equal 7
+  The lines of stderr should equal 1
 End
 
 # --virtualization shortcut should return only virtualization attributes in json format (Gigabyte)
@@ -98,6 +104,7 @@ It "--config ${GRU_CONF} --virtualization 127.0.0.1:5001 --json"
   The stdout should include 'Rome0162' # 'IOMMU'
   The stdout should include 'Rome0565' # 'SVM Mode'
   The stdout should be_json
+  The lines of stderr should equal 0
 End
 
 # Gigabyte should return friendly names on non-json output
@@ -109,7 +116,8 @@ It "--config ${GRU_CONF} 127.0.0.1:5001"
   The stdout should include 'Disable Block Sid'
   The stdout should include 'Rome0179'
   The stdout should include 'Determinism Slider'
-  The lines of stdout should equal 553
+  The lines of stdout should equal 552
+  The lines of stderr should equal 1
 End
 
 # Gigabyte should not return friendly names on json output
@@ -124,6 +132,7 @@ It "--config ${GRU_CONF} 127.0.0.1:5001 --json"
   The stdout should include 'Disabled'
   The stdout should not include 'Determinism Slider'
   The stdout should be_json
+  The lines of stderr should equal 0
 End
 
 End

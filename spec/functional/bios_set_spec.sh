@@ -33,6 +33,7 @@ It "--config ${GRU_CONF} 127.0.0.1:5000"
   The status should equal 1
   The stderr should include 'an error occurred: at least one of the flags in the group [attributes from-file virtualization clear-cmos] is required'
   The stdout should include "Usage:"
+  The lines of stderr should equal 1
 End
 
 # setting with more than one flag should fail
@@ -41,6 +42,7 @@ It "--config ${GRU_CONF} 127.0.0.1:5000"
   The status should equal 1
   The stderr should include 'an error occurred: only one of the flags in the group [attributes from-file virtualization clear-cmos] can be specified at a time'
   The stdout should include "Usage:"
+  The lines of stderr should equal 1
 End
 
 # TODO: restore when args work with piping
@@ -49,6 +51,7 @@ End
 #   When call ./gru --config "${GRU_CONF}" bios set
 #   The status should equal 1
 #   The stderr should include 'Error: requires at least 1 arg(s), only received 0'
+#   The lines of stderr should equal 1
 # End
 
 # FIXME: the emulator does not support PATCH ops.  Once it does, uncomment, adjust if needed
@@ -58,7 +61,8 @@ End
 #   The status should equal 0
 #   The stdout should include 'Error'
 #   The stdout should include 'BIOS reset failure: unable to execute request, no target provided'
-#   The lines of stdout should equal 3
+#   The lines of stdout should equal 2
+#   The lines of stderr should equal 1
 # End
 
 # # restoring defaults and be valid json
@@ -68,6 +72,7 @@ End
 #   The stdout should include 'Error'
 #   The stdout should include 'BIOS reset failure: unable to execute request, no target provided'
 #   The stdout should be_json
+#   The lines of stderr should equal 0
 # End
 
 # # setting keys from a file should return those keys
@@ -84,7 +89,8 @@ End
 #   The stdout should include 'SRIOVEnable'
 #   The stdout should include 'SvrMngmntAcpiIpmi'
 #   The stdout should include 'VTdSupport'
-#   The lines of stdout should equal 3
+#   The lines of stdout should equal 2
+#   The lines of stderr should equal 1
 # End
 
 # # setting keys from a file should return those keys and be valid json
@@ -102,6 +108,7 @@ End
 #   The stdout should include 'SvrMngmntAcpiIpmi'
 #   The stdout should include 'VTdSupport'
 #   The stdout should be_json
+#   The lines of stderr should equal 0
 # End
 
 # # passing a shortcut should return a limited set of pre-defined keys
@@ -115,6 +122,7 @@ End
 #   The stdout should include 'SRIOVEnable'
 #   The stdout should include 'SvrMngmntAcpiIpmi'
 #   The stdout should include 'VTdSupport'
+#   The lines of stderr should equal 1
 # End
 
 # # passing a shortcut should return a limited set of pre-defined keys and be valid json
@@ -129,6 +137,7 @@ End
 #   The stdout should include 'SvrMngmntAcpiIpmi'
 #   The stdout should include 'VTdSupport'
 #   The stdout should be_json
+#   The lines of stderr should equal 0
 # End
 
 End

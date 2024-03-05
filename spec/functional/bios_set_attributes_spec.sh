@@ -31,7 +31,8 @@ BeforeAll use_valid_config
 #   When call ./gru bios set --config "${GRU_CONF}" --attributes ProcessorHyperThreadingDisable=0,SRIOVEnable=0 127.0.0.1:5000
 #   The status should equal 0
 #   The stdout should include 'BIOS change(s) may be applied at: ["Immediate","OnReset","AtMaintenanceWindowStart","InMaintenanceWindowOnReset"]'
-#   The lines of stdout should equal 3
+#   The lines of stdout should equal 2
+#   The lines of stderr should equal 1
 # End
 
 # TODO: restore when args work with piping
