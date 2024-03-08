@@ -31,6 +31,7 @@ import (
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/spf13/cobra"
+	"strings"
 )
 
 // NewShowCommand creates the `system` subcommand for `show`.
@@ -64,16 +65,16 @@ func getSystemInformation(host string) interface{} {
 		system.Error = err
 		return system
 	}
-	system.FirmwareVersion = managers[0].FirmwareVersion
+	system.FirmwareVersion = strings.TrimSpace(managers[0].FirmwareVersion)
 
 	systems, err := service.Systems()
 	if err != nil || len(systems) < 1 {
 		system.Error = err
 		return system
 	}
-	system.Manufacturer = systems[0].Manufacturer
-	system.Model = systems[0].Model
-	system.BIOSVersion = systems[0].BIOSVersion
-	system.ProcessorModel = systems[0].ProcessorSummary.Model
+	system.Manufacturer = strings.TrimSpace(systems[0].Manufacturer)
+	system.Model = strings.TrimSpace(systems[0].Model)
+	system.BIOSVersion = strings.TrimSpace(systems[0].BIOSVersion)
+	system.ProcessorModel = strings.TrimSpace(systems[0].ProcessorSummary.Model)
 	return system
 }
