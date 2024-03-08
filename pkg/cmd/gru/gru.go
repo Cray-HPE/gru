@@ -86,7 +86,13 @@ the YAML file may provide these per host.
 		"json",
 		"j",
 		false,
-		"Output results in JSON",
+		"Output in JSON",
+	)
+	c.PersistentFlags().BoolP(
+		"yaml",
+		"y",
+		false,
+		"Output in YAML",
 	)
 	c.AddCommand(
 		bios.NewCommand(),

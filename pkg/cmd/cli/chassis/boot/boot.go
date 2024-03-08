@@ -36,15 +36,15 @@ import (
 
 // Boot represents boot configuration on the BMC. Only Error is emitted on empty.
 type Boot struct {
-	Order []string `json:"order,omitempty"`
-	Next  string   `json:"next,omitempty"`
-	Error error    `json:"error,omitempty"`
+	Order []string `json:"order,omitempty" yaml:"order,omitempty"`
+	Next  string   `json:"next,omitempty" yaml:"next,omitempty"`
+	Error error    `json:"error,omitempty" yaml:"error,omitempty"`
 }
 
 // Override represents the result of the boot override.
 type Override struct {
-	Target redfish.BootSourceOverrideTarget `json:"target"`
-	Error  error                            `json:"error,omitempty"`
+	Target redfish.BootSourceOverrideTarget `json:"target" yaml:"target"`
+	Error  error                            `json:"error,omitempty" yaml:"error,omitempty"`
 }
 
 // NewCommand creates the `boot` subcommand for `chassis`.

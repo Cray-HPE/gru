@@ -28,10 +28,10 @@ package system
 
 // System represents system meta from the BMC. Only Error is omitted on empty.
 type System struct {
-	BIOSVersion     string `json:"biosVersion"`
-	FirmwareVersion string `json:"firmwareVersion"`
-	ProcessorModel  string `json:"processorModel"`
-	Manufacturer    string `json:"manufacturer"`
-	Model           string `json:"model"`
-	Error           error  `json:"error,omitempty"`
+	BIOSVersion     string `json:"biosVersion" yaml:"bios_version"`
+	FirmwareVersion string `json:"firmwareVersion" yaml:"firmware_version"`
+	ProcessorModel  string `json:"processorModel" yaml:"processor_model"`
+	Manufacturer    string `json:"manufacturer" yaml:"manufacturer"`
+	Model           string `json:"model" yaml:"model"`
+	Error           error  `json:"error,omitempty" yaml:"error,omitempty"`
 }

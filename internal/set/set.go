@@ -27,9 +27,8 @@
 package set
 
 import (
-	"os"
 	"fmt"
-	"github.com/spf13/viper"
+	"os"
 	"sync"
 )
 
@@ -47,10 +46,7 @@ func Async(
 	sliceLength := len(hosts)
 	wg.Add(sliceLength)
 
-	v := viper.GetViper()
-	if !v.GetBool("json") {
-		fmt.Fprintf(os.Stderr, "Asynchronously updating [%5d] hosts ... \n", len(hosts))
-	}
+	fmt.Fprintf(os.Stderr, "Asynchronously updating [%5d] hosts ... \n", len(hosts))
 
 	sm := make(map[string]interface{})
 
@@ -80,10 +76,7 @@ func AsyncMap(
 	sliceLength := len(hosts)
 	wg.Add(sliceLength)
 
-	v := viper.GetViper()
-	if !v.GetBool("json") {
-		fmt.Fprintf(os.Stderr, "Asynchronously updating [%5d] hosts ... \n", len(hosts))
-	}
+	fmt.Fprintf(os.Stderr, "Asynchronously updating [%5d] hosts ... \n", len(hosts))
 
 	sm := make(map[string]interface{})
 
@@ -112,10 +105,7 @@ func AsyncCall(
 	sliceLength := len(hosts)
 	wg.Add(sliceLength)
 
-	v := viper.GetViper()
-	if !v.GetBool("json") {
-		fmt.Fprintf(os.Stderr, "Asynchronously updating [%5d] hosts ... \n", len(hosts))
-	}
+	fmt.Fprintf(os.Stderr, "Asynchronously updating [%5d] hosts ... \n", len(hosts))
 
 	sm := make(map[string]interface{})
 

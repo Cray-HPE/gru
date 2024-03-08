@@ -27,11 +27,9 @@
 package query
 
 import (
-	"os"
 	"fmt"
+	"os"
 	"sync"
-
-	"github.com/spf13/viper"
 )
 
 // Async runs an async query (fn) against a list of hosts. Returns a map of each host with their
@@ -43,10 +41,7 @@ func Async(fn func(host string) interface{}, hosts []string) map[string]any {
 	sliceLength := len(hosts)
 	wg.Add(sliceLength)
 
-	v := viper.GetViper()
-	if !v.GetBool("json") {
-		fmt.Fprintf(os.Stderr, "Asynchronously querying [%5d] hosts ... \n", len(hosts))
-	}
+	fmt.Fprintf(os.Stderr, "Asynchronously querying [%5d] hosts ... \n", len(hosts))
 	sm := make(map[string]interface{})
 
 	for _, host := range hosts {

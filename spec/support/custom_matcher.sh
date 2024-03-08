@@ -44,3 +44,25 @@ shellspec_matcher_be_json() {
   shellspec_syntax_param count [ $# -eq 0 ] || return 0
   shellspec_matcher_do_match "$@"
 }
+
+shellspec_syntax 'shellspec_matcher_be_yaml'
+shellspec_matcher_be_yaml() {
+  shellspec_matcher__match() {
+    # no args because we match the subject
+    [ ${SHELLSPEC_SUBJECT+x} ]
+    # check if yq can read the subject
+    if ! echo "$SHELLSPEC_SUBJECT" | yq > /dev/null;then return 1;fi
+    return 0
+  }
+
+  shellspec_syntax_failure_message + \
+    'expected: valid yaml' \
+    '     got: $1'
+
+  shellspec_syntax_failure_message - \
+    'expected: invalid yaml' \
+    '     got: $1'
+
+  shellspec_syntax_param count [ $# -eq 0 ] || return 0
+  shellspec_matcher_do_match "$@"
+}

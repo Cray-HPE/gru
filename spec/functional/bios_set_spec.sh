@@ -71,8 +71,18 @@ End
 #   The status should equal 0
 #   The stdout should include 'Error'
 #   The stdout should include 'BIOS reset failure: unable to execute request, no target provided'
+#   The lines of stderr should equal 1
 #   The stdout should be_json
-#   The lines of stderr should equal 0
+# End
+
+# # restoring defaults and be valid yaml
+# It "--config ${GRU_CONF} --defaults 127.0.0.1:5000 --yaml"
+#   When call ./gru bios set --config "${GRU_CONF}" --defaults 127.0.0.1:5000 --yaml
+#   The status should equal 0
+#   The stdout should include 'Error'
+#   The stdout should include 'BIOS reset failure: unable to execute request, no target provided'
+#   The lines of stderr should equal 1
+#   The stdout should be_yaml
 # End
 
 # # setting keys from a file should return those keys
@@ -107,8 +117,26 @@ End
 #   The stdout should include 'SRIOVEnable'
 #   The stdout should include 'SvrMngmntAcpiIpmi'
 #   The stdout should include 'VTdSupport'
+#   The lines of stderr should equal 1
 #   The stdout should be_json
-#   The lines of stderr should equal 0
+# End
+
+# # setting keys from a file should return those keys and be valid yaml
+# It "--config ${GRU_CONF} --from-file ${GRU_BIOS_KV} 127.0.0.1:5000 --yaml"
+#   When call ./gru bios set --config "${GRU_CONF}" --from-file "${GRU_BIOS_KV}" 127.0.0.1:5000 --yaml
+#   The status should equal 0
+#   The stdout should include 'Pending'
+#   The stdout should include 'Attributes'
+#   The stdout should include 'BootMode'
+#   The stdout should include 'BootTimeout'
+#   The stdout should include 'ProcessorHyperThreadingDisable'
+#   The stdout should include 'ProcessorVmxEnable'
+#   The stdout should include 'ProcessorX2apic'
+#   The stdout should include 'SRIOVEnable'
+#   The stdout should include 'SvrMngmntAcpiIpmi'
+#   The stdout should include 'VTdSupport'
+#   The lines of stderr should equal 1
+#   The stdout should be_yaml
 # End
 
 # # passing a shortcut should return a limited set of pre-defined keys
@@ -136,8 +164,24 @@ End
 #   The stdout should include 'SRIOVEnable'
 #   The stdout should include 'SvrMngmntAcpiIpmi'
 #   The stdout should include 'VTdSupport'
+#   The lines of stderr should equal 1
 #   The stdout should be_json
-#   The lines of stderr should equal 0
+# End
+
+
+# # passing a shortcut should return a limited set of pre-defined keys and be valid yaml
+# It "--config ${GRU_CONF} --virtualization 127.0.0.1:5000 --yaml"
+#   When call ./gru bios set --config "${GRU_CONF}" --virtualization 127.0.0.1:5000 --yaml
+#   The status should equal 0
+#   The stdout should include 'BootMode'
+#   The stdout should include 'ProcessorHyperThreadingDisable'
+#   The stdout should include 'ProcessorVmxEnable'
+#   The stdout should include 'ProcessorX2apic'
+#   The stdout should include 'SRIOVEnable'
+#   The stdout should include 'SvrMngmntAcpiIpmi'
+#   The stdout should include 'VTdSupport'
+#   The lines of stderr should equal 1
+#   The stdout should be_yaml
 # End
 
 End
