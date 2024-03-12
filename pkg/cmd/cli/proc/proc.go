@@ -24,26 +24,20 @@
 
 */
 
-package show
+package proc
 
-import (
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/chassis/boot"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/proc"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/system"
-	"github.com/spf13/cobra"
-)
+// Processors represents a list of Processor types.
+type Processors []Processor
 
-// NewCommand creates the `show` subcommand.
-func NewCommand() *cobra.Command {
-	c := &cobra.Command{
-		Use:   "show",
-		Short: "Curated server information",
-		Long:  `Print pre-defined classes of information from one or more BMCs`,
-	}
-	c.AddCommand(
-		boot.NewShowCommand(),
-		proc.NewShowCommand(),
-		system.NewShowCommand(),
-	)
-	return c
+// Processor represents a single, physical processor.
+// The processor's model number is stored in either Processor.Model or Processor.VendorID depending
+// on the vendor. The user may need to interpret both fields to understand what they have.
+type Processor struct {
+	Architecture string `json:"architecture" yaml:"architecture"`
+	TotalCores   int    `json:"totalCores" yaml:"total_cores"`
+	Model        string `json:"model" yaml:"model"`
+	Socket       string `json:"socket" yaml:"socket"`
+	Threads      int    `json:"threads" yaml:"threads"`
+	VendorID     string `json:"vendorID" yaml:"vendor_id"`
+	Error        error  `json:"error,omitempty" yaml:"error,omitempty"`
 }
