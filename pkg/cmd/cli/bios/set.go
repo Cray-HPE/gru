@@ -1,7 +1,7 @@
 /*
 MIT License
 
-(C) Copyright 2023 Hewlett Packard Enterprise Development LP
+(C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -35,7 +35,7 @@ import (
 	"os"
 )
 
-// ClearCmos determins whether or not to clear the CMOS values.
+// ClearCmos determines whether to clear the CMOS values.
 var ClearCmos bool
 
 // NewBiosSetCommand creates the `set` subcommand for `bios`.
@@ -80,7 +80,7 @@ func NewBiosSetCommand() *cobra.Command {
 				content = set.AsyncMap(setBios, hosts, attributes.Attributes)
 			}
 
-			cli.MapPrint(content)
+			cli.PrettyPrint(content)
 		},
 		Hidden: false,
 	}
