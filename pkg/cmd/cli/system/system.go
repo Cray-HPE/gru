@@ -2,7 +2,7 @@
 
  MIT License
 
- (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+ (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 
  Permission is hereby granted, free of charge, to any person obtaining a
  copy of this software and associated documentation files (the "Software"),
@@ -33,5 +33,6 @@ type System struct {
 	ProcessorModel  string `json:"processorModel" yaml:"processor_model"`
 	Manufacturer    string `json:"manufacturer" yaml:"manufacturer"`
 	Model           string `json:"model" yaml:"model"`
+	SerialNumber    string `json:"serialNumber" yaml:"serial_number"`
 	Error           error  `json:"error,omitempty" yaml:"error,omitempty"`
 }

@@ -2,7 +2,7 @@
 
  MIT License
 
- (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+ (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 
  Permission is hereby granted, free of charge, to any person obtaining a
  copy of this software and associated documentation files (the "Software"),
@@ -43,7 +43,7 @@ func NewShowCommand() *cobra.Command {
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := query.Async(getSystemInformation, hosts)
-			cli.MapPrint(content)
+			cli.PrettyPrint(content)
 		},
 	}
 	return c
@@ -72,9 +72,12 @@ func getSystemInformation(host string) interface{} {
 		system.Error = err
 		return system
 	}
+
+	system.BIOSVersion = strings.TrimSpace(systems[0].BIOSVersion)
 	system.Manufacturer = strings.TrimSpace(systems[0].Manufacturer)
 	system.Model = strings.TrimSpace(systems[0].Model)
-	system.BIOSVersion = strings.TrimSpace(systems[0].BIOSVersion)
 	system.ProcessorModel = strings.TrimSpace(systems[0].ProcessorSummary.Model)
+	system.SerialNumber = strings.TrimSpace(systems[0].SerialNumber)
+
 	return system
 }

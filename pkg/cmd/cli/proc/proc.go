@@ -24,27 +24,20 @@
 
 */
 
-package power
+package proc
 
-import (
-	"github.com/Cray-HPE/gru/internal/set"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/spf13/cobra"
-	"github.com/stmcginnis/gofish/redfish"
-)
+// Processors represents a list of Processor types.
+type Processors []Processor
 
-// NewPowerResetCommand creates the `reset` subcommand for `power`.
-func NewPowerResetCommand() *cobra.Command {
-	c := &cobra.Command{
-		Use:   "reset host [...host]",
-		Short: "Power reset the target machine(s)",
-		Long:  `Forcefully restart the target machine(s) without a graceful shutdown`,
-		Run: func(c *cobra.Command, args []string) {
-			hosts := cli.ParseHosts(args)
-			content := set.Async(Issue, hosts, redfish.ForceRestartResetType)
-			cli.PrettyPrint(content)
-		},
-		Hidden: false,
-	}
-	return c
+// Processor represents a single, physical processor.
+// The processor's model number is stored in either Processor.Model or Processor.VendorID depending
+// on the vendor. The user may need to interpret both fields to understand what they have.
+type Processor struct {
+	Architecture string `json:"architecture" yaml:"architecture"`
+	TotalCores   int    `json:"totalCores" yaml:"total_cores"`
+	Model        string `json:"model" yaml:"model"`
+	Socket       string `json:"socket" yaml:"socket"`
+	Threads      int    `json:"threads" yaml:"threads"`
+	VendorID     string `json:"vendorID" yaml:"vendor_id"`
+	Error        error  `json:"error,omitempty" yaml:"error,omitempty"`
 }
