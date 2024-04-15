@@ -160,7 +160,6 @@ func getSystemBios(host string) (systems []*redfish.ComputerSystem, bios *redfis
 	}
 	defer c.Logout()
 
-	// get the systems
 	service := c.Service
 	systems, err = service.Systems()
 	if err != nil || len(systems) < 1 {
