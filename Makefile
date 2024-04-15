@@ -30,13 +30,19 @@ lc =$(subst A,a,$(subst B,b,$(subst C,c,$(subst D,d,$(subst E,e,$(subst F,f,$(su
 
 .PHONY: \
 	all \
-	default \
+	build \
 	clean \
+	default \
 	doc \
-	help \
+	edge \
 	fmt \
-	tools \
+	functional \
+	help \
+	integration \
+	shellspec-deps \
+	sim \
 	tidy \
+	tools \
 	vet
 
 default: build
@@ -60,6 +66,12 @@ help:
 	@echo '    fmt                Run go fmt.'
 	@echo '    tidy               Run go mod tidy.'
 	@echo '    doc                Start Go documentation server on port 8080.'
+	@echo ''
+	@echo '    shellspec-deps     Installs shellspec if it is not already installed.'
+	@echo '    sim                Launches the simulator for testing.'
+	@echo '    edge               Runs the edge tests through the simulator.'
+	@echo '    functional         Runs the functional tests through the simulator.'
+	@echo '    integration        Runs the integration tests through the simulator.'
 	@echo ''
 # Used to force some rules to run every time
 FORCE: ;
@@ -165,7 +177,6 @@ endif
 
 binaries := ${NAME}
 
-.PHONY: build
 build: tidy $(binaries)
 
 go_build := $(go_path) go build $(go_flags) -ldflags '$(go_ldflags)' -o
@@ -190,9 +201,19 @@ sim:
 	if ! [ -d ./csm-redfish-interface-emulator ]; then git clone https://github.com/Cray-HPE/csm-redfish-interface-emulator.git; fi
 	spec/support/bin/setup_simulator.sh ./csm-redfish-interface-emulator ./testdata/fixtures/rie/docker-compose.simple.yaml
 
-spec:
-	if ! [ -d ./shellspec ]; then git clone https://github.com/shellspec/shellspec.git; fi
-	ln -s "$(shell pwd)"/shellspec/shellspec /usr/local/bin/
+# FIXME: Redo to use `sudo` on Linux, and use brew on Darwin.
+SHELLSPEC := $(shell command -v shellspec 2> /dev/null)
+shellspec-deps:
+ifndef SHELLSPEC
+ifeq ($(OS),Darwin)
+	brew install shellspec
+else ifeq ($(OS),Linux)
+	git clone https://github.com/shellspec/shellspec.git $(HOME)/shellspec
+	ln -s "$(HOME)/shellspec/shellspec" /usr/local/bin/
+else
+	$(error unsupported OS: $(OS))
+endif
+endif
 
 unit: build
 	mkdir -pv $(TEST_OUTPUT_DIR)/unittest $(TEST_OUTPUT_DIR)/coverage
