@@ -2,7 +2,7 @@
 
  MIT License
 
- (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+ (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 
  Permission is hereby granted, free of charge, to any person obtaining a
  copy of this software and associated documentation files (the "Software"),
@@ -160,7 +160,6 @@ func getSystemBios(host string) (systems []*redfish.ComputerSystem, bios *redfis
 	}
 	defer c.Logout()
 
-	// get the systems
 	service := c.Service
 	systems, err = service.Systems()
 	if err != nil || len(systems) < 1 {

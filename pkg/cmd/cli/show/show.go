@@ -2,7 +2,7 @@
 
  MIT License
 
- (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+ (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 
  Permission is hereby granted, free of charge, to any person obtaining a
  copy of this software and associated documentation files (the "Software"),
@@ -28,6 +28,7 @@ package show
 
 import (
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/chassis/boot"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/proc"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/system"
 	"github.com/spf13/cobra"
 )
@@ -41,6 +42,7 @@ func NewCommand() *cobra.Command {
 	}
 	c.AddCommand(
 		boot.NewShowCommand(),
+		proc.NewShowCommand(),
 		system.NewShowCommand(),
 	)
 	return c

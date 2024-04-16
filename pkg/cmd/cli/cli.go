@@ -2,7 +2,7 @@
 
  MIT License
 
- (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+ (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 
  Permission is hereby granted, free of charge, to any person obtaining a
  copy of this software and associated documentation files (the "Software"),
@@ -28,15 +28,9 @@ package cli
 
 import (
 	"bufio"
-	"encoding/json"
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"os"
-	"reflect"
-	"sort"
 	"unicode/utf8"
-
-	"github.com/spf13/viper"
 )
 
 func isInputFromPipe() bool {
@@ -131,82 +125,4 @@ func ParseHosts(args []string) []string {
 		os.Exit(1)
 	}
 	return args
-}
-
-// MapPrint outputs a given map to stdout.
-func MapPrint(content map[string]interface{}) {
-	if viper.GetBool("json") {
-		JSON, err := json.MarshalIndent(content, "", "  ")
-		if err != nil {
-			panic(fmt.Errorf("could not create valid JSON from %v", content))
-		}
-		fmt.Printf("%s\n", string(JSON))
-	} else if viper.GetBool("yaml") {
-		YAML, err := yaml.Marshal(content)
-		if err != nil {
-			panic(fmt.Errorf("could not create valid YAML from %v", content))
-		}
-		fmt.Printf("%s\n", string(YAML))
-	} else {
-		keys := make([]string, 0, len(content))
-		for k := range content {
-			keys = append(keys, k)
-		}
-		sort.Strings(keys)
-		for _, k := range keys {
-			fmt.Printf("%s:\n", k)
-
-			// Warning; the struct fields must be exported!
-			s := content[k]
-			v := reflect.ValueOf(s)
-			typeOfS := v.Type()
-			for i := 0; i < v.NumField(); i++ {
-				if v.Field(i).Interface() == nil {
-					continue
-				} else if _, ok := v.Field(i).Interface().(map[string]interface{}); ok {
-					keys := v.Field(i).MapKeys()
-					if len(keys) != 0 {
-						fmt.Printf("\t%v:\n", typeOfS.Field(i).Name)
-					} else {
-						continue
-					}
-
-					sortedKeys := make([]string, 0, len(keys))
-
-					for key := range keys {
-						sortedKeys = append(sortedKeys, keys[key].String())
-					}
-
-					sort.Strings(sortedKeys)
-					for key := range sortedKeys {
-						fmt.Printf(
-							"\t\t%-60s: %-60v\n",
-							sortedKeys[key],
-							v.Field(i).MapIndex(reflect.ValueOf(sortedKeys[key])),
-						)
-					}
-				} else if _, ok := v.Field(i).Interface().([]string); ok {
-					fmt.Printf(
-						"\t%s:\n",
-						typeOfS.Field(i).Name,
-					)
-					for _, v := range v.Field(i).Interface().([]string) {
-						fmt.Printf(
-							"\t\t%-60v\n",
-							v,
-						)
-					}
-				} else {
-					if v.Field(i).Interface() == nil || v.Field(i).Interface() == "" {
-						continue
-					}
-					fmt.Printf(
-						"\t%-60s: %-60s\n",
-						typeOfS.Field(i).Name,
-						v.Field(i).Interface(),
-					)
-				}
-			}
-		}
-	}
 }

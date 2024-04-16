@@ -2,7 +2,7 @@
 
  MIT License
 
- (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+ (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 
  Permission is hereby granted, free of charge, to any person obtaining a
  copy of this software and associated documentation files (the "Software"),
@@ -50,10 +50,10 @@ func NewBiosOverrideCommand() *cobra.Command {
 			cmd.CheckError(bindErr)
 
 			content := set.Async(issueOverride, hosts, redfish.BiosSetupBootSourceOverrideTarget)
-			cli.MapPrint(content)
+			cli.PrettyPrint(content)
 			if v.GetBool("now") {
 				content = set.Async(power.Issue, hosts, redfish.ForceRestartResetType)
-				cli.MapPrint(content)
+				cli.PrettyPrint(content)
 			}
 		},
 	}
@@ -69,7 +69,7 @@ func NewPxeOverrideCommand() *cobra.Command {
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := set.Async(issueOverride, hosts, redfish.PxeBootSourceOverrideTarget)
-			cli.MapPrint(content)
+			cli.PrettyPrint(content)
 		},
 	}
 	return c
@@ -84,7 +84,7 @@ func NewHddOverrideCommand() *cobra.Command {
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := set.Async(issueOverride, hosts, redfish.HddBootSourceOverrideTarget)
-			cli.MapPrint(content)
+			cli.PrettyPrint(content)
 		},
 	}
 	return c
@@ -99,7 +99,7 @@ func NewUEFIHttpOverrideCommand() *cobra.Command {
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := set.Async(issueOverride, hosts, redfish.UefiHTTPBootSourceOverrideTarget)
-			cli.MapPrint(content)
+			cli.PrettyPrint(content)
 		},
 	}
 	return c
@@ -114,7 +114,7 @@ func NewNoneOverrideCommand() *cobra.Command {
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
 			content := set.Async(issueOverride, hosts, redfish.NoneBootSourceOverrideTarget)
-			cli.MapPrint(content)
+			cli.PrettyPrint(content)
 		},
 	}
 	return c

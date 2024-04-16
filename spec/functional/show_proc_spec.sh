@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 # MIT License
 #
-# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -22,6 +22,19 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 
 
-Describe 'EDGE:'
+Describe 'gru show proc'
+
+BeforeAll use_valid_config
+BeforeAll use_valid_bios_attributes_file
+
+# getting all bios keys should return lots of output
+It "--config ${GRU_CONF} 127.0.0.1:5000"
+  When call ./gru show proc --config "${GRU_CONF}" 127.0.0.1:5000
+  The status should equal 0
+  # check for some arbitrary keys to ensure it is not junk
+  The stdout should include 'CPU 1'
+  The stdout should include 'CPU 2'
+  The lines of stderr should equal 1
+End
 
 End

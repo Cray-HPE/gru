@@ -24,52 +24,84 @@
 
 */
 
-package power
+package proc
 
 import (
+	"fmt"
 	"github.com/Cray-HPE/gru/internal/query"
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/spf13/cobra"
+	"strings"
 )
 
-// NewPowerStatusCommand creates the `status` subcommand for `power`.
-func NewPowerStatusCommand() *cobra.Command {
+// NewShowCommand creates the `system` subcommand for `show`.
+func NewShowCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "status host [...host]",
-		Short: "Power status for the target machine(s)",
-		Long:  `Prints the current power status reported by the blade management controller for the target machine(s)`,
+		Use:   "proc host [...host]",
+		Short: "Processor information",
+		Long:  `Show the Server's processors, a full list with their core count, model, architecture, and serial numbers.`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := query.Async(status, hosts)
+			content := query.Async(getProcessors, hosts)
 			cli.PrettyPrint(content)
 		},
-		Hidden: false,
 	}
 	return c
 }
 
-// status retrieves the redfish.PowerState for a machine..
-func status(host string) interface{} {
-	s := State{}
+func getProcessors(host string) interface{} {
+	foundProcessors := Processors{}
 	c, err := auth.Connection(host)
 	if err != nil {
-		s.Error = err
-		return s
+		foundProcessors = append(
+			foundProcessors, Processor{
+				Error: err,
+			},
+		)
+		return foundProcessors
 	}
 	defer c.Logout()
-
 	service := c.Service
+
+	managers, err := service.Managers()
+	if err != nil || len(managers) < 1 {
+		foundProcessors = append(
+			foundProcessors, Processor{
+				Error: err,
+			},
+		)
+		return foundProcessors
+	}
 
 	systems, err := service.Systems()
 	if err != nil || len(systems) < 1 {
-		s.Error = err
-		return s
+		foundProcessors = append(
+			foundProcessors, Processor{
+				Error: err,
+			},
+		)
+		return foundProcessors
 	}
-	s.PowerState = systems[0].PowerState
+	systemProcessors, err := systems[0].Processors()
 	if err != nil {
-		s.Error = err
+		foundProcessors = append(
+			foundProcessors, Processor{
+				Error: err,
+			},
+		)
+	} else {
+		for i := range systemProcessors {
+			processor := Processor{
+				Architecture: strings.TrimSpace(fmt.Sprintf("%v", systemProcessors[i].ProcessorArchitecture)),
+				TotalCores:   systemProcessors[i].TotalCores,
+				Model:        strings.TrimSpace(systemProcessors[i].Model),
+				Socket:       strings.TrimSpace(systemProcessors[i].Socket),
+				Threads:      systemProcessors[i].TotalThreads,
+				VendorID:     strings.TrimSpace(systemProcessors[i].ProcessorID.VendorID),
+			}
+			foundProcessors = append(foundProcessors, processor)
+		}
 	}
-
-	return s
+	return foundProcessors
 }
