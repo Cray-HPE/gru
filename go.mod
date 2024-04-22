@@ -30,7 +30,7 @@ go 1.20
 require (
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/viper v1.18.2
-	github.com/stmcginnis/gofish v0.15.0
+	github.com/stmcginnis/gofish v0.16.1
 	gopkg.in/yaml.v3 v3.0.1
 )
 
