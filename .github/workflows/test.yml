@@ -25,7 +25,7 @@ jobs:
         repository: Cray-HPE/csm-redfish-interface-emulator
         ref: v1.5.0
         fetch-depth: 0
-      
+
     - name: checkout shellspec
       uses: actions/checkout@v4
       with:
@@ -39,7 +39,7 @@ jobs:
         HOMEBREW_NO_AUTO_UPDATE=1 brew install --cask docker
         sudo /Applications/Docker.app/Contents/MacOS/Docker --unattended --install-privileged-components
         open -a /Applications/Docker.app --args --unattended --accept-license
-        echo "waiting for Docker to start...this can take a while on github runners"
+        echo "waiting for Docker to start...this can take a while on GitHub runners"
         while ! /Applications/Docker.app/Contents/Resources/bin/docker info &>/dev/null; do sleep 1; done
 
     - name: login to algol60 container registry
