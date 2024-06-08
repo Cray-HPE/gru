@@ -21,3 +21,6 @@ gru
 !testdata/fixtures/gru
 gru-*
 csm-redfish-interface-emulator/
+
+# Test workflow creates this directory, marking the binary as "dirty"
+shellspec/
