@@ -31,10 +31,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/spf13/viper"
 	"os"
 	"path"
 	"strings"
+
+	"github.com/spf13/viper"
 )
 
 //go:embed *.json
@@ -93,7 +94,10 @@ func newEmbeddedLibrary(customDir string) (*Library, error) {
 	}
 
 	for _, file := range builtin {
-		filePath := path.Join(basePath, file.Name())
+		filePath := path.Join(
+			basePath,
+			file.Name(),
+		)
 		data, err := fs.ReadFile(filePath)
 		if err != nil {
 			return nil, err
@@ -101,11 +105,17 @@ func newEmbeddedLibrary(customDir string) (*Library, error) {
 
 		attribute := Attribute{}
 
-		err = json.Unmarshal(data, &attribute)
+		err = json.Unmarshal(
+			data,
+			&attribute,
+		)
 		if err != nil {
 			return nil, errors.Join(
 				err,
-				fmt.Errorf("%+v", string(data)),
+				fmt.Errorf(
+					"%+v",
+					string(data),
+				),
 			)
 		}
 
@@ -121,7 +131,10 @@ func newEmbeddedLibrary(customDir string) (*Library, error) {
 // RegisterAttribute adds an attribute to the library
 func (l *Library) RegisterAttribute(attribute Attribute) error {
 	if _, exists := l.Attributes[attribute.AttributeName]; exists {
-		return fmt.Errorf("%s already exists", attribute.AttributeName)
+		return fmt.Errorf(
+			"%s already exists",
+			attribute.AttributeName,
+		)
 	}
 
 	l.Attributes[attribute.AttributeName] = attribute
@@ -136,7 +149,14 @@ func (d DecoderMap) Decode(key string) string {
 		if v.GetBool("json") || v.GetBool("yaml") {
 			key = romeAttr.AttributeName
 		} else {
-			key = fmt.Sprintf("%s (%s)", romeAttr.AttributeName, strings.TrimLeft(romeAttr.DisplayName, " "))
+			key = fmt.Sprintf(
+				"%s (%s)",
+				romeAttr.AttributeName,
+				strings.TrimLeft(
+					romeAttr.DisplayName,
+					" ",
+				),
+			)
 		}
 	}
 	return key
@@ -146,7 +166,10 @@ func init() {
 	var err error
 	Map, err = newEmbeddedLibrary("")
 	if err != nil {
-		fmt.Printf("failed to decode rome attributes:\n%v\n", err)
+		fmt.Printf(
+			"failed to decode rome attributes:\n%v\n",
+			err,
+		)
 		os.Exit(1)
 	}
 }

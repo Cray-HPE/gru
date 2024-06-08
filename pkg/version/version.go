@@ -52,7 +52,11 @@ var (
 // Version returns the one-line version of this application.
 func Version() string {
 	if GitTreeState != "clean" {
-		return fmt.Sprintf("%s-%s", GitTag, GitTreeState)
+		return fmt.Sprintf(
+			"%s-%s",
+			GitTag,
+			GitTreeState,
+		)
 	}
 	return GitTag
 }

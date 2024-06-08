@@ -108,17 +108,27 @@ func ParseHosts(args []string) []string {
 		// Count the words.
 		count := 0
 		for scanner.Scan() {
-			newArgs = append(newArgs, scanner.Text())
+			newArgs = append(
+				newArgs,
+				scanner.Text(),
+			)
 			count++
 		}
 		if err := scanner.Err(); err != nil {
-			fmt.Fprintln(os.Stderr, "reading input:", err)
+			fmt.Fprintln(
+				os.Stderr,
+				"reading input:",
+				err,
+			)
 		}
 		return newArgs
 	}
 	if len(args) < 1 {
 		err := fmt.Errorf("no hosts given")
-		if _, exc := fmt.Fprintln(os.Stderr, err); exc != nil {
+		if _, exc := fmt.Fprintln(
+			os.Stderr,
+			err,
+		); exc != nil {
 
 			panic(exc)
 		}

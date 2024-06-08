@@ -27,9 +27,10 @@
 package power
 
 import (
-	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/spf13/cobra"
 	"github.com/stmcginnis/gofish/redfish"
+
+	"github.com/Cray-HPE/gru/pkg/auth"
 )
 
 // NewCommand creates the `power` subcommand for `chassis`.

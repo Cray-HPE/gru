@@ -28,10 +28,12 @@ package boot
 
 import (
 	"fmt"
-	"github.com/Cray-HPE/gru/pkg/auth"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stmcginnis/gofish/redfish"
+
+	"github.com/Cray-HPE/gru/pkg/auth"
 )
 
 // Boot represents boot configuration on the BMC. Only Error is emitted on empty.

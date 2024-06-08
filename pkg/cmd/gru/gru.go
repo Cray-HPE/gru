@@ -28,14 +28,16 @@ package gru
 
 import (
 	"fmt"
+
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/chassis"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/show"
 	"github.com/Cray-HPE/gru/pkg/version"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 // NewCommand creates the main command for `gru`.
@@ -43,7 +45,10 @@ func NewCommand(name string) *cobra.Command {
 	c := &cobra.Command{
 		Use:              name,
 		TraverseChildren: true,
-		Short:            fmt.Sprintf("Go Redfish Utility (%s)", name),
+		Short: fmt.Sprintf(
+			"Go Redfish Utility (%s)",
+			name,
+		),
 		Long: fmt.Sprintf(
 			`
 %[1]s is a tool for interacting with Redfish devices. %[1]s provides a
@@ -57,7 +62,8 @@ authenticating with the target RedFish endpoints.
 Set USERNAME and PASSWORD (or IPMI_PASSWORD) with the target's credentials, or
 provide these via a YAML file. Optionally, if the target hosts have different credentials
 the YAML file may provide these per host.
-`, name,
+`,
+			name,
 		),
 		Version: version.Version(),
 		PersistentPreRun: func(c *cobra.Command, args []string) {
@@ -71,7 +77,10 @@ the YAML file may provide these per host.
 	c.PersistentFlags().StringP(
 		"config",
 		"c",
-		fmt.Sprintf("./%s.yml", name),
+		fmt.Sprintf(
+			"./%s.yml",
+			name,
+		),
 		fmt.Sprintln(
 			"Configuration file containing BMC credentials, necessary if USERNAME and PASSWORD are not defined in the environment",
 			name,

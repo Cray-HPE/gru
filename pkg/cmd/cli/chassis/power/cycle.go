@@ -28,18 +28,20 @@ package power
 
 import (
 	"fmt"
-	"github.com/Cray-HPE/gru/internal/set"
-	"github.com/Cray-HPE/gru/pkg/cmd"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stmcginnis/gofish/redfish"
+
+	"github.com/Cray-HPE/gru/internal/set"
+	"github.com/Cray-HPE/gru/pkg/cmd"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 )
 
 // NewPowerCycleCommand creates the `cycle` subcommand for `power`.
 func NewPowerCycleCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "cycle host [...host]",
+		Use: "cycle host [...host]",
 		Short: "Power cycle the target machine(s)",
 		Long: `Performs an ACPI shutdown and startup to power cycle the target machine(s).
 Also allows bypassing the OS shutdown, forcing a warm boot.`,
@@ -57,7 +59,11 @@ Also allows bypassing the OS shutdown, forcing a warm boot.`,
 				resetType = redfish.ForceRestartResetType
 			}
 
-			content := set.Async(Issue, hosts, resetType)
+			content := set.Async(
+				Issue,
+				hosts,
+				resetType,
+			)
 			cli.PrettyPrint(content)
 		},
 		Hidden: false,

@@ -29,25 +29,39 @@ package cli
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/spf13/viper"
-	"gopkg.in/yaml.v3"
 	"reflect"
 	"sort"
+
+	"github.com/spf13/viper"
+	"gopkg.in/yaml.v3"
 )
 
 // keyValuePrint is a print helper for formatting key-value pairs.
 func keyValuePrint(key string, value any, indent string) {
-	fmt.Printf("%s%-60s: %-60v\n", indent, key, value)
+	fmt.Printf(
+		"%s%-60s: %-60v\n",
+		indent,
+		key,
+		value,
+	)
 }
 
 // keyPrint is a print helper for printing just a key in anticipation of printing a data structure as a value.
 func keyPrint(key string, indent string) {
-	fmt.Printf("%s%s:\n", indent, key)
+	fmt.Printf(
+		"%s%s:\n",
+		indent,
+		key,
+	)
 }
 
 // sliceElementPrint is a print helper for printing values belonging to an array in a marked up format.
 func sliceElementPrint(value any, indent string) {
-	fmt.Printf("%s%-60v\n", indent, value)
+	fmt.Printf(
+		"%s%-60v\n",
+		indent,
+		value,
+	)
 }
 
 // slicePrint is a print helper for printing a slice of interfaces.
@@ -56,7 +70,13 @@ func slicePrint(value reflect.Value) {
 	for i := 0; i < value.Len(); i++ {
 
 		sv := reflect.ValueOf(value.Index(i).Interface())
-		keyPrint(fmt.Sprintf("%d", i), "\t")
+		keyPrint(
+			fmt.Sprintf(
+				"%d",
+				i,
+			),
+			"\t",
+		)
 
 		for k := 0; k < sv.NumField(); k++ {
 
@@ -72,13 +92,20 @@ func slicePrint(value reflect.Value) {
 
 			if kind == reflect.Slice {
 
-				keyPrint(typeOfS.Field(k).Name, "\t")
+				keyPrint(
+					typeOfS.Field(k).Name,
+					"\t",
+				)
 
 				// FIXME: This does not increase indent level.
 				slicePrint(sv.Field(k))
 
 			} else {
-				keyValuePrint(typeOfS.Field(k).Name, sv.Field(k), "\t\t")
+				keyValuePrint(
+					typeOfS.Field(k).Name,
+					sv.Field(k),
+					"\t\t",
+				)
 			}
 		}
 	}
@@ -101,7 +128,10 @@ func structPrint(value reflect.Value) {
 
 			if len(keys) != 0 {
 
-				keyPrint(typeOfS.Field(i).Name, "\t")
+				keyPrint(
+					typeOfS.Field(i).Name,
+					"\t",
+				)
 
 			} else {
 
@@ -109,11 +139,18 @@ func structPrint(value reflect.Value) {
 
 			}
 
-			sortedKeys := make([]string, 0, len(keys))
+			sortedKeys := make(
+				[]string,
+				0,
+				len(keys),
+			)
 
 			for key := range keys {
 
-				sortedKeys = append(sortedKeys, keys[key].String())
+				sortedKeys = append(
+					sortedKeys,
+					keys[key].String(),
+				)
 
 			}
 
@@ -121,17 +158,27 @@ func structPrint(value reflect.Value) {
 
 			for key := range sortedKeys {
 
-				keyValuePrint(sortedKeys[key], value.Field(i).MapIndex(reflect.ValueOf(sortedKeys[key])), "\t\t")
+				keyValuePrint(
+					sortedKeys[key],
+					value.Field(i).MapIndex(reflect.ValueOf(sortedKeys[key])),
+					"\t\t",
+				)
 
 			}
 
 		} else if _, ok := value.Field(i).Interface().([]string); ok {
 
-			keyPrint(typeOfS.Field(i).Name, "\t")
+			keyPrint(
+				typeOfS.Field(i).Name,
+				"\t",
+			)
 
 			for _, v := range value.Field(i).Interface().([]string) {
 
-				sliceElementPrint(v, "\t\t")
+				sliceElementPrint(
+					v,
+					"\t\t",
+				)
 
 			}
 
@@ -147,7 +194,11 @@ func structPrint(value reflect.Value) {
 
 			}
 
-			keyValuePrint(typeOfS.Field(i).Name, value.Field(i).Interface(), "\t")
+			keyValuePrint(
+				typeOfS.Field(i).Name,
+				value.Field(i).Interface(),
+				"\t",
+			)
 
 		}
 	}
@@ -157,27 +208,54 @@ func structPrint(value reflect.Value) {
 func PrettyPrint(content map[string]interface{}) {
 	if viper.GetBool("json") {
 
-		JSON, err := json.MarshalIndent(content, "", "  ")
+		JSON, err := json.MarshalIndent(
+			content,
+			"",
+			"  ",
+		)
 		if err != nil {
-			panic(fmt.Errorf("could not create valid JSON from %v", content))
+			panic(
+				fmt.Errorf(
+					"could not create valid JSON from %v",
+					content,
+				),
+			)
 		}
-		fmt.Printf("%s\n", string(JSON))
+		fmt.Printf(
+			"%s\n",
+			string(JSON),
+		)
 
 	} else if viper.GetBool("yaml") {
 
 		YAML, err := yaml.Marshal(content)
 		if err != nil {
-			panic(fmt.Errorf("could not create valid YAML from %v", content))
+			panic(
+				fmt.Errorf(
+					"could not create valid YAML from %v",
+					content,
+				),
+			)
 		}
-		fmt.Printf("%s\n", string(YAML))
+		fmt.Printf(
+			"%s\n",
+			string(YAML),
+		)
 
 	} else {
 
-		keys := make([]string, 0, len(content))
+		keys := make(
+			[]string,
+			0,
+			len(content),
+		)
 
 		for k := range content {
 
-			keys = append(keys, k)
+			keys = append(
+				keys,
+				k,
+			)
 
 		}
 
@@ -185,7 +263,10 @@ func PrettyPrint(content map[string]interface{}) {
 
 		for _, k := range keys {
 
-			fmt.Printf("%s:\n", k)
+			fmt.Printf(
+				"%s:\n",
+				k,
+			)
 
 			// Warning; the struct fields must be exported!
 			s := content[k]
