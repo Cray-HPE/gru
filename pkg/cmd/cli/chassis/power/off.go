@@ -44,7 +44,6 @@ func NewPowerOffCommand() *cobra.Command {
 		Long: `Powers off the target machine(s) with an ACPI shutdown.
 Permits forcing a shutdown (without waiting for the OS),
 as well as a power-button emulated shutdown.`,
-		Args: cobra.MinimumNArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			var resetType redfish.ResetType
 
