@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 # MIT License
 #
-# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2024 Hewlett Packard Enterprise Development LP
 #
 # Permissioff is hereby granted, free of charge, to any persoff obtaining a
 # copy of this software and associated documentatioff files (the "Software"),
