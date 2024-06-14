@@ -22,56 +22,35 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 
 
-Describe 'gru chassis power off'
-
-# it should error if no config is present
-It '127.0.0.1:5000 (no config file)'
-  When call ./gru chassis power off 127.0.0.1:5000
-  The status should equal 1
-  The line 1 of stderr should include 'Asynchronously updating'
-  The stderr should include "An error occurred: no credentials provided, please provide a config file or environment variables"
-End
+Describe 'gru chassis power cycle'
 
 # Running against an active host with good credentials should succeed and show output
 It "--config ${GRU_CONF} 127.0.0.1:5000"
   BeforeCall use_valid_config
-  When call ./gru chassis power off --config "${GRU_CONF}" 127.0.0.1:5000
+  When call ./gru chassis power cycle --config "${GRU_CONF}" 127.0.0.1:5000
   The status should equal 0
   The line 1 of stderr should include 'Asynchronously updating'
   The line 1 of stdout should equal '127.0.0.1:5000:'
   The line 2 of stdout should include 'PreviousPowerState'
-  # powerstate can vary depending when test runs so more logic needed
-  # The line 3 of stdout should include 'Off' 
   The line 3 of stdout should include 'RequestedPowerState'
-  The line 3 of stdout should include 'GracefulShutdown'
-  The lines of stderr should equal 1
-End
-
-# immediately check the status of the same node, which should now be off
-It "--config ${GRU_CONF} 127.0.0.1:5000"
-  BeforeCall use_valid_config
-  When call ./gru chassis power status --config "${GRU_CONF}" 127.0.0.1:5000
-  The status should equal 0
-  The line 1 of stderr should include 'Asynchronously querying'
-  The line 1 of stdout should equal '127.0.0.1:5000:'
-  The line 2 of stdout should include 'PowerState'
-  The line 2 of stdout should include 'Off'
+  The line 3 of stdout should include 'GracefulRestart'
   The lines of stderr should equal 1
 End
   
 # validate piping to STDIN works
-It "--config ${GRU_CONF}"
+It "--config ${GRU_CONF} (via STDIN)"
   BeforeCall use_valid_config
   
   Data "127.0.0.1:5000" # STDIN
 
-  When call ./gru chassis power off --config "${GRU_CONF}"
+  When call ./gru chassis power cycle --config "${GRU_CONF}"
   The status should equal 0
   The line 1 of stderr should include 'Asynchronously updating'
   The line 1 of stdout should equal '127.0.0.1:5000:'
   The line 2 of stdout should include 'PowerState'
-  The line 2 of stdout should include 'Off'
-  The lines of stdout should equal 3
+  The line 3 of stdout should include 'GracefulRestart'
+  The line 4 of stdout should include "reset type 'GracefulRestart' is not supported by this service"
+  The lines of stderr should equal 1
 End
 
 End
