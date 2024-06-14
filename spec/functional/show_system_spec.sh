@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 # MIT License
 #
-# (C) Copyright 2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -22,37 +22,37 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 
 
-Describe "gru show proc --config ${GRU_CONF}"
+Describe "gru --config ${GRU_CONF} show system"
 BeforeAll use_valid_config
 BeforeAll use_valid_bios_attributes_file
 
 # test all vendors/models (see testdata/fixtures/rie) as their outputs vary
 Parameters
-  127.0.0.1:5000    "CPU 1"     "CPU 2"   
-  127.0.0.1:5001    "P1"        "P1"      
-  127.0.0.1:5002    "Proc 1"    ""       
-  127.0.0.1:5003    "CPU 0"     "CPU 1"   
-  127.0.0.1:5004    "Proc 1"    "Proc 2"  
+  # $1              $2
+  127.0.0.1:5000    "S2600BPB"                   
+  127.0.0.1:5001    "H262-Z63-00"                
+  127.0.0.1:5002    "ProLiant DL325 Gen10 Plus" 
+  127.0.0.1:5003    "HPE CRAY EX425 (MILAN)"     
+  127.0.0.1:5004    "ProLiant XL675d Gen10 Plus" 
 End
 
-# the proc names vary by vendor/model, so check them according to the parameters
+# check the model number as it will vary by vendor/model
 It "$1"
-  When call ./gru --config "${GRU_CONF}" show proc "$1"
+  When call ./gru --config "${GRU_CONF}" show system "$1"
   The status should equal 0
   The stdout should include "$2"
-  The stdout should include "$3"
   The lines of stderr should equal 1
 End
 
 # validate yaml and json outputs work
 It "$1 --yaml"
-  When call ./gru --config "${GRU_CONF}" show proc "$1" "--yaml"
+  When call ./gru --config "${GRU_CONF}" show system "$1" "--yaml"
   The status should equal 0
   The stderr should be present
   The stdout should "be_yaml"
 End
 It "$1 --json"
-  When call ./gru --config "${GRU_CONF}" show proc "$1" "--json"
+  When call ./gru --config "${GRU_CONF}" show system "$1" "--json"
   The status should equal 0
   The stderr should be present
   The stdout should "be_json"
@@ -63,7 +63,7 @@ Data:expand
  #| $1
 End
 It "$1 (host passed via STDIN)"
-  When call ./gru --config "${GRU_CONF}" show proc
+  When call ./gru --config "${GRU_CONF}" show system
   The status should equal 0
   The stderr should be present
   The stdout should be present

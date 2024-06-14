@@ -22,13 +22,66 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 
 
-Describe 'gru <empty>'
-
-# no hosts should exit
-It "--config ${GRU_CONF} show system"
-  When call ./gru show system --config "${GRU_CONF}"
-  The status should equal 1
-  The stderr should include 'no hosts given'
+# TODO: use Parameters:dynamic to get all sub commands recursively
+# check 'bios' and sub-commands with no hosts given
+Describe "gru --config ${GRU_CONF}"
+Parameters:matrix
+  "bios"
+  "get"
+End
+It "$1 $2 (no hosts given)"
+  When call ./gru --config "${GRU_CONF}" "$1" "$2"
+  The status should equal 1 # no hosts should error
+  The stderr should include 'no hosts given' 
 End
 
+# it should error if no attributes are passed to the flag
+It "127.0.0.1 --attributes"
+  When call ./gru "$1" "$2" --config "${GRU_CONF}" "127.0.0.1" --attributes
+  The status should equal 1
+  The stderr should include 'flag needs an argument: --attributes'
+End
+
+
+End
+
+# check 'chassis boot' and sub-commands with no hosts given
+Describe "gru --config ${GRU_CONF} chassis"
+Parameters:matrix 
+  "boot"
+  "bios" "hdd" "http" "none" "pxe"
+End
+It "$1 $2 (no hosts given)"
+  When call ./gru --config "${GRU_CONF}" "chassis" "$1" "$2"
+  The status should equal 1 # no hosts should error
+  The stdout should be defined
+  The stderr should include 'no hosts given'
+End
+End
+
+# check 'chassis power' and sub-commands with no hosts given
+Describe "gru --config ${GRU_CONF} chassis"
+Parameters:matrix
+  "power"
+  "cycle" "nmi" "off" "on" "reset" "status"
+End
+It "$1 $2 (no hosts given)"
+  When call ./gru --config "${GRU_CONF}" "chassis" "$1" "$2"
+  The status should equal 1 # no hosts should error
+  The stdout should be defined
+  The stderr should include 'no hosts given'
+End
+End
+
+# check 'show' and sub-commands with no hosts given
+Describe "gru --config ${GRU_CONF}"
+Parameters:matrix
+  "show"
+  "boot" "proc" "system"
+End
+It "$1 $2 (no hosts given)"
+  When call ./gru --config "${GRU_CONF}" "$1" "$2"
+  The status should equal 1 # no hosts should error
+  The stderr should include 'no hosts given'
+End
 End
