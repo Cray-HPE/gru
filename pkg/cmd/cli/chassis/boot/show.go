@@ -29,14 +29,17 @@ package boot
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Cray-HPE/gru/internal/query"
-	"github.com/stmcginnis/gofish/redfish"
 	"io"
 	"strings"
 
+	"github.com/stmcginnis/gofish/redfish"
+
+	"github.com/Cray-HPE/gru/internal/query"
+
+	"github.com/spf13/cobra"
+
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/spf13/cobra"
 )
 
 // NewShowCommand creates the `boot` subcommand for `show`.
@@ -47,7 +50,10 @@ func NewShowCommand() *cobra.Command {
 		Long:  `Show the current BootOrder; BootNext, networkRetry, and more`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := query.Async(getBootInformation, hosts)
+			content := query.Async(
+				getBootInformation,
+				hosts,
+			)
 			cli.PrettyPrint(content)
 		},
 	}
@@ -72,7 +78,14 @@ func getBootInformation(host string) interface{} {
 		return boot
 	}
 
-	bo := fmt.Sprintf("%s/%s", strings.TrimRight(systems[0].ODataID, "/"), "BootOptions")
+	bo := fmt.Sprintf(
+		"%s/%s",
+		strings.TrimRight(
+			systems[0].ODataID,
+			"/",
+		),
+		"BootOptions",
+	)
 	client := systems[0].GetClient()
 	resp, err := client.Get(bo)
 
@@ -87,7 +100,14 @@ func getBootInformation(host string) interface{} {
 		}
 
 		for _, b := range systems[0].Boot.BootOrder {
-			ep := fmt.Sprintf("%s/%s", bo, strings.TrimPrefix(b, "Boot"))
+			ep := fmt.Sprintf(
+				"%s/%s",
+				bo,
+				strings.TrimPrefix(
+					b,
+					"Boot",
+				),
+			)
 			resp, err := client.Get(ep)
 			if err != nil {
 				boot.Error = err
@@ -100,11 +120,17 @@ func getBootInformation(host string) interface{} {
 				return boot
 			}
 
-			boot.Order = append(boot.Order, strings.TrimSpace(names["Description"].(string)))
+			boot.Order = append(
+				boot.Order,
+				strings.TrimSpace(names["Description"].(string)),
+			)
 		}
 	} else {
 
-		bo = strings.TrimRight(systems[0].ODataID, "/")
+		bo = strings.TrimRight(
+			systems[0].ODataID,
+			"/",
+		)
 		response, err := client.Get(bo)
 		if err != nil {
 			boot.Error = err
@@ -113,7 +139,10 @@ func getBootInformation(host string) interface{} {
 
 		names := make(map[string]interface{})
 		body, err := io.ReadAll(response.Body)
-		err = json.Unmarshal(body, &names)
+		err = json.Unmarshal(
+			body,
+			&names,
+		)
 		if err != nil {
 			boot.Error = err
 			return boot
@@ -133,7 +162,10 @@ func getBootInformation(host string) interface{} {
 		}
 
 		for _, v := range bootMap.BootOrder {
-			boot.Order = append(boot.Order, strings.TrimSpace(v))
+			boot.Order = append(
+				boot.Order,
+				strings.TrimSpace(v),
+			)
 		}
 
 	}

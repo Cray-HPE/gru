@@ -27,10 +27,11 @@
 package show
 
 import (
+	"github.com/spf13/cobra"
+
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/chassis/boot"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/proc"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/system"
-	"github.com/spf13/cobra"
 )
 
 // NewCommand creates the `show` subcommand.

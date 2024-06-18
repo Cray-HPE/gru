@@ -33,11 +33,12 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/Cray-HPE/gru/pkg/auth"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios/collections"
 	"github.com/spf13/cobra"
 	"github.com/stmcginnis/gofish/redfish"
 	"gopkg.in/yaml.v3"
+
+	"github.com/Cray-HPE/gru/pkg/auth"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios/collections"
 )
 
 // Settings is a structure for holding current BIOS attributes, pending attributes, and errors.
@@ -106,7 +107,10 @@ func makeAttributes(args []string) Settings {
 	var a interface{}
 
 	for _, attribute := range args {
-		if key, value, ok := strings.Cut(attribute, "="); ok {
+		if key, value, ok := strings.Cut(
+			attribute,
+			"=",
+		); ok {
 			attributes.Attributes[key] = value
 		}
 	}
@@ -117,7 +121,10 @@ func makeAttributes(args []string) Settings {
 		return attributes
 	}
 
-	err = yaml.Unmarshal(b, &a)
+	err = yaml.Unmarshal(
+		b,
+		&a,
+	)
 	if err != nil {
 		attributes.Error = err
 		return attributes
@@ -138,9 +145,15 @@ func unmarshalBiosKeyValFile(file string) (settings map[string]interface{}, err 
 	fileExtension := filepath.Ext(file)
 	re := regexp.MustCompile(`ya?ml`)
 	if re.Match([]byte(fileExtension)) {
-		err = yaml.Unmarshal(biosKv, settings)
+		err = yaml.Unmarshal(
+			biosKv,
+			settings,
+		)
 	} else {
-		return settings, fmt.Errorf("invalid filetype: %s", fileExtension)
+		return settings, fmt.Errorf(
+			"invalid filetype: %s",
+			fileExtension,
+		)
 	}
 
 	if err != nil {

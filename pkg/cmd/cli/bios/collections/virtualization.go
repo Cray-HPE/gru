@@ -28,8 +28,9 @@ package collections
 
 import (
 	"fmt"
-	"github.com/stmcginnis/gofish/redfish"
 	"strings"
+
+	"github.com/stmcginnis/gofish/redfish"
 )
 
 // Virtualization denotes whether to use this collection.

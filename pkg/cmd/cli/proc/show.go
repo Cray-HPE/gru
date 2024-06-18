@@ -28,22 +28,27 @@ package proc
 
 import (
 	"fmt"
+	"strings"
+
+	"github.com/spf13/cobra"
+
 	"github.com/Cray-HPE/gru/internal/query"
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/spf13/cobra"
-	"strings"
 )
 
 // NewShowCommand creates the `system` subcommand for `show`.
 func NewShowCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "proc host [...host]",
+		Use: "proc host [...host]",
 		Short: "Processor information",
-		Long:  `Show the Server's processors, a full list with their core count, model, architecture, and serial numbers.`,
+		Long: `Show the Server's processors, a full list with their core count, model, architecture, and serial numbers.`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := query.Async(getProcessors, hosts)
+			content := query.Async(
+				getProcessors,
+				hosts,
+			)
 			cli.PrettyPrint(content)
 		},
 	}
@@ -55,7 +60,8 @@ func getProcessors(host string) interface{} {
 	c, err := auth.Connection(host)
 	if err != nil {
 		foundProcessors = append(
-			foundProcessors, Processor{
+			foundProcessors,
+			Processor{
 				Error: err,
 			},
 		)
@@ -67,7 +73,8 @@ func getProcessors(host string) interface{} {
 	managers, err := service.Managers()
 	if err != nil || len(managers) < 1 {
 		foundProcessors = append(
-			foundProcessors, Processor{
+			foundProcessors,
+			Processor{
 				Error: err,
 			},
 		)
@@ -77,7 +84,8 @@ func getProcessors(host string) interface{} {
 	systems, err := service.Systems()
 	if err != nil || len(systems) < 1 {
 		foundProcessors = append(
-			foundProcessors, Processor{
+			foundProcessors,
+			Processor{
 				Error: err,
 			},
 		)
@@ -86,21 +94,30 @@ func getProcessors(host string) interface{} {
 	systemProcessors, err := systems[0].Processors()
 	if err != nil {
 		foundProcessors = append(
-			foundProcessors, Processor{
+			foundProcessors,
+			Processor{
 				Error: err,
 			},
 		)
 	} else {
 		for i := range systemProcessors {
 			processor := Processor{
-				Architecture: strings.TrimSpace(fmt.Sprintf("%v", systemProcessors[i].ProcessorArchitecture)),
+				Architecture: strings.TrimSpace(
+					fmt.Sprintf(
+						"%v",
+						systemProcessors[i].ProcessorArchitecture,
+					),
+				),
 				TotalCores:   systemProcessors[i].TotalCores,
 				Model:        strings.TrimSpace(systemProcessors[i].Model),
 				Socket:       strings.TrimSpace(systemProcessors[i].Socket),
 				Threads:      systemProcessors[i].TotalThreads,
 				VendorID:     strings.TrimSpace(systemProcessors[i].ProcessorID.VendorID),
 			}
-			foundProcessors = append(foundProcessors, processor)
+			foundProcessors = append(
+				foundProcessors,
+				processor,
+			)
 		}
 	}
 	return foundProcessors

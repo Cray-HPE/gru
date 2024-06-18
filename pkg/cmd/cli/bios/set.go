@@ -26,13 +26,15 @@ package bios
 
 import (
 	"fmt"
-	"github.com/Cray-HPE/gru/internal/set"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios/collections"
+	"os"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stmcginnis/gofish/redfish"
-	"os"
+
+	"github.com/Cray-HPE/gru/internal/set"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios/collections"
 )
 
 // ClearCmos determines whether to clear the CMOS values.
@@ -75,9 +77,16 @@ func NewBiosSetCommand() *cobra.Command {
 			var content map[string]interface{}
 
 			if v.GetBool("clear-cmos") {
-				content = set.AsyncCall(resetBios, hosts)
+				content = set.AsyncCall(
+					resetBios,
+					hosts,
+				)
 			} else {
-				content = set.AsyncMap(setBios, hosts, attributes.Attributes)
+				content = set.AsyncMap(
+					setBios,
+					hosts,
+					attributes.Attributes,
+				)
 			}
 
 			cli.PrettyPrint(content)
@@ -108,7 +117,10 @@ func setBios(host string, requestedAttributes map[string]interface{}) interface{
 	attributes.Attributes = redfish.SettingsAttributes{}
 
 	if v.GetBool("virtualization") {
-		attributes.Attributes, err = collections.VirtualizationAttributes(true, systems[0].Manufacturer)
+		attributes.Attributes, err = collections.VirtualizationAttributes(
+			true,
+			systems[0].Manufacturer,
+		)
 		if err != nil {
 			attributes.Error = err
 			return attributes

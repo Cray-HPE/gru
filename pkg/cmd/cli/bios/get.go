@@ -29,16 +29,18 @@ package bios
 import (
 	"encoding/json"
 	"fmt"
+	"log"
+	"regexp"
+	"strings"
+
+	"github.com/spf13/cobra"
+	"github.com/stmcginnis/gofish/redfish"
+
 	"github.com/Cray-HPE/gru/internal/query"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios/collections"
-	"github.com/spf13/cobra"
-	"github.com/stmcginnis/gofish/redfish"
-	"log"
-	"regexp"
 
 	"github.com/spf13/viper"
-	"strings"
 )
 
 // NewBiosGetCommand creates a `get` subcommand for `bios`.
@@ -49,7 +51,10 @@ func NewBiosGetCommand() *cobra.Command {
 		Long:  `Gets BIOS attributes`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := query.Async(getBiosAttributes, hosts)
+			content := query.Async(
+				getBiosAttributes,
+				hosts,
+			)
 			cli.PrettyPrint(content)
 		},
 		Hidden: false,
@@ -87,7 +92,10 @@ func getBiosAttributes(host string) interface{} {
 	for decoder := range AttributeDecoderMaps {
 		regex, err := regexp.Compile(AttributeDecoderMaps[decoder].Token)
 		if err != nil {
-			fmt.Printf("Failed to create decoder regex for: %s", AttributeDecoderMaps[decoder].Token)
+			fmt.Printf(
+				"Failed to create decoder regex for: %s",
+				AttributeDecoderMaps[decoder].Token,
+			)
 			continue
 		}
 		if regex.MatchString(systems[0].ProcessorSummary.Model) {
@@ -109,21 +117,30 @@ func getBiosAttributes(host string) interface{} {
 			log.Fatal(err)
 		}
 		for k := range attrsFromFile {
-			requestedAttributes = append(requestedAttributes, k)
+			requestedAttributes = append(
+				requestedAttributes,
+				k,
+			)
 		}
 	} else {
 		requestedAttributes = viper.GetStringSlice("attributes")
 	}
 
 	if v.GetBool("virtualization") {
-		virtualizationAttributes, err := collections.VirtualizationAttributes(true, systems[0].Manufacturer)
+		virtualizationAttributes, err := collections.VirtualizationAttributes(
+			true,
+			systems[0].Manufacturer,
+		)
 		if err != nil {
 			attributes.Error = err
 			return attributes
 		}
 
 		for key := range virtualizationAttributes {
-			requestedAttributes = append(requestedAttributes, key)
+			requestedAttributes = append(
+				requestedAttributes,
+				key,
+			)
 		}
 	}
 
@@ -140,13 +157,21 @@ func getBiosAttributes(host string) interface{} {
 				decodedAttribute = biosDecoder.Decode(attribute)
 			}
 			if v, exists := bios.Attributes[attribute]; exists {
-				attributes = updateAttributeMap(attributes, attribute, v, decodedAttribute)
+				attributes = updateAttributeMap(
+					attributes,
+					attribute,
+					v,
+					decodedAttribute,
+				)
 			} else {
 				attributes.Attributes[attribute] = nil
 			}
 		}
 		if len(attributes.Attributes) == 0 {
-			attributes.Error = fmt.Errorf("no matching keys found in: %v", requestedAttributes)
+			attributes.Error = fmt.Errorf(
+				"no matching keys found in: %v",
+				requestedAttributes,
+			)
 		}
 	} else {
 
@@ -156,7 +181,12 @@ func getBiosAttributes(host string) interface{} {
 				decodedAttribute = biosDecoder.Decode(k)
 			}
 
-			attributes = updateAttributeMap(attributes, k, v, decodedAttribute)
+			attributes = updateAttributeMap(
+				attributes,
+				k,
+				v,
+				decodedAttribute,
+			)
 		}
 	}
 	return attributes
@@ -187,7 +217,14 @@ func getPendingBiosAttributes(host string) Settings {
 		Some combos of redfish/bios versions do not actually have this endpoint
 		The library should actually check for this, but this works for now
 	*/
-	staging := fmt.Sprintf("%s/%s", strings.TrimRight(bios.ODataID, "/"), "Settings")
+	staging := fmt.Sprintf(
+		"%s/%s",
+		strings.TrimRight(
+			bios.ODataID,
+			"/",
+		),
+		"Settings",
+	)
 	client := bios.GetClient()
 	resp, err := client.Get(staging)
 	if err != nil {

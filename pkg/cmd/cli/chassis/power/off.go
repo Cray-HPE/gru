@@ -28,12 +28,14 @@ package power
 
 import (
 	"fmt"
-	"github.com/Cray-HPE/gru/internal/set"
-	"github.com/Cray-HPE/gru/pkg/cmd"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stmcginnis/gofish/redfish"
+
+	"github.com/Cray-HPE/gru/internal/set"
+	"github.com/Cray-HPE/gru/pkg/cmd"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 )
 
 // NewPowerOffCommand creates the `off` subcommand for `power`.
@@ -61,7 +63,11 @@ as well as a power-button emulated shutdown.`,
 				resetType = redfish.PushPowerButtonResetType
 			}
 
-			content := set.Async(Issue, hosts, resetType)
+			content := set.Async(
+				Issue,
+				hosts,
+				resetType,
+			)
 			cli.PrettyPrint(content)
 		},
 	}
@@ -79,6 +85,9 @@ as well as a power-button emulated shutdown.`,
 		false,
 		"Emulate a power-button press",
 	)
-	c.MarkFlagsMutuallyExclusive("button", "force")
+	c.MarkFlagsMutuallyExclusive(
+		"button",
+		"force",
+	)
 	return c
 }
