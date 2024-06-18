@@ -28,15 +28,16 @@ package bios
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+	"regexp"
+	"strings"
+
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/bios/collections"
 	"github.com/spf13/cobra"
 	"github.com/stmcginnis/gofish/redfish"
 	"gopkg.in/yaml.v3"
-	"os"
-	"path/filepath"
-	"regexp"
-	"strings"
 )
 
 // Settings is a structure for holding current BIOS attributes, pending attributes, and errors.
@@ -64,7 +65,7 @@ func NewCommand() *cobra.Command {
 		},
 	}
 
-	c.PersistentFlags().StringArrayVarP(
+	c.PersistentFlags().StringSliceVarP(
 		&Attributes,
 		"attributes",
 		"a",
