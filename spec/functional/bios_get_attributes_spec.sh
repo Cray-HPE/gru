@@ -58,7 +58,7 @@ It "--config ${GRU_CONF} --attributes ProcessorHyperThreadingDisable,SRIOVEnable
   The status should equal 0
   The stdout should include 'ProcessorHyperThreadingDisable'
   The stdout should include 'SRIOVEnable'
-  The lines of stdout should equal 3
+  The lines of stdout should equal 4
   The lines of stderr should equal 1
 End
 

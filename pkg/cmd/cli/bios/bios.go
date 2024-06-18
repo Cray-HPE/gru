@@ -66,7 +66,7 @@ func NewCommand() *cobra.Command {
 		},
 	}
 
-	c.PersistentFlags().StringArrayVarP(
+	c.PersistentFlags().StringSliceVarP(
 		&Attributes,
 		"attributes",
 		"a",
