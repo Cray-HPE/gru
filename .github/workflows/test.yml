@@ -28,7 +28,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         path: shellspec
-        ref: 38eee75cc2192160e0c7e858616aebd5043fbb5f # revert to avoid: 'prechecker.sh: line 66: 9: Bad file descriptor'
+        ref: c209cb49a60b2a7727632373caf37e98649104f7 # pins at a specific commit for stability
         repository: shellspec/shellspec
         fetch-depth: 0
 
