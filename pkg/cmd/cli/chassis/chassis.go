@@ -27,9 +27,10 @@
 package chassis
 
 import (
+	"github.com/spf13/cobra"
+
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/chassis/boot"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/chassis/power"
-	"github.com/spf13/cobra"
 )
 
 // NewCommand creates the `chassis` subcommand.

@@ -29,9 +29,10 @@ package auth
 import (
 	"fmt"
 
-	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/spf13/viper"
 	"github.com/stmcginnis/gofish"
+
+	"github.com/Cray-HPE/gru/pkg/cmd"
 )
 
 type configuration struct {
@@ -44,9 +45,18 @@ var config configuration
 
 // LoadConfig loads the applications configuration file and merges it with the environment.
 func LoadConfig(path string) {
-	viper.SetDefault("username", "")
-	viper.SetDefault("password", "")
-	if viper.BindEnv("password", "IPMI_PASSWORD") != nil {
+	viper.SetDefault(
+		"username",
+		"",
+	)
+	viper.SetDefault(
+		"password",
+		"",
+	)
+	if viper.BindEnv(
+		"password",
+		"IPMI_PASSWORD",
+	) != nil {
 		cmd.CheckError(fmt.Errorf("failed to bind ipmi_password environment variable"))
 	}
 	viper.SetConfigFile(path)
@@ -54,7 +64,10 @@ func LoadConfig(path string) {
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			// Config file not found; ignore error if desired
-			fmt.Printf("Loading config file %s", path)
+			fmt.Printf(
+				"Loading config file %s",
+				path,
+			)
 		} else {
 			// Config file was found but another error was produced
 			// TODO: Handle all errors except if the file is missing.
@@ -64,7 +77,10 @@ func LoadConfig(path string) {
 	viper.AutomaticEnv()
 	err := viper.Unmarshal(&config)
 	if err != nil {
-		fmt.Printf("Unable to decode into struct, %v", err)
+		fmt.Printf(
+			"Unable to decode into struct, %v",
+			err,
+		)
 	}
 }
 
@@ -78,14 +94,20 @@ func Connection(host string) (*gofish.APIClient, error) {
 	password := viper.GetString("password")
 	if val, ok := hosts[host]; ok {
 		hostConfig := val.(map[string]interface{})
-		username = fmt.Sprintf("%v", hostConfig["username"])
-		password = fmt.Sprintf("%v", hostConfig["password"])
+		username = fmt.Sprintf(
+			"%v",
+			hostConfig["username"],
+		)
+		password = fmt.Sprintf(
+			"%v",
+			hostConfig["password"],
+		)
 	}
 	config := gofish.ClientConfig{
-		Endpoint:  "https://" + host,
-		Username:  username,
-		Password:  password,
-		Insecure:  viper.GetBool("insecure"),
+		Endpoint: "https://" + host,
+		Username: username,
+		Password: password,
+		Insecure: viper.GetBool("insecure"),
 		BasicAuth: true,
 	}
 	c, err := gofish.Connect(config)

@@ -27,13 +27,14 @@
 package boot
 
 import (
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"github.com/stmcginnis/gofish/redfish"
+
 	"github.com/Cray-HPE/gru/internal/set"
 	"github.com/Cray-HPE/gru/pkg/cmd"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli/chassis/power"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-	"github.com/stmcginnis/gofish/redfish"
 )
 
 // NewBiosOverrideCommand creates the `bios` subcommand for `boot`.
@@ -49,10 +50,18 @@ func NewBiosOverrideCommand() *cobra.Command {
 			bindErr := v.BindPFlags(c.Flags())
 			cmd.CheckError(bindErr)
 
-			content := set.Async(issueOverride, hosts, redfish.BiosSetupBootSourceOverrideTarget)
+			content := set.Async(
+				issueOverride,
+				hosts,
+				redfish.BiosSetupBootSourceOverrideTarget,
+			)
 			cli.PrettyPrint(content)
 			if v.GetBool("now") {
-				content = set.Async(power.Issue, hosts, redfish.ForceRestartResetType)
+				content = set.Async(
+					power.Issue,
+					hosts,
+					redfish.ForceRestartResetType,
+				)
 				cli.PrettyPrint(content)
 			}
 		},
@@ -68,7 +77,11 @@ func NewPxeOverrideCommand() *cobra.Command {
 		Long:  `Override the next boot with the PXE option`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := set.Async(issueOverride, hosts, redfish.PxeBootSourceOverrideTarget)
+			content := set.Async(
+				issueOverride,
+				hosts,
+				redfish.PxeBootSourceOverrideTarget,
+			)
 			cli.PrettyPrint(content)
 		},
 	}
@@ -83,7 +96,11 @@ func NewHddOverrideCommand() *cobra.Command {
 		Long:  `Override the next boot with the HDD option`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := set.Async(issueOverride, hosts, redfish.HddBootSourceOverrideTarget)
+			content := set.Async(
+				issueOverride,
+				hosts,
+				redfish.HddBootSourceOverrideTarget,
+			)
 			cli.PrettyPrint(content)
 		},
 	}
@@ -98,7 +115,11 @@ func NewUEFIHttpOverrideCommand() *cobra.Command {
 		Long:  `Override the next boot with the HTTP option`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := set.Async(issueOverride, hosts, redfish.UefiHTTPBootSourceOverrideTarget)
+			content := set.Async(
+				issueOverride,
+				hosts,
+				redfish.UefiHTTPBootSourceOverrideTarget,
+			)
 			cli.PrettyPrint(content)
 		},
 	}
@@ -113,7 +134,11 @@ func NewNoneOverrideCommand() *cobra.Command {
 		Long:  `Clears a boot override`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := set.Async(issueOverride, hosts, redfish.NoneBootSourceOverrideTarget)
+			content := set.Async(
+				issueOverride,
+				hosts,
+				redfish.NoneBootSourceOverrideTarget,
+			)
 			cli.PrettyPrint(content)
 		},
 	}

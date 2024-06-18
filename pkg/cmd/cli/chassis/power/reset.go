@@ -27,21 +27,26 @@
 package power
 
 import (
-	"github.com/Cray-HPE/gru/internal/set"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/spf13/cobra"
 	"github.com/stmcginnis/gofish/redfish"
+
+	"github.com/Cray-HPE/gru/internal/set"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 )
 
 // NewPowerResetCommand creates the `reset` subcommand for `power`.
 func NewPowerResetCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "reset host [...host]",
+		Use: "reset host [...host]",
 		Short: "Power reset the target machine(s)",
-		Long:  `Forcefully restart the target machine(s) without a graceful shutdown`,
+		Long: `Forcefully restart the target machine(s) without a graceful shutdown`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := set.Async(Issue, hosts, redfish.ForceRestartResetType)
+			content := set.Async(
+				Issue,
+				hosts,
+				redfish.ForceRestartResetType,
+			)
 			cli.PrettyPrint(content)
 		},
 		Hidden: false,

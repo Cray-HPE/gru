@@ -27,21 +27,26 @@
 package power
 
 import (
-	"github.com/Cray-HPE/gru/internal/set"
-	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 	"github.com/spf13/cobra"
 	"github.com/stmcginnis/gofish/redfish"
+
+	"github.com/Cray-HPE/gru/internal/set"
+	"github.com/Cray-HPE/gru/pkg/cmd/cli"
 )
 
 // NewPowerNMICommand creates the `nmi` subcommand for `power`.
 func NewPowerNMICommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "nmi host [...host]",
+		Use: "nmi host [...host]",
 		Short: "Issue an NMI to the target machine(s)",
-		Long:  `Issue a non-maskable interrupt, triggering a crash/core dump`,
+		Long: `Issue a non-maskable interrupt, triggering a crash/core dump`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := set.Async(Issue, hosts, redfish.NmiResetType)
+			content := set.Async(
+				Issue,
+				hosts,
+				redfish.NmiResetType,
+			)
 			cli.PrettyPrint(content)
 		},
 		Hidden: false,

@@ -27,10 +27,11 @@
 package main
 
 import (
-	"github.com/Cray-HPE/gru/pkg/cmd"
-	"github.com/Cray-HPE/gru/pkg/cmd/gru"
 	"os"
 	"path/filepath"
+
+	"github.com/Cray-HPE/gru/pkg/cmd"
+	"github.com/Cray-HPE/gru/pkg/cmd/gru"
 )
 
 func main() {

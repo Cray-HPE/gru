@@ -27,21 +27,25 @@
 package power
 
 import (
+	"github.com/spf13/cobra"
+
 	"github.com/Cray-HPE/gru/internal/query"
 	"github.com/Cray-HPE/gru/pkg/auth"
 	"github.com/Cray-HPE/gru/pkg/cmd/cli"
-	"github.com/spf13/cobra"
 )
 
 // NewPowerStatusCommand creates the `status` subcommand for `power`.
 func NewPowerStatusCommand() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "status host [...host]",
+		Use: "status host [...host]",
 		Short: "Power status for the target machine(s)",
-		Long:  `Prints the current power status reported by the blade management controller for the target machine(s)`,
+		Long: `Prints the current power status reported by the blade management controller for the target machine(s)`,
 		Run: func(c *cobra.Command, args []string) {
 			hosts := cli.ParseHosts(args)
-			content := query.Async(status, hosts)
+			content := query.Async(
+				status,
+				hosts,
+			)
 			cli.PrettyPrint(content)
 		},
 		Hidden: false,
