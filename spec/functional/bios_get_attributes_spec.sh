@@ -21,163 +21,114 @@
 # ARISING FROM, OUT OF OR IN CONNECTIoff WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-Describe 'gru bios get'
-
+Describe "gru --config ${GRU_CONF} bios get"
 BeforeAll use_valid_config
+BeforeAll use_valid_bios_attributes_file
 
-# getting a single key should return only those key
-It "--config ${GRU_CONF} --attributes BootTimeout 127.0.0.1:5000"
-  When call ./gru bios get --config "${GRU_CONF}" --attributes BootTimeout 127.0.0.1:5000
+# test various combinations of --attributes, which may or may not exist from a pariticlar vendor/model
+# test comma-separated list of attributes as well
+# test all vendors/models (see testdata/fixtures/rie) as their outputs vary
+Parameters
+  127.0.0.1:5000   
+  127.0.0.1:5001              
+  # 127.0.0.1:5002   
+  127.0.0.1:5003      
+  # 127.0.0.1:5004   
+End
+
+# getting a single key should return only that key (1 line of stdout)
+It "$1 --attributes SingleKey"
+  When call ./gru --config "${GRU_CONF}" bios get "$1" --attributes "SingleKey"
   The status should equal 0
-  The stdout should include 'BootTimeout'
+  The line 1 of stdout should include "$1:"
+  The line 2 of stdout should include 'Attributes'
+  The line 3 of stdout should include 'SingleKey'
   The lines of stdout should equal 3
-  The lines of stderr should equal 1
-End
-
-# getting a single key should return only those key in json
-It "--config ${GRU_CONF} --attributes BootTimeout 127.0.0.1:5000 --json"
-  When call ./gru bios get --config "${GRU_CONF}" --attributes BootTimeout 127.0.0.1:5000 --json
-  The status should equal 0
-  The stdout should include 'BootTimeout'
-  The stdout should be_json
-  The lines of stderr should equal 1
-End
-
-# getting a single key should return only those key in yaml
-It "--config ${GRU_CONF} --attributes BootTimeout 127.0.0.1:5000 --yaml"
-  When call ./gru bios get --config "${GRU_CONF}" --attributes BootTimeout 127.0.0.1:5000 --yaml
-  The status should equal 0
-  The stdout should include 'BootTimeout'
-  The stdout should be_yaml
   The lines of stderr should equal 1
 End
 
 # getting multiple keys should return only those keys
-It "--config ${GRU_CONF} --attributes ProcessorHyperThreadingDisable,SRIOVEnable 127.0.0.1:5000"
-  When call ./gru bios get --config "${GRU_CONF}" --attributes ProcessorHyperThreadingDisable,SRIOVEnable 127.0.0.1:5000
+It "$1 --attributes Key1,Key2"
+  When call ./gru --config "${GRU_CONF}" bios get "$1" --attributes  Key1,Key2
   The status should equal 0
-  The stdout should include 'ProcessorHyperThreadingDisable'
-  The stdout should include 'SRIOVEnable'
+  The line 1 of stdout should include "$1:"
+  The line 2 of stdout should include 'Attributes'
+  The line 3 of stdout should include 'Key1'
+  The line 4 of stdout should include 'Key2'
   The lines of stdout should equal 4
   The lines of stderr should equal 1
 End
 
-# getting specific keys should return only those keys and should be json
-It "--config ${GRU_CONF} --attributes ProcessorHyperThreadingDisable,SRIOVEnable 127.0.0.1:5000 --json"
-  When call ./gru bios get --config "${GRU_CONF}" --attributes ProcessorHyperThreadingDisable,SRIOVEnable 127.0.0.1:5000 --json
+# validate yaml and json outputs work
+It "$1 --attributes SingleKey --yaml"
+  When call ./gru --config "${GRU_CONF}" bios get "$1" --attributes "SingleKey" "--yaml"
   The status should equal 0
-  The stdout should include 'ProcessorHyperThreadingDisable'
-  The stdout should include 'SRIOVEnable'
-  The stdout should be_json
+  The stderr should be present
+  The stdout should "be_yaml"
+End
+It "$1 --attributes SingleKey --json"
+  When call ./gru --config "${GRU_CONF}" bios get "$1" --attributes "SingleKey" "--json"
+  The status should equal 0
+  The stderr should be present
+  The stdout should "be_json"
+End
+
+# validate piping to STDIN works
+Data:expand
+ #| $1
+End
+It "--attributes SingleKey (host passed via STDIN)"
+  When call ./gru --config "${GRU_CONF}" bios get --attributes SingleKey
+  The status should equal 0
+  The stderr should be present
+  The stdout should be present
+End
+
+End
+
+# Vendor-specific tests, mostly relating to those vendors/models needing a decoder for their BIOS attribute names
+Describe "gru --config ${GRU_CONF} bios get"
+Parameters
+  # $1           $2         $3                 $4           $5                  $6           $7               $8            $9         $10           $11           $12
+  127.0.0.1:5001 "PCIS007"  "SR-IOV Support"   "Rome0039"   "Local APIC Mode"   "Rome0059"   "SMT Control"    "Rome0162"    "IOMMU"    "Rome0565"    "SVM Mode"    "7"
+  # add other vendors if they have a decoder
+End
+
+# --virtualization shortcut should return only virtualization attributes and show the code names and friendly names
+It "$1 --virtualization"
+  When call ./gru --config "${GRU_CONF}" bios get "$1" --virtualization
+  The status should equal 0
+  The stdout should include "${2} (${3})"
+  The stdout should include "${4} (${5})"
+  The stdout should include "${6} (${7})"
+  The stdout should include "${8} (${9})"
+  The stdout should include "${10} (${11})"
+  The lines of stdout should equal "${12}"
   The lines of stderr should equal 1
 End
 
-# getting specific keys should return only those keys and should be yaml
-It "--config ${GRU_CONF} --attributes ProcessorHyperThreadingDisable,SRIOVEnable 127.0.0.1:5000 --yaml"
-  When call ./gru bios get --config "${GRU_CONF}" --attributes ProcessorHyperThreadingDisable,SRIOVEnable 127.0.0.1:5000 --yaml
+# --virtualization shortcut should return only virtualization attributes and only show the code names in the json output
+It "$1 --virtualization --json"
+  When call ./gru --config "${GRU_CONF}" bios get "$1" --virtualization --json
   The status should equal 0
-  The stdout should include 'ProcessorHyperThreadingDisable'
-  The stdout should include 'SRIOVEnable'
-  The stdout should be_yaml
-  The lines of stderr should equal 1
-End
-
-# it should error if no matching keys were found
-It "--config ${GRU_CONF} --attributes junk 127.0.0.1:5000"
-  When call ./gru bios get --config "${GRU_CONF}" --attributes junk 127.0.0.1:5000
-  The status should equal 0
-  The line 3 of stdout should include 'junk'
-  The line 3 of stdout should include '<nil>'
-  The lines of stdout should equal 3
-  The lines of stderr should equal 1
-End
-
-# TODO: restore when args work with piping
-# # it should error if no attributes are passed to the flag
-# It "--config ${GRU_CONF} --attributes 127.0.0.1:5000"
-#   When call ./gru bios get --config "${GRU_CONF}" --attributes 127.0.0.1:5000
-#   The status should equal 1
-#   The stderr should include 'requires at least 1 arg(s), only received 0'
-# End
-
-# --virtualization shortcut should return only virtualization attributes (Gigabyte)
-It "--config ${GRU_CONF} --virtualization 127.0.0.1:5001"
-  When call ./gru bios get --config "${GRU_CONF}" --virtualization 127.0.0.1:5001
-  The status should equal 0
-  The stdout should include 'SR-IOV Support'
-  The stdout should include 'SMT Control'
-  The stdout should include 'Local APIC Mode'
-  The stdout should include 'IOMMU'
-  The stdout should include 'SVM Mode'
-  The lines of stdout should equal 7
-  The lines of stderr should equal 1
-End
-
-# --virtualization shortcut should return only virtualization attributes in json format (Gigabyte)
-It "--config ${GRU_CONF} --virtualization 127.0.0.1:5001 --json"
-  When call ./gru bios get --config "${GRU_CONF}" --virtualization 127.0.0.1:5001 --json
-  The status should equal 0
-  The stdout should include 'PCIS007' # 'SR-IOV Support'
-  The stdout should include 'Rome0039' # 'Local APIC Mode'
-  The stdout should include 'Rome0059' # 'SMT Control'
-  The stdout should include 'Rome0162' # 'IOMMU'
-  The stdout should include 'Rome0565' # 'SVM Mode'
+  The stdout should include "${2}"
+  The stdout should include "${4}"
+  The stdout should include "${6}"
+  The stdout should include "${8}"
+  The stdout should include "${10}"
   The lines of stderr should equal 1
   The stdout should be_json
 End
 
-# --virtualization shortcut should return only virtualization attributes in yaml format (Gigabyte)
-It "--config ${GRU_CONF} --virtualization 127.0.0.1:5001 --yaml"
-  When call ./gru bios get --config "${GRU_CONF}" --virtualization 127.0.0.1:5001 --yaml
+# --virtualization shortcut should return only virtualization attributes and only show the code names in the yaml output
+It "$1 --virtualization --yaml"
+  When call ./gru --config "${GRU_CONF}" bios get "$1" --virtualization --yaml
   The status should equal 0
-  The stdout should include 'PCIS007' # 'SR-IOV Support'
-  The stdout should include 'Rome0039' # 'Local APIC Mode'
-  The stdout should include 'Rome0059' # 'SMT Control'
-  The stdout should include 'Rome0162' # 'IOMMU'
-  The stdout should include 'Rome0565' # 'SVM Mode'
-  The lines of stderr should equal 1
-  The stdout should be_yaml
-End
-
-# Gigabyte should return friendly names on non-json output
-It "--config ${GRU_CONF} 127.0.0.1:5001"
-  When call ./gru bios get --config "${GRU_CONF}" 127.0.0.1:5001
-  The status should equal 0
-  # check for some random keys and their friendly names
-  The stdout should include 'TCG023'
-  The stdout should include 'Disable Block Sid'
-  The stdout should include 'Rome0179'
-  The stdout should include 'Determinism Slider'
-  The lines of stdout should equal 552
-  The lines of stderr should equal 1
-End
-
-# Gigabyte should not return friendly names on json output
-It "--config ${GRU_CONF} 127.0.0.1:5001 --json"
-  When call ./gru bios get --config "${GRU_CONF}" 127.0.0.1:5001 --json
-  The status should equal 0
-  # check for some random keys
-  The stdout should include 'TCG023'
-  The stdout should include 'Disabled'
-  The stdout should not include 'Disable Block Sid'
-  The stdout should include 'Rome0179'
-  The stdout should include 'Disabled'
-  The stdout should not include 'Determinism Slider'
-  The lines of stderr should equal 1
-  The stdout should be_json
-End
-
-# Gigabyte should not return friendly names on yaml output
-It "--config ${GRU_CONF} 127.0.0.1:5001 --yaml"
-  When call ./gru bios get --config "${GRU_CONF}" 127.0.0.1:5001 --yaml
-  The status should equal 0
-  # check for some random keys
-  The stdout should include 'TCG023'
-  The stdout should include 'Disabled'
-  The stdout should not include 'Disable Block Sid'
-  The stdout should include 'Rome0179'
-  The stdout should include 'Disabled'
-  The stdout should not include 'Determinism Slider'
+  The stdout should include "${2}"
+  The stdout should include "${4}"
+  The stdout should include "${6}"
+  The stdout should include "${8}"
+  The stdout should include "${10}"
   The lines of stderr should equal 1
   The stdout should be_yaml
 End

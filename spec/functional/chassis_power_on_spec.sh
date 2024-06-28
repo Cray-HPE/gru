@@ -22,39 +22,56 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 
 
-Describe 'gru chassis power on'
+Describe "gru --config ${GRU_CONF} chassis power on"
+BeforeAll use_valid_config
+BeforeAll use_valid_bios_attributes_file
 
-# it should error if no config is present
-It '127.0.0.1:5000 (no config file)'
-  When call ./gru chassis power on 127.0.0.1:5000
-  The status should equal 1
-  The line 1 of stderr should include 'Asynchronously updating'
-  The stderr should include "An error occurred: no credentials provided, please provide a config file or environment variables"
+# test all vendors/models (see testdata/fixtures/rie) as their outputs vary
+Parameters
+  127.0.0.1:5000
+  127.0.0.1:5001
+  127.0.0.1:5002 
+  127.0.0.1:5003
+  127.0.0.1:5004
 End
 
-# Running against an active host with good credentials should succeed and report the node is on
-It "--config ${GRU_CONF} 127.0.0.1:5000"
-  BeforeCall use_valid_config
-  When call ./gru chassis power on --config "${GRU_CONF}" 127.0.0.1:5000
+# check that the requested power state is on
+It "$1"
+  When call ./gru --config "${GRU_CONF}" chassis power on "$1"
   The status should equal 0
-  The line 1 of stderr should include 'Asynchronously updating'
-  The line 1 of stdout should equal '127.0.0.1:5000:'
-  The line 2 of stdout should include 'PreviousPowerState'
-  # powerstate can vary depending when test runs so more logic needed
-  # The line 3 of stdout should include 'On'
+  The line 1 of stdout should include "$1:" # the host should be in the stdout
+  # the power state may vary, but check for the word 'PreviousPowerState'
+  The line 2 of stdout should include 'PreviousPowerState' 
+  # Powering on should also show the requested power state,
   The line 3 of stdout should include 'RequestedPowerState'
+  # which should be 'On'
   The line 3 of stdout should include 'On'
   The lines of stderr should equal 1
 End
 
-# Running against an active host with good credentials should succeed and report the node is on
-It "--config ${GRU_CONF} 127.0.0.1:5000"
-  BeforeCall use_valid_config
-  When call ./gru chassis power status --config "${GRU_CONF}" 127.0.0.1:5000
+# validate yaml and json outputs work
+It "$1 --yaml"
+  When call ./gru --config "${GRU_CONF}" chassis power on "$1" "--yaml"
   The status should equal 0
-  The line 1 of stderr should include 'Asynchronously querying'
-  The line 1 of stdout should equal '127.0.0.1:5000:'
-  The lines of stderr should equal 1
+  The stderr should be present
+  The stdout should "be_yaml"
+End
+It "$1 --json"
+  When call ./gru --config "${GRU_CONF}" chassis power on "$1" "--json"
+  The status should equal 0
+  The stderr should be present
+  The stdout should "be_json"
+End
+
+# also check that stdin works for this command, just checking that output exists
+Data:expand
+ #| $1
+End
+It "$1 (host passed via STDIN)"
+  When call ./gru --config "${GRU_CONF}" chassis power on
+  The status should equal 0
+  The stderr should be present
+  The stdout should be present
 End
 
 End

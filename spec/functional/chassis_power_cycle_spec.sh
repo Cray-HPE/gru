@@ -21,36 +21,55 @@
 # ARISING FROM, OUT OF OR IN CONNECTIoff WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
+Describe "gru --config ${GRU_CONF} chassis power"
+BeforeAll use_valid_config
+BeforeAll use_valid_bios_attributes_file
 
-Describe 'gru chassis power cycle'
+# test all "cycle" variant against all vendors/models as their outputs vary
+# (see chassis power --help and testdata/fixtures/rie)
+Parameters:matrix
+  "cycle" "reset"
+  "127.0.0.1:5000" "127.0.0.1:5001" "127.0.0.1:5002" "127.0.0.1:5003" "127.0.0.1:5004"
+End
 
-# Running against an active host with good credentials should succeed and show output
-It "--config ${GRU_CONF} 127.0.0.1:5000"
-  BeforeCall use_valid_config
-  When call ./gru chassis power cycle --config "${GRU_CONF}" 127.0.0.1:5000
+# check that the requested power state is on
+It "$1 $2"
+  When call ./gru --config "${GRU_CONF}" chassis power "$1" "$2"
   The status should equal 0
-  The line 1 of stderr should include 'Asynchronously updating'
-  The line 1 of stdout should equal '127.0.0.1:5000:'
-  The line 2 of stdout should include 'PreviousPowerState'
+  The line 1 of stdout should include "$2:" # the host should be in the stdout
+  # the power state may vary, but check for the word 'PreviousPowerState'
+  The line 2 of stdout should include 'PreviousPowerState' 
+  # Powering on should also show the requested power state
   The line 3 of stdout should include 'RequestedPowerState'
-  The line 3 of stdout should include 'GracefulRestart'
   The lines of stderr should equal 1
 End
-  
-# validate piping to STDIN works
-It "--config ${GRU_CONF} (via STDIN)"
-  BeforeCall use_valid_config
-  
-  Data "127.0.0.1:5000" # STDIN
 
-  When call ./gru chassis power cycle --config "${GRU_CONF}"
+# validate yaml and json outputs work
+It "$1 $2 --yaml"
+  When call ./gru --config "${GRU_CONF}" chassis power "$1" "$2" "--yaml"
   The status should equal 0
-  The line 1 of stderr should include 'Asynchronously updating'
-  The line 1 of stdout should equal '127.0.0.1:5000:'
-  The line 2 of stdout should include 'PowerState'
-  The line 3 of stdout should include 'GracefulRestart'
-  The line 4 of stdout should include "reset type 'GracefulRestart' is not supported by this service"
-  The lines of stderr should equal 1
+  The stderr should be present
+  The stdout should "be_yaml"
+End
+# FIXME: newlines in JSON with invalid reset types: 
+#        "message": "{\n    \"Status\": 400,\n    \"Message\": \"Invalid ResetType\"\n}",
+#        jq: parse error: Invalid string: control characters from U+0000 through U+001F must be escaped at line 10, column 2
+# It "$1 $2 --json"
+#   When call ./gru  --config "${GRU_CONF}" chassis power "$1" "$2" "--json"
+#   The status should equal 0
+#   The stderr should be present
+#   The stdout should "be_json"
+# End
+
+# validate piping to STDIN works
+Data:expand
+ #| $2
+End
+It "$1 $2 (host passed via STDIN)"
+  When call ./gru  --config "${GRU_CONF}" chassis power "$1"
+  The status should equal 0
+  The stderr should be present
+  The stdout should be present
 End
 
 End

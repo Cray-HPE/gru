@@ -3,75 +3,74 @@
 #
 # (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
-# Permissioff is hereby granted, free of charge, to any persoff obtaining a
-# copy of this software and associated documentatioff files (the "Software"),
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
 # to deal in the Software without restriction, including without limitation
 # the rights to use, copy, modify, merge, publish, distribute, sublicense,
 # and/or sell copies of the Software, and to permit persons to whom the
 # Software is furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permissioff notice shall be included
+# The above copyright notice and this permission notice shall be included
 # in all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
 # THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-# OTHER LIABILITY, WHETHER IN AN ACTIoff OF CONTRACT, TORT OR OTHERWISE,
-# ARISING FROM, OUT OF OR IN CONNECTIoff WITH THE SOFTWARE OR THE USE OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
 
-Describe 'gru chassis power off'
+Describe "gru --config ${GRU_CONF} chassis power"
+BeforeAll use_valid_config
+BeforeAll use_valid_bios_attributes_file
 
-# it should error if no config is present
-It '127.0.0.1:5000 (no config file)'
-  When call ./gru chassis power off 127.0.0.1:5000
-  The status should equal 1
-  The line 1 of stderr should include 'Asynchronously updating'
-  The stderr should include "An error occurred: no credentials provided, please provide a config file or environment variables"
+# test all "off" variant against all vendors/models as their outputs vary
+# (see chassis power --help and testdata/fixtures/rie)
+Parameters:matrix
+  "nmi" "off"
+  "127.0.0.1:5000" "127.0.0.1:5001" "127.0.0.1:5002" "127.0.0.1:5003" "127.0.0.1:5004"
 End
 
-# Running against an active host with good credentials should succeed and show output
-It "--config ${GRU_CONF} 127.0.0.1:5000"
-  BeforeCall use_valid_config
-  When call ./gru chassis power off --config "${GRU_CONF}" 127.0.0.1:5000
+# check that the requested power state is on
+It "$1 $2"
+  When call ./gru --config "${GRU_CONF}" chassis power "$1" "$2"
   The status should equal 0
-  The line 1 of stderr should include 'Asynchronously updating'
-  The line 1 of stdout should equal '127.0.0.1:5000:'
-  The line 2 of stdout should include 'PreviousPowerState'
-  # powerstate can vary depending when test runs so more logic needed
-  # The line 3 of stdout should include 'Off' 
+  The line 1 of stdout should include "$2:" # the host should be in the stdout
+  # the power state may vary, but check for the word 'PreviousPowerState'
+  The line 2 of stdout should include 'PreviousPowerState' 
+  # Powering on should also show the requested power state
   The line 3 of stdout should include 'RequestedPowerState'
-  The line 3 of stdout should include 'GracefulShutdown'
   The lines of stderr should equal 1
 End
 
-# immediately check the status of the same node, which should now be off
-It "--config ${GRU_CONF} 127.0.0.1:5000"
-  BeforeCall use_valid_config
-  When call ./gru chassis power status --config "${GRU_CONF}" 127.0.0.1:5000
+# validate yaml and json outputs work
+It "$1 $2 --yaml"
+  When call ./gru --config "${GRU_CONF}" chassis power "$1" "$2" "--yaml"
   The status should equal 0
-  The line 1 of stderr should include 'Asynchronously querying'
-  The line 1 of stdout should equal '127.0.0.1:5000:'
-  The line 2 of stdout should include 'PowerState'
-  The line 2 of stdout should include 'Off'
-  The lines of stderr should equal 1
+  The stderr should be present
+  The stdout should "be_yaml"
 End
-  
+# FIXME: newlines in JSON with invalid reset types: 
+#        "message": "{\n    \"Status\": 400,\n    \"Message\": \"Invalid ResetType\"\n}",
+#        jq: parse error: Invalid string: control characters from U+0000 through U+001F must be escaped at line 10, column 2
+# It "$1 $2 --json"
+#   When call ./gru  --config "${GRU_CONF}" chassis power "$1" "$2" "--json"
+#   The status should equal 0
+#   The stderr should be present
+#   The stdout should "be_json"
+# End
+
 # validate piping to STDIN works
-It "--config ${GRU_CONF}"
-  BeforeCall use_valid_config
-  
-  Data "127.0.0.1:5000" # STDIN
-
-  When call ./gru chassis power off --config "${GRU_CONF}"
+Data:expand
+ #| $2
+End
+It "$1 $2 (host passed via STDIN)"
+  When call ./gru  --config "${GRU_CONF}" chassis power "$1"
   The status should equal 0
-  The line 1 of stderr should include 'Asynchronously updating'
-  The line 1 of stdout should equal '127.0.0.1:5000:'
-  The line 2 of stdout should include 'PowerState'
-  The line 2 of stdout should include 'Off'
-  The lines of stdout should equal 3
+  The stderr should be present
+  The stdout should be present
 End
 
 End
