@@ -93,29 +93,28 @@ It "$1 --from-file ${GRU_BIOS_KV} --json"
 End
 
 
-# re-enable after https://github.com/Cray-HPE/csm-redfish-interface-emulator/pull/10 merges
-# # passing a shortcut should return a limited set of pre-defined keys
-# It "$1 --virtualization"
-#   When call ./gru bios get --config "${GRU_CONF}" "$1" --virtualization
-#   The status should equal 0
-#   The stdout should include "${5}"
-#   The stdout should include "${6}"
-#   The lines of stderr should equal 1
-# End
+# passing a shortcut should return a limited set of pre-defined keys
+It "$1 --virtualization"
+  When call ./gru bios get --config "${GRU_CONF}" "$1" --virtualization
+  The status should equal 0
+  The stdout should include "${5}"
+  The stdout should include "${6}"
+  The lines of stderr should equal 1
+End
 
-# # validate yaml and json outputs work
-# It "$1 --virtualization --yaml"
-#   When call ./gru --config "${GRU_CONF}" bios get "$1" --virtualization --yaml
-#   The status should equal 0
-#   The stderr should be present
-#   The stdout should "be_yaml"
-# End
-# It "$1 --virtualization --json"
-#   When call ./gru --config "${GRU_CONF}" bios get "$1" --virtualization --json
-#   The status should equal 0
-#   The stderr should be present
-#   The stdout should "be_json"
-# End
+# validate yaml and json outputs work
+It "$1 --virtualization --yaml"
+  When call ./gru --config "${GRU_CONF}" bios get "$1" --virtualization --yaml
+  The status should equal 0
+  The stderr should be present
+  The stdout should "be_yaml"
+End
+It "$1 --virtualization --json"
+  When call ./gru --config "${GRU_CONF}" bios get "$1" --virtualization --json
+  The status should equal 0
+  The stderr should be present
+  The stdout should "be_json"
+End
 
 
 # also check that stdin works for this command, just checking that output exists
