@@ -75,64 +75,13 @@ func (application *Application) UnmarshalJSON(b []byte) error {
 
 // GetApplication will get a Application instance from the service.
 func GetApplication(c common.Client, uri string) (*Application, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var application Application
-	err = json.NewDecoder(resp.Body).Decode(&application)
-	if err != nil {
-		return nil, err
-	}
-
-	application.SetClient(c)
-	return &application, nil
+	return common.GetObject[Application](c, uri)
 }
 
 // ListReferencedApplications gets the collection of Application from
 // a provided reference.
 func ListReferencedApplications(c common.Client, link string) ([]*Application, error) {
-	var result []*Application
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Application
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		application, err := GetApplication(c, link)
-		ch <- GetResult{Item: application, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Application](c, link)
 }
 
 // SoftwareImage returns a `SoftwareInventory“ that represents the software image from which this application runs.

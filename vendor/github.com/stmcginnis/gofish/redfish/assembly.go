@@ -73,52 +73,13 @@ func (assembly *Assembly) Update() error {
 
 // GetAssembly will get a Assembly instance from the service.
 func GetAssembly(c common.Client, uri string) (*Assembly, error) {
-	var assembly Assembly
-	return &assembly, assembly.Get(c, uri, &assembly)
+	return common.GetObject[Assembly](c, uri)
 }
 
 // ListReferencedAssemblys gets the collection of Assembly from
 // a provided reference.
 func ListReferencedAssemblys(c common.Client, link string) ([]*Assembly, error) {
-	var result []*Assembly
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Assembly
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		assembly, err := GetAssembly(c, link)
-		ch <- GetResult{Item: assembly, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Assembly](c, link)
 }
 
 // AssemblyData is information about an assembly.

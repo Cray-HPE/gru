@@ -131,23 +131,7 @@ func (nvmedomain *NVMeDomain) UnmarshalJSON(b []byte) error {
 
 // AssociatedDomains gets the NVMeDomains associated with this domain.
 func (nvmedomain *NVMeDomain) AssociatedDomains() ([]*NVMeDomain, error) {
-	var result []*NVMeDomain
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range nvmedomain.associatedDomains {
-		sc, err := GetNVMeDomain(nvmedomain.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, sc)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[NVMeDomain](nvmedomain.GetClient(), nvmedomain.associatedDomains)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -169,62 +153,11 @@ func (nvmedomain *NVMeDomain) Update() error {
 
 // GetNVMeDomain will get a NVMeDomain instance from the service.
 func GetNVMeDomain(c common.Client, uri string) (*NVMeDomain, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var nvmedomain NVMeDomain
-	err = json.NewDecoder(resp.Body).Decode(&nvmedomain)
-	if err != nil {
-		return nil, err
-	}
-
-	nvmedomain.SetClient(c)
-	return &nvmedomain, nil
+	return common.GetObject[NVMeDomain](c, uri)
 }
 
 // ListReferencedNVMeDomains gets the collection of NVMeDomain from
 // a provided reference.
 func ListReferencedNVMeDomains(c common.Client, link string) ([]*NVMeDomain, error) {
-	var result []*NVMeDomain
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *NVMeDomain
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		nvmedomain, err := GetNVMeDomain(c, link)
-		ch <- GetResult{Item: nvmedomain, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[NVMeDomain](c, link)
 }

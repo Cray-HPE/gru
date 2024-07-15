@@ -98,62 +98,11 @@ func (powersubsystem *PowerSubsystem) PowerSupplies() ([]*PowerSupply, error) {
 
 // GetPowerSubsystem will get a PowerSubsystem instance from the service.
 func GetPowerSubsystem(c common.Client, uri string) (*PowerSubsystem, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var powersubsystem PowerSubsystem
-	err = json.NewDecoder(resp.Body).Decode(&powersubsystem)
-	if err != nil {
-		return nil, err
-	}
-
-	powersubsystem.SetClient(c)
-	return &powersubsystem, nil
+	return common.GetObject[PowerSubsystem](c, uri)
 }
 
 // ListReferencedPowerSubsystems gets the collection of PowerSubsystem from
 // a provided reference.
 func ListReferencedPowerSubsystems(c common.Client, link string) ([]*PowerSubsystem, error) {
-	var result []*PowerSubsystem
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *PowerSubsystem
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		powersubsystem, err := GetPowerSubsystem(c, link)
-		ch <- GetResult{Item: powersubsystem, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[PowerSubsystem](c, link)
 }

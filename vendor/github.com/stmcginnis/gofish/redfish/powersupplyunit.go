@@ -231,52 +231,13 @@ func (powerSupplyUnit *PowerSupplyUnit) Update() error {
 
 // GetPowerSupplyUnit will get a PowerSupplyUnit instance from the Redfish service.
 func GetPowerSupplyUnit(c common.Client, uri string) (*PowerSupplyUnit, error) {
-	var powerSupplyUnit PowerSupplyUnit
-	return &powerSupplyUnit, powerSupplyUnit.Get(c, uri, &powerSupplyUnit)
+	return common.GetObject[PowerSupplyUnit](c, uri)
 }
 
 // ListReferencedPowerSupplyUnits gets the collection of PowerSupplies from
 // a provided reference.
 func ListReferencedPowerSupplyUnits(c common.Client, link string) ([]*PowerSupplyUnit, error) {
-	var result []*PowerSupplyUnit
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *PowerSupplyUnit
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		powerSupplyUnit, err := GetPowerSupplyUnit(c, link)
-		ch <- GetResult{Item: powerSupplyUnit, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[PowerSupplyUnit](c, link)
 }
 
 // This action shall reset a power supply. A GracefulRestart ResetType shall reset the power supply
@@ -320,42 +281,10 @@ func (powerSupplyUnit *PowerSupplyUnit) Outlet() (*Outlet, error) {
 
 // PowerOutlets gets the outlets that supply power to this power supply.
 func (powerSupplyUnit *PowerSupplyUnit) PowerOutlets() ([]*Outlet, error) {
-	var result []*Outlet
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range powerSupplyUnit.powerOutlets {
-		chassis, err := GetOutlet(powerSupplyUnit.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, chassis)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Outlet](powerSupplyUnit.GetClient(), powerSupplyUnit.powerOutlets)
 }
 
 // PoweringChassis gets the collection of the chassis directly powered by this power supply.
 func (powerSupplyUnit *PowerSupplyUnit) PoweringChassis() ([]*Chassis, error) {
-	var result []*Chassis
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range powerSupplyUnit.poweringChassis {
-		chassis, err := GetChassis(powerSupplyUnit.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, chassis)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Chassis](powerSupplyUnit.GetClient(), powerSupplyUnit.poweringChassis)
 }

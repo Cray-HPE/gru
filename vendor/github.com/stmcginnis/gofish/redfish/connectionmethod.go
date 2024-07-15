@@ -92,83 +92,16 @@ func (connectionmethod *ConnectionMethod) UnmarshalJSON(b []byte) error {
 
 // GetConnectionMethod will get a ConnectionMethod instance from the service.
 func GetConnectionMethod(c common.Client, uri string) (*ConnectionMethod, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var connectionmethod ConnectionMethod
-	err = json.NewDecoder(resp.Body).Decode(&connectionmethod)
-	if err != nil {
-		return nil, err
-	}
-
-	connectionmethod.SetClient(c)
-	return &connectionmethod, nil
+	return common.GetObject[ConnectionMethod](c, uri)
 }
 
 // ListReferencedConnectionMethods gets the collection of ConnectionMethod from
 // a provided reference.
 func ListReferencedConnectionMethods(c common.Client, link string) ([]*ConnectionMethod, error) {
-	var result []*ConnectionMethod
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *ConnectionMethod
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		connectionmethod, err := GetConnectionMethod(c, link)
-		ch <- GetResult{Item: connectionmethod, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[ConnectionMethod](c, link)
 }
 
 // AggregationSources gets the access points using this connection method.
 func (connectionmethod *ConnectionMethod) AggregationSources() ([]*AggregationSource, error) {
-	var result []*AggregationSource
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range connectionmethod.aggregationSources {
-		rb, err := GetAggregationSource(connectionmethod.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, rb)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[AggregationSource](connectionmethod.GetClient(), connectionmethod.aggregationSources)
 }

@@ -356,52 +356,13 @@ func (pciedevice *PCIeDevice) Update() error {
 
 // GetPCIeDevice will get a PCIeDevice instance from the service.
 func GetPCIeDevice(c common.Client, uri string) (*PCIeDevice, error) {
-	var pcieDevice PCIeDevice
-	return &pcieDevice, pcieDevice.Get(c, uri, &pcieDevice)
+	return common.GetObject[PCIeDevice](c, uri)
 }
 
 // ListReferencedPCIeDevices gets the collection of PCIeDevice from
 // a provided reference.
 func ListReferencedPCIeDevices(c common.Client, link string) ([]*PCIeDevice, error) {
-	var result []*PCIeDevice
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *PCIeDevice
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		pciedevice, err := GetPCIeDevice(c, link)
-		ch <- GetResult{Item: pciedevice, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[PCIeDevice](c, link)
 }
 
 // PCIeInterface properties shall be the definition for a PCIe Interface for a
@@ -436,44 +397,13 @@ func (pciedevice *PCIeDevice) CXLLogicalDevices() ([]*CXLLogicalDevice, error) {
 
 // Chassis gets the chassis in which the PCIe device is contained.
 func (pciedevice *PCIeDevice) Chassis() ([]*Chassis, error) {
-	var result []*Chassis
-
-	collectionError := common.NewCollectionError()
-	for _, chassisLink := range pciedevice.chassis {
-		chassis, err := GetChassis(pciedevice.GetClient(), chassisLink)
-		if err != nil {
-			collectionError.Failures[chassisLink] = err
-		} else {
-			result = append(result, chassis)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Chassis](pciedevice.GetClient(), pciedevice.chassis)
 }
 
 // PCIeFunctions get the PCIe functions that this device exposes.
 func (pciedevice *PCIeDevice) PCIeFunctions() ([]*PCIeFunction, error) {
 	if len(pciedevice.pcieFunctionsArray) > 0 {
-		var result []*PCIeFunction
-
-		collectionError := common.NewCollectionError()
-		for _, funcLink := range pciedevice.pcieFunctionsArray {
-			pciefunction, err := GetPCIeFunction(pciedevice.GetClient(), funcLink)
-			if err != nil {
-				collectionError.Failures[funcLink] = err
-			} else {
-				result = append(result, pciefunction)
-			}
-		}
-		if collectionError.Empty() {
-			return result, nil
-		}
-
-		return result, collectionError
+		return common.GetObjects[PCIeFunction](pciedevice.GetClient(), pciedevice.pcieFunctionsArray)
 	}
 	return ListReferencedPCIeFunctions(pciedevice.GetClient(), pciedevice.pcieFunctions)
 }
@@ -488,21 +418,5 @@ func (pciedevice *PCIeDevice) Switch() (*Switch, error) {
 
 // Processors gets the processors that are directly connected or directly bridged to this PCIe device.
 func (pciedevice *PCIeDevice) Processors() ([]*Processor, error) {
-	var result []*Processor
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range pciedevice.processors {
-		processor, err := GetProcessor(pciedevice.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, processor)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Processor](pciedevice.GetClient(), pciedevice.processors)
 }

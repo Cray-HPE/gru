@@ -87,23 +87,7 @@ func (usbcontroller *USBController) PCIeDevice() (*PCIeDevice, error) {
 
 // Processors gets the processors that can utilize this USB controller.
 func (usbcontroller *USBController) Processors() ([]*Processor, error) {
-	var result []*Processor
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range usbcontroller.processors {
-		item, err := GetProcessor(usbcontroller.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Processor](usbcontroller.GetClient(), usbcontroller.processors)
 }
 
 // Ports gets the ports of the USB controller.
@@ -113,62 +97,11 @@ func (usbcontroller *USBController) Ports() ([]*Port, error) {
 
 // GetUSBController will get a USBController instance from the service.
 func GetUSBController(c common.Client, uri string) (*USBController, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var usbcontroller USBController
-	err = json.NewDecoder(resp.Body).Decode(&usbcontroller)
-	if err != nil {
-		return nil, err
-	}
-
-	usbcontroller.SetClient(c)
-	return &usbcontroller, nil
+	return common.GetObject[USBController](c, uri)
 }
 
 // ListReferencedUSBControllers gets the collection of USBController from
 // a provided reference.
 func ListReferencedUSBControllers(c common.Client, link string) ([]*USBController, error) {
-	var result []*USBController
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *USBController
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		usbcontroller, err := GetUSBController(c, link)
-		ch <- GetResult{Item: usbcontroller, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[USBController](c, link)
 }

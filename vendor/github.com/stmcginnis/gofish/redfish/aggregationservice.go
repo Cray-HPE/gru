@@ -144,62 +144,11 @@ func (aggregationservice *AggregationService) Update() error {
 
 // GetAggregationService will get a AggregationService instance from the service.
 func GetAggregationService(c common.Client, uri string) (*AggregationService, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var aggregationservice AggregationService
-	err = json.NewDecoder(resp.Body).Decode(&aggregationservice)
-	if err != nil {
-		return nil, err
-	}
-
-	aggregationservice.SetClient(c)
-	return &aggregationservice, nil
+	return common.GetObject[AggregationService](c, uri)
 }
 
 // ListReferencedAggregationServices gets the collection of AggregationService from
 // a provided reference.
 func ListReferencedAggregationServices(c common.Client, link string) ([]*AggregationService, error) {
-	var result []*AggregationService
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *AggregationService
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		aggregationservice, err := GetAggregationService(c, link)
-		ch <- GetResult{Item: aggregationservice, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[AggregationService](c, link)
 }

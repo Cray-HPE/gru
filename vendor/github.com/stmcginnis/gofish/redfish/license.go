@@ -144,7 +144,7 @@ func (license *License) UnmarshalJSON(b []byte) error {
 		// provide this property when installing a license to apply the license to specific devices. If not provided when
 		// installing a license, the service may determine the devices to which the license applies. This property shall
 		// not be present if the AuthorizationScope property contains the value 'Service'.
-		AuthorizedDevices []string
+		AuthorizedDevices common.Links
 		// AuthorizedDevices@odata.count
 		AuthorizedDevicesCount int `json:"AuthorizedDevices@odata.count"`
 		// TargetServices shall contain an array of links to resources of type Manager that represent the services where
@@ -167,7 +167,7 @@ func (license *License) UnmarshalJSON(b []byte) error {
 	*license = License(t.temp)
 
 	// Extract the links to other entities for later
-	license.AuthorizedDevices = t.Links.AuthorizedDevices
+	license.AuthorizedDevices = t.Links.AuthorizedDevices.ToStrings()
 	license.AuthorizedDevicesCount = t.Links.AuthorizedDevicesCount
 	license.targetServices = t.Links.TargetServices.ToStrings()
 	license.TargetServicesCount = t.Links.TargetServicesCount
@@ -178,83 +178,16 @@ func (license *License) UnmarshalJSON(b []byte) error {
 // TargetServices gets a set of Manager objects that represent the services where
 // the license is installed, such as remote Redfish services.
 func (license *License) TargetServices() ([]*Manager, error) {
-	var result []*Manager
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range license.targetServices {
-		unit, err := GetManager(license.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Manager](license.GetClient(), license.targetServices)
 }
 
 // GetLicense will get a License instance from the service.
 func GetLicense(c common.Client, uri string) (*License, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var license License
-	err = json.NewDecoder(resp.Body).Decode(&license)
-	if err != nil {
-		return nil, err
-	}
-
-	license.SetClient(c)
-	return &license, nil
+	return common.GetObject[License](c, uri)
 }
 
 // ListReferencedLicenses gets the collection of License from
 // a provided reference.
 func ListReferencedLicenses(c common.Client, link string) ([]*License, error) {
-	var result []*License
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *License
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		license, err := GetLicense(c, link)
-		ch <- GetResult{Item: license, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[License](c, link)
 }

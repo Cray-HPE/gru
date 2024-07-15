@@ -271,52 +271,13 @@ func (filesystem *FileSystem) Update() error {
 
 // GetFileSystem will get a FileSystem instance from the service.
 func GetFileSystem(c common.Client, uri string) (*FileSystem, error) {
-	var fileSystem FileSystem
-	return &fileSystem, fileSystem.Get(c, uri, &fileSystem)
+	return common.GetObject[FileSystem](c, uri)
 }
 
 // ListReferencedFileSystems gets the collection of FileSystem from
 // a provided reference.
 func ListReferencedFileSystems(c common.Client, link string) ([]*FileSystem, error) {
-	var result []*FileSystem
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *FileSystem
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		filesystem, err := GetFileSystem(c, link)
-		ch <- GetResult{Item: filesystem, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[FileSystem](c, link)
 }
 
 // ExportedShares gets the exported file shares for this file system.
@@ -335,21 +296,5 @@ func (filesystem *FileSystem) ClassOfService() (*ClassOfService, error) {
 
 // SpareResourceSets gets the spare resource sets used for this filesystem.
 func (filesystem *FileSystem) SpareResourceSets() ([]*SpareResourceSet, error) {
-	var result []*SpareResourceSet
-
-	collectionError := common.NewCollectionError()
-	for _, rsLink := range filesystem.spareResourceSets {
-		rs, err := GetSpareResourceSet(filesystem.GetClient(), rsLink)
-		if err != nil {
-			collectionError.Failures[rsLink] = err
-		} else {
-			result = append(result, rs)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[SpareResourceSet](filesystem.GetClient(), filesystem.spareResourceSets)
 }

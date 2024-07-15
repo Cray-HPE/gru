@@ -181,64 +181,13 @@ func (securitypolicy *SecurityPolicy) Update() error {
 
 // GetSecurityPolicy will get a SecurityPolicy instance from the service.
 func GetSecurityPolicy(c common.Client, uri string) (*SecurityPolicy, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var securitypolicy SecurityPolicy
-	err = json.NewDecoder(resp.Body).Decode(&securitypolicy)
-	if err != nil {
-		return nil, err
-	}
-
-	securitypolicy.SetClient(c)
-	return &securitypolicy, nil
+	return common.GetObject[SecurityPolicy](c, uri)
 }
 
 // ListReferencedSecurityPolicys gets the collection of SecurityPolicy from
 // a provided reference.
 func ListReferencedSecurityPolicys(c common.Client, link string) ([]*SecurityPolicy, error) {
-	var result []*SecurityPolicy
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *SecurityPolicy
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		securitypolicy, err := GetSecurityPolicy(c, link)
-		ch <- GetResult{Item: securitypolicy, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[SecurityPolicy](c, link)
 }
 
 // TLSAlgorithmSet shall contain TLS algorithm settings.

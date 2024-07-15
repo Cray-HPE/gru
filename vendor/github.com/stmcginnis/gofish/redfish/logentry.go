@@ -565,23 +565,7 @@ func (logentry *LogEntry) UnmarshalJSON(b []byte) error {
 
 // RelatedLogEntries gets the set of LogEntry in this or other log services that are related to this log entry.
 func (logentry *LogEntry) RelatedLogEntries() ([]*LogEntry, error) {
-	var result []*LogEntry
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range logentry.relatedLogEntries {
-		unit, err := GetLogEntry(logentry.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[LogEntry](logentry.GetClient(), logentry.relatedLogEntries)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -603,50 +587,11 @@ func (logentry *LogEntry) Update() error {
 
 // GetLogEntry will get a LogEntry instance from the service.
 func GetLogEntry(c common.Client, uri string) (*LogEntry, error) {
-	var logEntry LogEntry
-	return &logEntry, logEntry.Get(c, uri, &logEntry)
+	return common.GetObject[LogEntry](c, uri)
 }
 
 // ListReferencedLogEntrys gets the collection of LogEntry from
 // a provided reference.
 func ListReferencedLogEntrys(c common.Client, link string) ([]*LogEntry, error) {
-	var result []*LogEntry
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *LogEntry
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		logentry, err := GetLogEntry(c, link)
-		ch <- GetResult{Item: logentry, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[LogEntry](c, link)
 }

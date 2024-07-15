@@ -132,23 +132,7 @@ func (fan *Fan) Assembly() (*Assembly, error) {
 
 // CoolingChassis get the cooling chassis related to this fan.
 func (fan *Fan) CoolingChassis() ([]*Chassis, error) {
-	var result []*Chassis
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range fan.coolingChassis {
-		unit, err := GetChassis(fan.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Chassis](fan.GetClient(), fan.coolingChassis)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -170,62 +154,11 @@ func (fan *Fan) Update() error {
 
 // GetFan will get a Fan instance from the service.
 func GetFan(c common.Client, uri string) (*Fan, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var fan Fan
-	err = json.NewDecoder(resp.Body).Decode(&fan)
-	if err != nil {
-		return nil, err
-	}
-
-	fan.SetClient(c)
-	return &fan, nil
+	return common.GetObject[Fan](c, uri)
 }
 
 // ListReferencedFans gets the collection of Fan from
 // a provided reference.
 func ListReferencedFans(c common.Client, link string) ([]*Fan, error) {
-	var result []*Fan
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Fan
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		fan, err := GetFan(c, link)
-		ch <- GetResult{Item: fan, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Fan](c, link)
 }

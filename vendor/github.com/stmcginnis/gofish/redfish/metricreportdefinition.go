@@ -239,23 +239,7 @@ func (metricreportdefinition *MetricReportDefinition) UnmarshalJSON(b []byte) er
 
 // Triggers get the associated triggers.
 func (metricreportdefinition *MetricReportDefinition) Triggers() ([]*Triggers, error) {
-	var result []*Triggers
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range metricreportdefinition.triggers {
-		unit, err := GetTriggers(metricreportdefinition.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Triggers](metricreportdefinition.GetClient(), metricreportdefinition.triggers)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -284,62 +268,11 @@ func (metricreportdefinition *MetricReportDefinition) Update() error {
 
 // GetMetricReportDefinition will get a MetricReportDefinition instance from the service.
 func GetMetricReportDefinition(c common.Client, uri string) (*MetricReportDefinition, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var metricreportdefinition MetricReportDefinition
-	err = json.NewDecoder(resp.Body).Decode(&metricreportdefinition)
-	if err != nil {
-		return nil, err
-	}
-
-	metricreportdefinition.SetClient(c)
-	return &metricreportdefinition, nil
+	return common.GetObject[MetricReportDefinition](c, uri)
 }
 
 // ListReferencedMetricReportDefinitions gets the collection of MetricReportDefinition from
 // a provided reference.
 func ListReferencedMetricReportDefinitions(c common.Client, link string) ([]*MetricReportDefinition, error) {
-	var result []*MetricReportDefinition
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *MetricReportDefinition
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		metricreportdefinition, err := GetMetricReportDefinition(c, link)
-		ch <- GetResult{Item: metricreportdefinition, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[MetricReportDefinition](c, link)
 }

@@ -62,6 +62,8 @@ const (
 
 // Manifest shall describe a manifest containing a set of requests to be fulfilled.
 type Manifest struct {
+	// The schema doesn't define this as a full Entity object, but it shouldn't hurt.
+	common.Entity
 	// Description provides a description of this resource.
 	Description string
 	// Expand shall contain the expansion control for references in manifest responses.
@@ -74,63 +76,13 @@ type Manifest struct {
 
 // GetManifest will get a Manifest instance from the service.
 func GetManifest(c common.Client, uri string) (*Manifest, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var manifest Manifest
-	err = json.NewDecoder(resp.Body).Decode(&manifest)
-	if err != nil {
-		return nil, err
-	}
-
-	return &manifest, nil
+	return common.GetObject[Manifest](c, uri)
 }
 
 // ListReferencedManifests gets the collection of Manifest from
 // a provided reference.
 func ListReferencedManifests(c common.Client, link string) ([]*Manifest, error) {
-	var result []*Manifest
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Manifest
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		manifest, err := GetManifest(c, link)
-		ch <- GetResult{Item: manifest, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Manifest](c, link)
 }
 
 // Stanza shall contain properties that describe a request to be fulfilled within a manifest.

@@ -729,23 +729,7 @@ func (processor *Processor) ResetToDefaults() error {
 
 // AccelerationFunctions gets acceleration functions associated with this processor.
 func (processor *Processor) AcclerationFunctions() ([]*AccelerationFunction, error) {
-	var result []*AccelerationFunction
-
-	collectionError := common.NewCollectionError()
-	for _, ethLink := range processor.accelerationFunctions {
-		eth, err := GetAccelerationFunction(processor.GetClient(), ethLink)
-		if err != nil {
-			collectionError.Failures[ethLink] = err
-		} else {
-			result = append(result, eth)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[AccelerationFunction](processor.GetClient(), processor.accelerationFunctions)
 }
 
 // AppliedOperatingConfig gets the operating configuration that is applied to this processor.
@@ -766,23 +750,7 @@ func (processor *Processor) Assembly() (*Assembly, error) {
 
 // Certificates gets the certificates for device identity and attestation.
 func (processor *Processor) Certificates() ([]*Certificate, error) {
-	var result []*Certificate
-
-	collectionError := common.NewCollectionError()
-	for _, ethLink := range processor.certificates {
-		eth, err := GetCertificate(processor.GetClient(), ethLink)
-		if err != nil {
-			collectionError.Failures[ethLink] = err
-		} else {
-			result = append(result, eth)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Certificate](processor.GetClient(), processor.certificates)
 }
 
 // EnvironmentMetrics gets the environment metrics for this processor.
@@ -803,68 +771,20 @@ func (processor *Processor) Metrics() (*ProcessorMetrics, error) {
 
 // OperatingConfigs gets acceleration functions associated with this processor.
 func (processor *Processor) OperatingConfigs() ([]*OperatingConfig, error) {
-	var result []*OperatingConfig
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range processor.operatingConfigs {
-		item, err := GetOperatingConfig(processor.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[OperatingConfig](processor.GetClient(), processor.operatingConfigs)
 }
 
 // Ports gets the interconnect and fabric ports of this processor. It shall not
 // contain ports for GraphicsController resources, USBController resources, or
 // other local adapter-related types of resources.
 func (processor *Processor) Ports() ([]*Port, error) {
-	var result []*Port
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range processor.ports {
-		item, err := GetPort(processor.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Port](processor.GetClient(), processor.ports)
 }
 
 // SubProcessors gets the sub-processors associated with this processor, such as
 // cores or threads, that are part of a processor.
 func (processor *Processor) SubProcessors() ([]*Processor, error) {
-	var result []*Processor
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range processor.subProcessors {
-		item, err := GetProcessor(processor.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Processor](processor.GetClient(), processor.subProcessors)
 }
 
 // Chassis gets the physical container associated with this processor.
@@ -877,65 +797,17 @@ func (processor *Processor) Chassis() (*Chassis, error) {
 
 // ConnectedProcessors gets the processors that are directly connected to this processor.
 func (processor *Processor) ConnectedProcessors() ([]*Processor, error) {
-	var result []*Processor
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range processor.connectedProcessors {
-		item, err := GetProcessor(processor.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Processor](processor.GetClient(), processor.connectedProcessors)
 }
 
 // Endpoints gets the endpoints associated with this processor.
 func (processor *Processor) Endpoints() ([]*Endpoint, error) {
-	var result []*Endpoint
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range processor.endpoints {
-		item, err := GetEndpoint(processor.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Endpoint](processor.GetClient(), processor.endpoints)
 }
 
 // FabricAdapters gets the fabric adapters that present this processor to a fabric.
 func (processor *Processor) FabricAdapters() ([]*FabricAdapter, error) {
-	var result []*FabricAdapter
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range processor.fabricAdapters {
-		item, err := GetFabricAdapter(processor.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[FabricAdapter](processor.GetClient(), processor.fabricAdapters)
 }
 
 // GraphicsController gets a graphics controller associated with this processor.
@@ -948,44 +820,12 @@ func (processor *Processor) GraphicsController() (*GraphicsController, error) {
 
 // Memory gets the memory objects that are associated with this processor.
 func (processor *Processor) Memory() ([]*Memory, error) {
-	var result []*Memory
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range processor.memory {
-		item, err := GetMemory(processor.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Memory](processor.GetClient(), processor.memory)
 }
 
 // NetworkDeviceFunctions gets the memory objects that are associated with this processor.
 func (processor *Processor) NetworkDeviceFunctions() ([]*NetworkDeviceFunction, error) {
-	var result []*NetworkDeviceFunction
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range processor.networkDeviceFunctions {
-		item, err := GetNetworkDeviceFunction(processor.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[NetworkDeviceFunction](processor.GetClient(), processor.networkDeviceFunctions)
 }
 
 // PCIeDevice gets the PCIe device associated with this processor.
@@ -998,72 +838,17 @@ func (processor *Processor) PCIeDevice() (*PCIeDevice, error) {
 
 // PCIeFunctions gets the PCIeFunctions associated with this processor.
 func (processor *Processor) PCIeFunctions() ([]*PCIeFunction, error) {
-	var result []*PCIeFunction
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range processor.pcieFunctions {
-		item, err := GetPCIeFunction(processor.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[PCIeFunction](processor.GetClient(), processor.pcieFunctions)
 }
 
 // GetProcessor will get a Processor instance from the system
 func GetProcessor(c common.Client, uri string) (*Processor, error) {
-	var processor Processor
-	return &processor, processor.Get(c, uri, &processor)
+	return common.GetObject[Processor](c, uri)
 }
 
 // ListReferencedProcessors gets the collection of Processor from a provided reference.
 func ListReferencedProcessors(c common.Client, link string) ([]*Processor, error) {
-	var result []*Processor
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Processor
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		processor, err := GetProcessor(c, link)
-		ch <- GetResult{Item: processor, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Processor](c, link)
 }
 
 // ProcessorID shall contain identification information for a processor.

@@ -400,52 +400,13 @@ func (ethernetinterface *EthernetInterface) Update() error {
 
 // GetEthernetInterface will get a EthernetInterface instance from the service.
 func GetEthernetInterface(c common.Client, uri string) (*EthernetInterface, error) {
-	var ethernetInterface EthernetInterface
-	return &ethernetInterface, ethernetInterface.Get(c, uri, &ethernetInterface)
+	return common.GetObject[EthernetInterface](c, uri)
 }
 
 // ListReferencedEthernetInterfaces gets the collection of EthernetInterface from
 // a provided reference.
 func ListReferencedEthernetInterfaces(c common.Client, link string) ([]*EthernetInterface, error) {
-	var result []*EthernetInterface
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *EthernetInterface
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		ethernetinterface, err := GetEthernetInterface(c, link)
-		ch <- GetResult{Item: ethernetinterface, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[EthernetInterface](c, link)
 }
 
 // IPv6AddressPolicyEntry describes and entry in the Address Selection Policy
@@ -481,26 +442,7 @@ func (ethernetinterface *EthernetInterface) VLANs() ([]*VLanNetworkInterface, er
 
 // AffiliatedInterfaces gets any ethernet interfaces that are affiliated with this interface.
 func (ethernetinterface *EthernetInterface) AffiliatedInterfaces() ([]*EthernetInterface, error) {
-	var result []*EthernetInterface
-	if len(ethernetinterface.affiliatedInterfaces) == 0 {
-		return result, nil
-	}
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range ethernetinterface.affiliatedInterfaces {
-		rb, err := GetEthernetInterface(ethernetinterface.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, rb)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[EthernetInterface](ethernetinterface.GetClient(), ethernetinterface.affiliatedInterfaces)
 }
 
 // Chassis gets the containing chassis.
@@ -514,26 +456,7 @@ func (ethernetinterface *EthernetInterface) Chassis() (*Chassis, error) {
 
 // Endpoints gets any endpoints associated with this interface.
 func (ethernetinterface *EthernetInterface) Endpoints() ([]*Endpoint, error) {
-	var result []*Endpoint
-	if len(ethernetinterface.endpoints) == 0 {
-		return result, nil
-	}
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range ethernetinterface.endpoints {
-		rb, err := GetEndpoint(ethernetinterface.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, rb)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Endpoint](ethernetinterface.GetClient(), ethernetinterface.endpoints)
 }
 
 // HostInterface gets the associated host interface.
@@ -547,48 +470,10 @@ func (ethernetinterface *EthernetInterface) HostInterface() (*HostInterface, err
 
 // NetworkDeviceFunctions gets any device functions associated with this interface.
 func (ethernetinterface *EthernetInterface) NetworkDeviceFunctions() ([]*NetworkDeviceFunction, error) {
-	var result []*NetworkDeviceFunction
-	if len(ethernetinterface.networkDeviceFunctions) == 0 {
-		return result, nil
-	}
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range ethernetinterface.networkDeviceFunctions {
-		rb, err := GetNetworkDeviceFunction(ethernetinterface.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, rb)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[NetworkDeviceFunction](ethernetinterface.GetClient(), ethernetinterface.networkDeviceFunctions)
 }
 
 // Ports gets any ports associated with this interface.
 func (ethernetinterface *EthernetInterface) Ports() ([]*Port, error) {
-	var result []*Port
-	if len(ethernetinterface.ports) == 0 {
-		return result, nil
-	}
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range ethernetinterface.ports {
-		rb, err := GetPort(ethernetinterface.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, rb)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Port](ethernetinterface.GetClient(), ethernetinterface.ports)
 }

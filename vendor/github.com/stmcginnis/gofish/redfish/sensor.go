@@ -483,51 +483,12 @@ func (sensor *Sensor) UnmarshalJSON(b []byte) error {
 
 // GetSensor will get a Sensor instance from the Redfish service.
 func GetSensor(c common.Client, uri string) (*Sensor, error) {
-	var sensor Sensor
-	return &sensor, sensor.Get(c, uri, &sensor)
+	return common.GetObject[Sensor](c, uri)
 }
 
 // ListReferencedSensor gets the Sensor collection.
 func ListReferencedSensors(c common.Client, link string) ([]*Sensor, error) {
-	var result []*Sensor
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Sensor
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		sensor, err := GetSensor(c, link)
-		ch <- GetResult{Item: sensor, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Sensor](c, link)
 }
 
 func (sensor *Sensor) ResetMetrics() error {

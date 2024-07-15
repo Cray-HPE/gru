@@ -124,104 +124,21 @@ func (endpointgroup *EndpointGroup) Update() error {
 
 // GetEndpointGroup will get a EndpointGroup instance from the service.
 func GetEndpointGroup(c common.Client, uri string) (*EndpointGroup, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var endpointgroup EndpointGroup
-	err = json.NewDecoder(resp.Body).Decode(&endpointgroup)
-	if err != nil {
-		return nil, err
-	}
-
-	endpointgroup.SetClient(c)
-	return &endpointgroup, nil
+	return common.GetObject[EndpointGroup](c, uri)
 }
 
 // ListReferencedEndpointGroups gets the collection of EndpointGroup from
 // a provided reference.
 func ListReferencedEndpointGroups(c common.Client, link string) ([]*EndpointGroup, error) {
-	var result []*EndpointGroup
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *EndpointGroup
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		endpointgroup, err := GetEndpointGroup(c, link)
-		ch <- GetResult{Item: endpointgroup, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[EndpointGroup](c, link)
 }
 
 // Endpoints get the endpoints associated with this endpoint group.
 func (endpointgroup *EndpointGroup) Endpoints() ([]*Endpoint, error) {
-	var result []*Endpoint
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range endpointgroup.endpoints {
-		rb, err := GetEndpoint(endpointgroup.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, rb)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Endpoint](endpointgroup.GetClient(), endpointgroup.endpoints)
 }
 
 // Connections get the connections associated with this endpoint group.
 func (endpointgroup *EndpointGroup) Connections() ([]*Connection, error) {
-	var result []*Connection
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range endpointgroup.connections {
-		rb, err := GetConnection(endpointgroup.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, rb)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Connection](endpointgroup.GetClient(), endpointgroup.connections)
 }

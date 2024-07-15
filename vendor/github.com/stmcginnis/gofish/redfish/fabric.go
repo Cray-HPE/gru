@@ -128,62 +128,11 @@ func (fabric *Fabric) Update() error {
 
 // GetFabric will get a Fabric instance from the service.
 func GetFabric(c common.Client, uri string) (*Fabric, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var fabric Fabric
-	err = json.NewDecoder(resp.Body).Decode(&fabric)
-	if err != nil {
-		return nil, err
-	}
-
-	fabric.SetClient(c)
-	return &fabric, nil
+	return common.GetObject[Fabric](c, uri)
 }
 
 // ListReferencedFabrics gets the collection of Fabric from
 // a provided reference.
 func ListReferencedFabrics(c common.Client, link string) ([]*Fabric, error) {
-	var result []*Fabric
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Fabric
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		fabric, err := GetFabric(c, link)
-		ch <- GetResult{Item: fabric, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Fabric](c, link)
 }
