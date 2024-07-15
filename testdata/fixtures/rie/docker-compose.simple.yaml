@@ -5,7 +5,7 @@ services:
 
   rfemulator0:
     hostname: x0c0b0
-    image: artifactory.algol60.net/csm-docker/stable/csm-rie:1.5.3
+    image: artifactory.algol60.net/csm-docker/stable/csm-rie:1.5.4
     environment:
       - MOCKUPFOLDER=Intel
       - XNAME=x0c0b0
@@ -16,7 +16,7 @@ services:
 
   rfemulator1:
     hostname: x0c0s1b0
-    image: artifactory.algol60.net/csm-docker/stable/csm-rie:1.5.3
+    image: artifactory.algol60.net/csm-docker/stable/csm-rie:1.5.4
     environment:
       - MOCKUPFOLDER=Gigabyte
       - XNAME=x0c0s1b0
@@ -27,7 +27,7 @@ services:
 
   rfemulator2:
     hostname: x0c0r2b0
-    image: artifactory.algol60.net/csm-docker/stable/csm-rie:1.5.3
+    image: artifactory.algol60.net/csm-docker/stable/csm-rie:1.5.4
     environment:
       - MOCKUPFOLDER=DL325
       - XNAME=x0c0r2b0
@@ -38,7 +38,7 @@ services:
 
   rfemulator3:
     hostname: x0c0r3b0
-    image: artifactory.algol60.net/csm-docker/stable/csm-rie:1.5.3
+    image: artifactory.algol60.net/csm-docker/stable/csm-rie:1.5.4
     environment:
       - MOCKUPFOLDER=EX425
       - XNAME=x0c0r3b0
@@ -49,7 +49,7 @@ services:
 
   rfemulator4:
     hostname: x0c0r4b0
-    image: artifactory.algol60.net/csm-docker/stable/csm-rie:1.5.3
+    image: artifactory.algol60.net/csm-docker/stable/csm-rie:1.5.4
     environment:
       - MOCKUPFOLDER=XL675d_A40
       - XNAME=x0c0r4b0
