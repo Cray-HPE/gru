@@ -230,86 +230,22 @@ func (cable *Cable) UnmarshalJSON(b []byte) error {
 
 // DownstreamChassis gets the physical downstream containers connected to this cable.
 func (cable *Cable) DownstreamChassis() ([]*Chassis, error) {
-	var result []*Chassis
-
-	collectionError := common.NewCollectionError()
-	for _, ethLink := range cable.downstreamChassis {
-		eth, err := GetChassis(cable.GetClient(), ethLink)
-		if err != nil {
-			collectionError.Failures[ethLink] = err
-		} else {
-			result = append(result, eth)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Chassis](cable.GetClient(), cable.downstreamChassis)
 }
 
 // DownstreamPorts gets the physical downstream connections connected to this cable.
 func (cable *Cable) DownstreamPorts() ([]*Port, error) {
-	var result []*Port
-
-	collectionError := common.NewCollectionError()
-	for _, ethLink := range cable.downstreamPorts {
-		eth, err := GetPort(cable.GetClient(), ethLink)
-		if err != nil {
-			collectionError.Failures[ethLink] = err
-		} else {
-			result = append(result, eth)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Port](cable.GetClient(), cable.downstreamPorts)
 }
 
 // UpstreamChassis gets the physical upstream containers connected to this cable.
 func (cable *Cable) UpstreamChassis() ([]*Chassis, error) {
-	var result []*Chassis
-
-	collectionError := common.NewCollectionError()
-	for _, ethLink := range cable.upstreamChassis {
-		eth, err := GetChassis(cable.GetClient(), ethLink)
-		if err != nil {
-			collectionError.Failures[ethLink] = err
-		} else {
-			result = append(result, eth)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Chassis](cable.GetClient(), cable.upstreamChassis)
 }
 
 // UpstreamPorts gets the physical upstream connections connected to this cable.
 func (cable *Cable) UptreamPorts() ([]*Port, error) {
-	var result []*Port
-
-	collectionError := common.NewCollectionError()
-	for _, ethLink := range cable.upstreamPorts {
-		eth, err := GetPort(cable.GetClient(), ethLink)
-		if err != nil {
-			collectionError.Failures[ethLink] = err
-		} else {
-			result = append(result, eth)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Port](cable.GetClient(), cable.upstreamPorts)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -347,62 +283,11 @@ func (cable *Cable) Update() error {
 
 // GetCable will get a Cable instance from the service.
 func GetCable(c common.Client, uri string) (*Cable, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var cable Cable
-	err = json.NewDecoder(resp.Body).Decode(&cable)
-	if err != nil {
-		return nil, err
-	}
-
-	cable.SetClient(c)
-	return &cable, nil
+	return common.GetObject[Cable](c, uri)
 }
 
 // ListReferencedCables gets the collection of Cable from
 // a provided reference.
 func ListReferencedCables(c common.Client, link string) ([]*Cable, error) {
-	var result []*Cable
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Cable
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		cable, err := GetCable(c, link)
-		ch <- GetResult{Item: cable, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Cable](c, link)
 }

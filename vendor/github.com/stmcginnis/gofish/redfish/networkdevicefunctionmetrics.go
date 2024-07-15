@@ -111,62 +111,11 @@ type NetworkDeviceFunctionMetrics struct {
 
 // GetNetworkDeviceFunctionMetrics will get a NetworkDeviceFunctionMetrics instance from the service.
 func GetNetworkDeviceFunctionMetrics(c common.Client, uri string) (*NetworkDeviceFunctionMetrics, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var networkdevicefunctionmetrics NetworkDeviceFunctionMetrics
-	err = json.NewDecoder(resp.Body).Decode(&networkdevicefunctionmetrics)
-	if err != nil {
-		return nil, err
-	}
-
-	networkdevicefunctionmetrics.SetClient(c)
-	return &networkdevicefunctionmetrics, nil
+	return common.GetObject[NetworkDeviceFunctionMetrics](c, uri)
 }
 
 // ListReferencedNetworkDeviceFunctionMetricss gets the collection of NetworkDeviceFunctionMetrics from
 // a provided reference.
 func ListReferencedNetworkDeviceFunctionMetricss(c common.Client, link string) ([]*NetworkDeviceFunctionMetrics, error) {
-	var result []*NetworkDeviceFunctionMetrics
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *NetworkDeviceFunctionMetrics
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		networkdevicefunctionmetrics, err := GetNetworkDeviceFunctionMetrics(c, link)
-		ch <- GetResult{Item: networkdevicefunctionmetrics, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[NetworkDeviceFunctionMetrics](c, link)
 }

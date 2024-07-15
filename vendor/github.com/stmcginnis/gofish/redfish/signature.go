@@ -48,62 +48,11 @@ type Signature struct {
 
 // GetSignature will get a Signature instance from the service.
 func GetSignature(c common.Client, uri string) (*Signature, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var signature Signature
-	err = json.NewDecoder(resp.Body).Decode(&signature)
-	if err != nil {
-		return nil, err
-	}
-
-	signature.SetClient(c)
-	return &signature, nil
+	return common.GetObject[Signature](c, uri)
 }
 
 // ListReferencedSignatures gets the collection of Signature from
 // a provided reference.
 func ListReferencedSignatures(c common.Client, link string) ([]*Signature, error) {
-	var result []*Signature
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Signature
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		signature, err := GetSignature(c, link)
-		ch <- GetResult{Item: signature, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Signature](c, link)
 }

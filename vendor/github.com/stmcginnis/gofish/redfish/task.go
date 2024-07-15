@@ -164,71 +164,16 @@ func (task *Task) UnmarshalJSON(b []byte) error {
 // SubTasks gets the sub-tasks for this task.
 // This property shall not be present if this resource represents a sub-task for a task.
 func (task *Task) SubTasks() ([]*Task, error) {
-	var result []*Task
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range task.subTasks {
-		item, err := GetTask(task.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Task](task.GetClient(), task.subTasks)
 }
 
 // GetTask will get a Task instance from the service.
 func GetTask(c common.Client, uri string) (*Task, error) {
-	var task Task
-	return &task, task.Get(c, uri, &task)
+	return common.GetObject[Task](c, uri)
 }
 
 // ListReferencedTasks gets the collection of Task from
 // a provided reference.
 func ListReferencedTasks(c common.Client, link string) ([]*Task, error) {
-	var result []*Task
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Task
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		task, err := GetTask(c, link)
-		ch <- GetResult{Item: task, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Task](c, link)
 }

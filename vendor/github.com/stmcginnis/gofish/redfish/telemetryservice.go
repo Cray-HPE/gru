@@ -213,62 +213,11 @@ func (telemetryservice *TelemetryService) Update() error {
 
 // GetTelemetryService will get a TelemetryService instance from the service.
 func GetTelemetryService(c common.Client, uri string) (*TelemetryService, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var telemetryservice TelemetryService
-	err = json.NewDecoder(resp.Body).Decode(&telemetryservice)
-	if err != nil {
-		return nil, err
-	}
-
-	telemetryservice.SetClient(c)
-	return &telemetryservice, nil
+	return common.GetObject[TelemetryService](c, uri)
 }
 
 // ListReferencedTelemetryServices gets the collection of TelemetryService from
 // a provided reference.
 func ListReferencedTelemetryServices(c common.Client, link string) ([]*TelemetryService, error) {
-	var result []*TelemetryService
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *TelemetryService
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		telemetryservice, err := GetTelemetryService(c, link)
-		ch <- GetResult{Item: telemetryservice, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[TelemetryService](c, link)
 }

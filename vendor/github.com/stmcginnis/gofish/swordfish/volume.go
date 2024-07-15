@@ -299,17 +299,17 @@ const (
 	// activities to close the RAID write hole.
 	OffWriteHoleProtectionPolicyType WriteHoleProtectionPolicyType = "Off"
 	// JournalingWriteHoleProtectionPolicyType The policy that uses separate
-	// block device for write-ahead logging to adddress write hole issue. All
+	// block device for write-ahead logging to address write hole issue. All
 	// write operations on the RAID volume are first logged on dedicated
 	// journaling device that is not part of the volume.
 	JournalingWriteHoleProtectionPolicyType WriteHoleProtectionPolicyType = "Journaling"
 	// DistributedLogWriteHoleProtectionPolicyType The policy that
-	// distributes additional log (e.q. cheksum of the parity) among the
+	// distributes additional log (e.q. checksum of the parity) among the
 	// volume's capacity sources to address write hole issue. Additional data
 	// is used to detect data corruption on the volume.
 	DistributedLogWriteHoleProtectionPolicyType WriteHoleProtectionPolicyType = "DistributedLog"
 	// OEMWriteHoleProtectionPolicyType The policy that is Oem specific. The
-	// mechanism details are unknown unless provided separatly by the Oem.
+	// mechanism details are unknown unless provided separately by the Oem.
 	OEMWriteHoleProtectionPolicyType WriteHoleProtectionPolicyType = "Oem"
 )
 
@@ -795,72 +795,17 @@ func (volume *Volume) Update() error {
 
 // GetVolume will get a Volume instance from the service.
 func GetVolume(c common.Client, uri string) (*Volume, error) {
-	var volume Volume
-	return &volume, volume.Get(c, uri, &volume)
+	return common.GetObject[Volume](c, uri)
 }
 
 // ListReferencedVolumes gets the collection of Volume from a provided reference.
 func ListReferencedVolumes(c common.Client, link string) ([]*Volume, error) {
-	var result []*Volume
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Volume
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		volume, err := GetVolume(c, link)
-		ch <- GetResult{Item: volume, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Volume](c, link)
 }
 
 // CacheDataVolumes gets the data volumes this volume serves as a cache volume.
 func (volume *Volume) CacheDataVolumes() ([]*Volume, error) {
-	var result []*Volume
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range volume.cacheDataVolumes {
-		item, err := GetVolume(volume.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Volume](volume.GetClient(), volume.cacheDataVolumes)
 }
 
 // CacheVolumeSources gets the cache volume source for this volume.
@@ -883,88 +828,24 @@ func (volume *Volume) ClassOfService() (*ClassOfService, error) {
 
 // ClientEndpoints gets the client Endpoints associated with this volume.
 func (volume *Volume) ClientEndpoints() ([]*redfish.Endpoint, error) {
-	var result []*redfish.Endpoint
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range volume.clientEndpoints {
-		item, err := redfish.GetEndpoint(volume.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[redfish.Endpoint](volume.GetClient(), volume.clientEndpoints)
 }
 
 // ConsistencyGroups gets the ConsistencyGroups associated with this volume.
 func (volume *Volume) ConsistencyGroups() ([]*ConsistencyGroup, error) {
-	var result []*ConsistencyGroup
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range volume.consistencyGroups {
-		item, err := GetConsistencyGroup(volume.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[ConsistencyGroup](volume.GetClient(), volume.consistencyGroups)
 }
 
 // Controllers gets the controllers (of type StorageController) associated with
 // this volume. When the volume is of type NVMe, these may be both the physical
 // and logical controller representations.
 func (volume *Volume) Controllers() ([]*redfish.StorageController, error) {
-	var result []*redfish.StorageController
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range volume.controllers {
-		item, err := redfish.GetStorageController(volume.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[redfish.StorageController](volume.GetClient(), volume.controllers)
 }
 
 // getDrives gets a set of referenced drives.
 func (volume *Volume) getDrives(links []string) ([]*redfish.Drive, error) {
-	var result []*redfish.Drive
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range links {
-		drive, err := redfish.GetDrive(volume.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, drive)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[redfish.Drive](volume.GetClient(), links)
 }
 
 // DedicatedSpareDrives references the Drives that are dedicated spares for this
@@ -1007,129 +888,33 @@ func (volume *Volume) ProvidingStoragePool() (*StoragePool, error) {
 
 // ServerEndpoints gets the server Endpoints associated with this volume.
 func (volume *Volume) ServerEndpoints() ([]*redfish.Endpoint, error) {
-	var result []*redfish.Endpoint
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range volume.serverEndpoints {
-		item, err := redfish.GetEndpoint(volume.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[redfish.Endpoint](volume.GetClient(), volume.serverEndpoints)
 }
 
 // SpareResourceSets gets the spare resources that can be used for this volume.
 func (volume *Volume) SpareResourceSets() ([]*SpareResourceSet, error) {
-	var result []*SpareResourceSet
-
-	collectionError := common.NewCollectionError()
-	for _, srsLink := range volume.spareResourceSets {
-		srs, err := GetSpareResourceSet(volume.GetClient(), srsLink)
-		if err != nil {
-			collectionError.Failures[srsLink] = err
-		} else {
-			result = append(result, srs)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[SpareResourceSet](volume.GetClient(), volume.spareResourceSets)
 }
 
 // StorageGroups gets the storage groups that associated with this volume.
 // This property is deprecated in favor of the Connections property.
 func (volume *Volume) StorageGroups() ([]*StorageGroup, error) {
-	var result []*StorageGroup
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range volume.storageGroups {
-		item, err := GetStorageGroup(volume.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[StorageGroup](volume.GetClient(), volume.storageGroups)
 }
 
 // AllocatedPools gets the storage pools that associated with this volume.
 func (volume *Volume) AllocatedPools() ([]*StoragePool, error) {
-	var result []*StoragePool
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range volume.allocatedPools {
-		item, err := GetStoragePool(volume.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[StoragePool](volume.GetClient(), volume.allocatedPools)
 }
 
 // CapacitySources gets the space allocations to this volume.
 func (volume *Volume) CapacitySources() ([]*CapacitySource, error) {
-	var result []*CapacitySource
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range volume.capacitySources {
-		item, err := GetCapacitySource(volume.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[CapacitySource](volume.GetClient(), volume.capacitySources)
 }
 
 // Connections gets the connections that include this volume.
 func (volume *Volume) Connections() ([]*redfish.Connection, error) {
-	var result []*redfish.Connection
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range volume.connections {
-		item, err := redfish.GetConnection(volume.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[redfish.Connection](volume.GetClient(), volume.connections)
 }
 
 // Metrics gets the metrics for this volume. IO metrics are reported in the IOStatistics property.

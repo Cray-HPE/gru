@@ -190,64 +190,13 @@ func (aggregationsource *AggregationSource) Update() error {
 
 // GetAggregationSource will get a AggregationSource instance from the service.
 func GetAggregationSource(c common.Client, uri string) (*AggregationSource, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var aggregationsource AggregationSource
-	err = json.NewDecoder(resp.Body).Decode(&aggregationsource)
-	if err != nil {
-		return nil, err
-	}
-
-	aggregationsource.SetClient(c)
-	return &aggregationsource, nil
+	return common.GetObject[AggregationSource](c, uri)
 }
 
 // ListReferencedAggregationSources gets the collection of AggregationSource from
 // a provided reference.
 func ListReferencedAggregationSources(c common.Client, link string) ([]*AggregationSource, error) {
-	var result []*AggregationSource
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *AggregationSource
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		aggregationsource, err := GetAggregationSource(c, link)
-		ch <- GetResult{Item: aggregationsource, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[AggregationSource](c, link)
 }
 
 // SNMPSettings shall contain the settings for an SNMP aggregation source.

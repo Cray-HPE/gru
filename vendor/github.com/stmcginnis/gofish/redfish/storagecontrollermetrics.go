@@ -5,8 +5,6 @@
 package redfish
 
 import (
-	"encoding/json"
-
 	"github.com/stmcginnis/gofish/common"
 )
 
@@ -143,62 +141,11 @@ type StorageControllerMetrics struct {
 
 // GetStorageControllerMetrics will get a StorageControllerMetrics instance from the service.
 func GetStorageControllerMetrics(c common.Client, uri string) (*StorageControllerMetrics, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var storagecontrollermetrics StorageControllerMetrics
-	err = json.NewDecoder(resp.Body).Decode(&storagecontrollermetrics)
-	if err != nil {
-		return nil, err
-	}
-
-	storagecontrollermetrics.SetClient(c)
-	return &storagecontrollermetrics, nil
+	return common.GetObject[StorageControllerMetrics](c, uri)
 }
 
 // ListReferencedStorageControllerMetrics gets the collection of StorageControllerMetrics from
 // a provided reference.
 func ListReferencedStorageControllerMetrics(c common.Client, link string) ([]*StorageControllerMetrics, error) {
-	var result []*StorageControllerMetrics
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *StorageControllerMetrics
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		storagecontrollermetrics, err := GetStorageControllerMetrics(c, link)
-		ch <- GetResult{Item: storagecontrollermetrics, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[StorageControllerMetrics](c, link)
 }

@@ -63,62 +63,11 @@ type NetworkAdapterMetrics struct {
 
 // GetNetworkAdapterMetrics will get a NetworkAdapterMetrics instance from the service.
 func GetNetworkAdapterMetrics(c common.Client, uri string) (*NetworkAdapterMetrics, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var networkadaptermetrics NetworkAdapterMetrics
-	err = json.NewDecoder(resp.Body).Decode(&networkadaptermetrics)
-	if err != nil {
-		return nil, err
-	}
-
-	networkadaptermetrics.SetClient(c)
-	return &networkadaptermetrics, nil
+	return common.GetObject[NetworkAdapterMetrics](c, uri)
 }
 
 // ListReferencedNetworkAdapterMetrics gets the collection of NetworkAdapterMetrics from
 // a provided reference.
 func ListReferencedNetworkAdapterMetrics(c common.Client, link string) ([]*NetworkAdapterMetrics, error) {
-	var result []*NetworkAdapterMetrics
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *NetworkAdapterMetrics
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		networkadaptermetrics, err := GetNetworkAdapterMetrics(c, link)
-		ch <- GetResult{Item: networkadaptermetrics, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[NetworkAdapterMetrics](c, link)
 }

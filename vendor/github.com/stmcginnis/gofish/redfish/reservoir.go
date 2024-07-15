@@ -125,23 +125,7 @@ func (reservoir *Reservoir) Assembly() (*Assembly, error) {
 
 // Filters gets a collection of filters.
 func (reservoir *Reservoir) Filters() ([]*Filter, error) {
-	var result []*Filter
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range reservoir.filters {
-		item, err := GetFilter(reservoir.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Filter](reservoir.GetClient(), reservoir.filters)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -164,62 +148,11 @@ func (reservoir *Reservoir) Update() error {
 
 // GetReservoir will get a Reservoir instance from the service.
 func GetReservoir(c common.Client, uri string) (*Reservoir, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var reservoir Reservoir
-	err = json.NewDecoder(resp.Body).Decode(&reservoir)
-	if err != nil {
-		return nil, err
-	}
-
-	reservoir.SetClient(c)
-	return &reservoir, nil
+	return common.GetObject[Reservoir](c, uri)
 }
 
 // ListReferencedReservoirs gets the collection of Reservoir from
 // a provided reference.
 func ListReferencedReservoirs(c common.Client, link string) ([]*Reservoir, error) {
-	var result []*Reservoir
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Reservoir
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		reservoir, err := GetReservoir(c, link)
-		ch <- GetResult{Item: reservoir, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Reservoir](c, link)
 }

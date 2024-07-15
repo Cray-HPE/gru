@@ -62,7 +62,7 @@ type AccelerationFunction struct {
 	UUID string
 	// Version shall describe the acceleration function version.
 	Version string
-	// endpoints is a colleection of URIs for connected endpoints.
+	// endpoints is a collection of URIs for connected endpoints.
 	endpoints []string
 	// EndpointsCount is the number of connected endpoints.
 	EndpointsCount int
@@ -103,104 +103,21 @@ func (accelerationfunction *AccelerationFunction) UnmarshalJSON(b []byte) error 
 
 // GetAccelerationFunction will get a AccelerationFunction instance from the service.
 func GetAccelerationFunction(c common.Client, uri string) (*AccelerationFunction, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var accelerationfunction AccelerationFunction
-	err = json.NewDecoder(resp.Body).Decode(&accelerationfunction)
-	if err != nil {
-		return nil, err
-	}
-
-	accelerationfunction.SetClient(c)
-	return &accelerationfunction, nil
+	return common.GetObject[AccelerationFunction](c, uri)
 }
 
 // ListReferencedAccelerationFunctions gets the collection of AccelerationFunction from
 // a provided reference.
 func ListReferencedAccelerationFunctions(c common.Client, link string) ([]*AccelerationFunction, error) {
-	var result []*AccelerationFunction
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *AccelerationFunction
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		accelerationfunction, err := GetAccelerationFunction(c, link)
-		ch <- GetResult{Item: accelerationfunction, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[AccelerationFunction](c, link)
 }
 
 // Endpoints gets the endpoints connected to this accelerator.
 func (accelerationfunction *AccelerationFunction) Endpoints() ([]*Endpoint, error) {
-	var result []*Endpoint
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range accelerationfunction.endpoints {
-		endpoint, err := GetEndpoint(accelerationfunction.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, endpoint)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Endpoint](accelerationfunction.GetClient(), accelerationfunction.endpoints)
 }
 
 // PCIeFunctions gets the PCIe functions associated with this accelerator.
 func (accelerationfunction *AccelerationFunction) PCIeFunctions() ([]*PCIeFunction, error) {
-	var result []*PCIeFunction
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range accelerationfunction.pcieFunctions {
-		function, err := GetPCIeFunction(accelerationfunction.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, function)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[PCIeFunction](accelerationfunction.GetClient(), accelerationfunction.pcieFunctions)
 }

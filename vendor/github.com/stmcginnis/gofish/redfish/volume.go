@@ -768,7 +768,7 @@ func (volume *Volume) Initialize(initializeMethod InitializeMethod, initializeTy
 // RemoveReplicaRelationship is used to disable data synchronization between a source and
 // target volume, remove the replication relationship, and optionally delete the target volume.
 //
-// `deleteTargetVolume` indicates whether to delte the target volume as part of the operation.
+// `deleteTargetVolume` indicates whether to delete the target volume as part of the operation.
 //
 // `targetVolumeURI` is the URI to the existing target volume.
 func (volume *Volume) RemoveReplicaRelationship(deleteTargetVolume bool, targetVolumeURI string) error {
@@ -857,23 +857,7 @@ func (volume *Volume) SuspendReplication(targetVolumeURI string) error {
 // CacheDataVolumes gets the cache data volumes this volume serves as a cache volume. The
 // corresponding VolumeUsage property shall be set to CacheOnly when this property is used.
 func (volume *Volume) CacheDataVolumes() ([]*Volume, error) {
-	var result []*Volume
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range volume.cacheDataVolumes {
-		item, err := GetVolume(volume.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Volume](volume.GetClient(), volume.cacheDataVolumes)
 }
 
 // CacheVolumeSource gets the cache volume source for this volume. The corresponding VolumeUsage
@@ -896,88 +880,24 @@ func (volume *Volume) CacheVolumeSource() (*Volume, error) {
 
 // ClientEndpoints gets the client Endpoints this volume is associated with.
 func (volume *Volume) ClientEndpoints() ([]*Endpoint, error) {
-	var result []*Endpoint
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range volume.clientEndpoints {
-		item, err := GetEndpoint(volume.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Endpoint](volume.GetClient(), volume.clientEndpoints)
 }
 
 // Controllers gets the controllers (of type StorageController) associated with this volume.
 // When the volume is of type NVMe, these may be both the physical and logical controller
 // representations.
 func (volume *Volume) Controllers() ([]*StorageController, error) {
-	var result []*StorageController
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range volume.controllers {
-		item, err := GetStorageController(volume.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[StorageController](volume.GetClient(), volume.controllers)
 }
 
 // DedicatedSpareDrives gets the drives which are dedicated spares for this volume.
 func (volume *Volume) DedicatedSpareDrives() ([]*Drive, error) {
-	var result []*Drive
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range volume.dedicatedSpareDrives {
-		item, err := GetDrive(volume.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Drive](volume.GetClient(), volume.dedicatedSpareDrives)
 }
 
 // Drives references the Drives that this volume is associated with.
 func (volume *Volume) Drives() ([]*Drive, error) {
-	var result []*Drive
-
-	collectionError := common.NewCollectionError()
-	for _, driveLink := range volume.drives {
-		drive, err := GetDrive(volume.GetClient(), driveLink)
-		if err != nil {
-			collectionError.Failures[driveLink] = err
-		} else {
-			result = append(result, drive)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Drive](volume.GetClient(), volume.drives)
 }
 
 // OwningStorageResource gets the Storage resource that owns or contains this volume.
@@ -998,23 +918,7 @@ func (volume *Volume) OwningStorageResource() (*Storage, error) {
 
 // ServerEndpoints gets the server Endpoints this volume is associated with.
 func (volume *Volume) ServerEndpoints() ([]*Endpoint, error) {
-	var result []*Endpoint
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range volume.serverEndpoints {
-		item, err := GetEndpoint(volume.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Endpoint](volume.GetClient(), volume.serverEndpoints)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -1053,51 +957,12 @@ func (volume *Volume) Update() error {
 
 // GetVolume will get a Volume instance from the service.
 func GetVolume(c common.Client, uri string) (*Volume, error) {
-	var volume Volume
-	return &volume, volume.Get(c, uri, &volume)
+	return common.GetObject[Volume](c, uri)
 }
 
 // ListReferencedVolumes gets the collection of Volumes from a provided reference.
 func ListReferencedVolumes(c common.Client, link string) ([]*Volume, error) {
-	var result []*Volume
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Volume
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		volume, err := GetVolume(c, link)
-		ch <- GetResult{Item: volume, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Volume](c, link)
 }
 
 // AllowedVolumesUpdateApplyTimes returns the set of allowed apply times to request when setting the volumes values

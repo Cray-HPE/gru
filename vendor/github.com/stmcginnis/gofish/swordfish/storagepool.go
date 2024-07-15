@@ -343,96 +343,25 @@ func (storagepool *StoragePool) Update() error {
 
 // GetStoragePool will get a StoragePool instance from the service.
 func GetStoragePool(c common.Client, uri string) (*StoragePool, error) {
-	var storagePool StoragePool
-	return &storagePool, storagePool.Get(c, uri, &storagePool)
+	return common.GetObject[StoragePool](c, uri)
 }
 
 // ListReferencedStoragePools gets the collection of StoragePool from
 // a provided reference.
 func ListReferencedStoragePools(c common.Client, link string) ([]*StoragePool, error) {
-	var result []*StoragePool
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *StoragePool
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		storagepool, err := GetStoragePool(c, link)
-		ch <- GetResult{Item: storagepool, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[StoragePool](c, link)
 }
 
 // DedicatedSpareDrives gets the Drive entities which are currently assigned as
 // a dedicated spare and are able to support this StoragePool.
 func (storagepool *StoragePool) DedicatedSpareDrives() ([]*redfish.Drive, error) {
-	var result []*redfish.Drive
-
-	collectionError := common.NewCollectionError()
-	for _, driveLink := range storagepool.dedicatedSpareDrives {
-		drive, err := redfish.GetDrive(storagepool.GetClient(), driveLink)
-		if err != nil {
-			collectionError.Failures[driveLink] = err
-		} else {
-			result = append(result, drive)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[redfish.Drive](storagepool.GetClient(), storagepool.dedicatedSpareDrives)
 }
 
 // SpareResourceSets gets resources that may be utilized to replace the capacity
 // provided by a failed resource having a compatible type.
 func (storagepool *StoragePool) SpareResourceSets() ([]*SpareResourceSet, error) {
-	var result []*SpareResourceSet
-
-	collectionError := common.NewCollectionError()
-	for _, srsLink := range storagepool.spareResourceSets {
-		srs, err := GetSpareResourceSet(storagepool.GetClient(), srsLink)
-		if err != nil {
-			collectionError.Failures[srsLink] = err
-		} else {
-			result = append(result, srs)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[SpareResourceSet](storagepool.GetClient(), storagepool.spareResourceSets)
 }
 
 // AllocatedPools gets the storage pools allocated from this storage pool.
@@ -447,23 +376,7 @@ func (storagepool *StoragePool) AllocatedVolumes() ([]*Volume, error) {
 
 // CapacitySources gets space allocations to this pool.
 func (storagepool *StoragePool) CapacitySources() ([]*CapacitySource, error) {
-	var result []*CapacitySource
-
-	collectionError := common.NewCollectionError()
-	for _, capLink := range storagepool.capacitySources {
-		capacity, err := GetCapacitySource(storagepool.GetClient(), capLink)
-		if err != nil {
-			collectionError.Failures[capLink] = err
-		} else {
-			result = append(result, capacity)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[CapacitySource](storagepool.GetClient(), storagepool.capacitySources)
 }
 
 // ClassesOfService gets references to all classes of service supported by this

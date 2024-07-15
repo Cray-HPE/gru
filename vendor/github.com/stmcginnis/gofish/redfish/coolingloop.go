@@ -171,64 +171,13 @@ func (coolingloop *CoolingLoop) Update() error {
 
 // GetCoolingLoop will get a CoolingLoop instance from the service.
 func GetCoolingLoop(c common.Client, uri string) (*CoolingLoop, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var coolingloop CoolingLoop
-	err = json.NewDecoder(resp.Body).Decode(&coolingloop)
-	if err != nil {
-		return nil, err
-	}
-
-	coolingloop.SetClient(c)
-	return &coolingloop, nil
+	return common.GetObject[CoolingLoop](c, uri)
 }
 
 // ListReferencedCoolingLoops gets the collection of CoolingLoop from
 // a provided reference.
 func ListReferencedCoolingLoops(c common.Client, link string) ([]*CoolingLoop, error) {
-	var result []*CoolingLoop
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *CoolingLoop
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		coolingloop, err := GetCoolingLoop(c, link)
-		ch <- GetResult{Item: coolingloop, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[CoolingLoop](c, link)
 }
 
 // SecondaryCoolantConnectors gets the secondary coolant connectors for this equipment.
@@ -248,21 +197,5 @@ func (coolingloop *CoolingLoop) Facility() (*Facility, error) {
 
 // ManagedBy gets the collection of managers of this equipment.
 func (coolingloop *CoolingLoop) ManagedBy() ([]*Manager, error) {
-	var result []*Manager
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range coolingloop.managedBy {
-		manager, err := GetManager(coolingloop.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, manager)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Manager](coolingloop.GetClient(), coolingloop.managedBy)
 }

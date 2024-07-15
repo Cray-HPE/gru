@@ -114,137 +114,34 @@ func (memorydomain *MemoryDomain) UnmarshalJSON(b []byte) error {
 // CXLLogicalDevices gets the CXLLogicalDevice that represent the CXL logical devices
 // that are associated with this memory domain.
 func (memorydomain *MemoryDomain) CXLLogicalDevices() ([]*CXLLogicalDevice, error) {
-	var result []*CXLLogicalDevice
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range memorydomain.cxlLogicalDevices {
-		unit, err := GetCXLLogicalDevice(memorydomain.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[CXLLogicalDevice](memorydomain.GetClient(), memorydomain.cxlLogicalDevices)
 }
 
 // FabricAdapters gets the fabric adapters that present this memory domain to a fabric.
 func (memorydomain *MemoryDomain) FabricAdapters() ([]*FabricAdapter, error) {
-	var result []*FabricAdapter
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range memorydomain.fabricAdapters {
-		unit, err := GetFabricAdapter(memorydomain.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[FabricAdapter](memorydomain.GetClient(), memorydomain.fabricAdapters)
 }
 
 // MediaControllers gets the media controllers for this memory domain.
 // This property has been deprecated in favor of the FabricAdapters property.
 func (memorydomain *MemoryDomain) MediaControllers() ([]*MediaController, error) {
-	var result []*MediaController
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range memorydomain.mediaControllers {
-		unit, err := GetMediaController(memorydomain.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[MediaController](memorydomain.GetClient(), memorydomain.mediaControllers)
 }
 
 // PCIeFunctions gets the PCIe functions representing this memory domain.
 func (memorydomain *MemoryDomain) PCIeFunctions() ([]*PCIeFunction, error) {
-	var result []*PCIeFunction
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range memorydomain.pcieFunctions {
-		unit, err := GetPCIeFunction(memorydomain.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[PCIeFunction](memorydomain.GetClient(), memorydomain.pcieFunctions)
 }
 
 // GetMemoryDomain will get a MemoryDomain instance from the service.
 func GetMemoryDomain(c common.Client, uri string) (*MemoryDomain, error) {
-	var memoryDomain MemoryDomain
-	return &memoryDomain, memoryDomain.Get(c, uri, &memoryDomain)
+	return common.GetObject[MemoryDomain](c, uri)
 }
 
 // ListReferencedMemoryDomains gets the collection of MemoryDomain from
 // a provided reference.
 func ListReferencedMemoryDomains(c common.Client, link string) ([]*MemoryDomain, error) {
-	var result []*MemoryDomain
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *MemoryDomain
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		memorydomain, err := GetMemoryDomain(c, link)
-		ch <- GetResult{Item: memorydomain, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[MemoryDomain](c, link)
 }
 
 // MemorySet shall represent the interleave sets for a memory chunk.
@@ -277,21 +174,5 @@ func (memoryset *MemorySet) UnmarshalJSON(b []byte) error {
 
 // MemorySet gets the Memory objects that are part of this set.
 func (memoryset *MemorySet) MemorySet(c common.Client) ([]*Memory, error) {
-	var result []*Memory
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range memoryset.memorySet {
-		unit, err := GetMemory(c, uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Memory](c, memoryset.memorySet)
 }

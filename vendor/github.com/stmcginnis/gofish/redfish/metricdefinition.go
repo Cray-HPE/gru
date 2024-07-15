@@ -213,64 +213,13 @@ func (metricdefinition *MetricDefinition) Update() error {
 
 // GetMetricDefinition will get a MetricDefinition instance from the service.
 func GetMetricDefinition(c common.Client, uri string) (*MetricDefinition, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var metricdefinition MetricDefinition
-	err = json.NewDecoder(resp.Body).Decode(&metricdefinition)
-	if err != nil {
-		return nil, err
-	}
-
-	metricdefinition.SetClient(c)
-	return &metricdefinition, nil
+	return common.GetObject[MetricDefinition](c, uri)
 }
 
 // ListReferencedMetricDefinitions gets the collection of MetricDefinition from
 // a provided reference.
 func ListReferencedMetricDefinitions(c common.Client, link string) ([]*MetricDefinition, error) {
-	var result []*MetricDefinition
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *MetricDefinition
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		metricdefinition, err := GetMetricDefinition(c, link)
-		ch <- GetResult{Item: metricdefinition, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[MetricDefinition](c, link)
 }
 
 // Wildcard shall contain a wildcard and its substitution values.

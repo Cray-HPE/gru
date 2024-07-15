@@ -156,148 +156,33 @@ func (connection *Connection) UnmarshalJSON(b []byte) error {
 
 // GetConnection will get a Connection instance from the service.
 func GetConnection(c common.Client, uri string) (*Connection, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var connection Connection
-	err = json.NewDecoder(resp.Body).Decode(&connection)
-	if err != nil {
-		return nil, err
-	}
-
-	connection.SetClient(c)
-	return &connection, nil
+	return common.GetObject[Connection](c, uri)
 }
 
 // ListReferencedConnections gets the collection of Connection from
 // a provided reference.
 func ListReferencedConnections(c common.Client, link string) ([]*Connection, error) {
-	var result []*Connection
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Connection
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		connection, err := GetConnection(c, link)
-		ch <- GetResult{Item: connection, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Connection](c, link)
 }
 
 // InitiatorEndpointGroups get the initiator endpoint groups associated with this connection.
 func (connection *Connection) InitiatorEndpointGroups() ([]*EndpointGroup, error) {
-	var result []*EndpointGroup
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range connection.initiatorEndpointGroups {
-		rb, err := GetEndpointGroup(connection.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, rb)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[EndpointGroup](connection.GetClient(), connection.initiatorEndpointGroups)
 }
 
 // InitiatorEndpoints get the initiator endpoint associated with this connection.
 func (connection *Connection) InitiatorEndpoints() ([]*Endpoint, error) {
-	var result []*Endpoint
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range connection.initiatorEndpoints {
-		rb, err := GetEndpoint(connection.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, rb)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Endpoint](connection.GetClient(), connection.initiatorEndpoints)
 }
 
 // TargetEndpointGroups get the target endpoint groups associated with this connection.
 func (connection *Connection) TargetEndpointGroups() ([]*EndpointGroup, error) {
-	var result []*EndpointGroup
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range connection.targetEndpointGroups {
-		rb, err := GetEndpointGroup(connection.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, rb)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[EndpointGroup](connection.GetClient(), connection.targetEndpointGroups)
 }
 
 // TargetEndpoints get the target endpoint associated with this connection.
 func (connection *Connection) TargetEndpoints() ([]*Endpoint, error) {
-	var result []*Endpoint
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range connection.targetEndpoints {
-		rb, err := GetEndpoint(connection.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, rb)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Endpoint](connection.GetClient(), connection.targetEndpoints)
 }
 
 // ConnectionKey shall contain the permission key information required to access the target resources for a

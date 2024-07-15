@@ -113,23 +113,7 @@ func (graphicscontroller *GraphicsController) PCIeDevice() (*PCIeDevice, error) 
 
 // Processors gets this graphics controllers processors.
 func (graphicscontroller *GraphicsController) Processors() ([]*Processor, error) {
-	var result []*Processor
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range graphicscontroller.processors {
-		unit, err := GetProcessor(graphicscontroller.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Processor](graphicscontroller.GetClient(), graphicscontroller.processors)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -151,62 +135,11 @@ func (graphicscontroller *GraphicsController) Update() error {
 
 // GetGraphicsController will get a GraphicsController instance from the service.
 func GetGraphicsController(c common.Client, uri string) (*GraphicsController, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var graphicscontroller GraphicsController
-	err = json.NewDecoder(resp.Body).Decode(&graphicscontroller)
-	if err != nil {
-		return nil, err
-	}
-
-	graphicscontroller.SetClient(c)
-	return &graphicscontroller, nil
+	return common.GetObject[GraphicsController](c, uri)
 }
 
 // ListReferencedGraphicsControllers gets the collection of GraphicsController from
 // a provided reference.
 func ListReferencedGraphicsControllers(c common.Client, link string) ([]*GraphicsController, error) {
-	var result []*GraphicsController
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *GraphicsController
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		graphicscontroller, err := GetGraphicsController(c, link)
-		ch <- GetResult{Item: graphicscontroller, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[GraphicsController](c, link)
 }

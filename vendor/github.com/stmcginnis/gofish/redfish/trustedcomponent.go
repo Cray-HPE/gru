@@ -178,44 +178,12 @@ func (trustedcomponent *TrustedComponent) ActiveSoftwareImage() (*SoftwareInvent
 
 // ComponentIntegrity gets the resources for which the trusted component is responsible.
 func (trustedcomponent *TrustedComponent) ComponentIntegrity() ([]*ComponentIntegrity, error) {
-	var result []*ComponentIntegrity
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range trustedcomponent.componentIntegrity {
-		cs, err := GetComponentIntegrity(trustedcomponent.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, cs)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[ComponentIntegrity](trustedcomponent.GetClient(), trustedcomponent.componentIntegrity)
 }
 
 // SoftwareImages gets the firmware images that apply to this trusted component.
 func (trustedcomponent *TrustedComponent) SoftwareImages() ([]*SoftwareInventory, error) {
-	var result []*SoftwareInventory
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range trustedcomponent.softwareImages {
-		cs, err := GetSoftwareInventory(trustedcomponent.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, cs)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[SoftwareInventory](trustedcomponent.GetClient(), trustedcomponent.softwareImages)
 }
 
 // Certificates gets the certificates associated with this trusted component.
@@ -242,62 +210,11 @@ func (trustedcomponent *TrustedComponent) TPMGetEventLog() (*TPMGetEventLogRespo
 
 // GetTrustedComponent will get a TrustedComponent instance from the service.
 func GetTrustedComponent(c common.Client, uri string) (*TrustedComponent, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var trustedcomponent TrustedComponent
-	err = json.NewDecoder(resp.Body).Decode(&trustedcomponent)
-	if err != nil {
-		return nil, err
-	}
-
-	trustedcomponent.SetClient(c)
-	return &trustedcomponent, nil
+	return common.GetObject[TrustedComponent](c, uri)
 }
 
 // ListReferencedTrustedComponents gets the collection of TrustedComponent from
 // a provided reference.
 func ListReferencedTrustedComponents(c common.Client, link string) ([]*TrustedComponent, error) {
-	var result []*TrustedComponent
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *TrustedComponent
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		trustedcomponent, err := GetTrustedComponent(c, link)
-		ch <- GetResult{Item: trustedcomponent, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[TrustedComponent](c, link)
 }

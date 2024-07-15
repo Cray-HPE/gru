@@ -177,107 +177,27 @@ func (controllers *Controllers) ActiveSoftwareImage(c common.Client) (*SoftwareI
 
 // NetworkDeviceFunctions gets the collection of NetworkDeviceFunctions of this network controller.
 func (controllers *Controllers) NetworkDeviceFunctions(c common.Client) ([]*NetworkDeviceFunction, error) {
-	var result []*NetworkDeviceFunction
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range controllers.networkDeviceFunctions {
-		unit, err := GetNetworkDeviceFunction(c, uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[NetworkDeviceFunction](c, controllers.networkDeviceFunctions)
 }
 
 // NetworkPorts gets the collection of NetworkPorts for this network controller.
 func (controllers *Controllers) NetworkPorts(c common.Client) ([]*NetworkPort, error) {
-	var result []*NetworkPort
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range controllers.networkPorts {
-		unit, err := GetNetworkPort(c, uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[NetworkPort](c, controllers.networkPorts)
 }
 
 // PCIeDevices gets the PCIe devices associated with this network controller.
 func (controllers *Controllers) PCIeDevices(c common.Client) ([]*PCIeDevice, error) {
-	var result []*PCIeDevice
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range controllers.pcieDevices {
-		unit, err := GetPCIeDevice(c, uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[PCIeDevice](c, controllers.pcieDevices)
 }
 
 // Ports gets the ports associated with this network controller.
 func (controllers *Controllers) Ports(c common.Client) ([]*Port, error) {
-	var result []*Port
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range controllers.ports {
-		unit, err := GetPort(c, uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Port](c, controllers.ports)
 }
 
 // SoftwareImages gets the firmware images that apply to this controller.
 func (controllers *Controllers) SoftwareImages(c common.Client) ([]*SoftwareInventory, error) {
-	var result []*SoftwareInventory
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range controllers.softwareImages {
-		unit, err := GetSoftwareInventory(c, uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[SoftwareInventory](c, controllers.softwareImages)
 }
 
 // DataCenterBridging shall describe the capability, status,
@@ -428,51 +348,12 @@ func (networkadapter *NetworkAdapter) Update() error {
 
 // GetNetworkAdapter will get a NetworkAdapter instance from the Redfish service.
 func GetNetworkAdapter(c common.Client, uri string) (*NetworkAdapter, error) {
-	var networkAdapter NetworkAdapter
-	return &networkAdapter, networkAdapter.Get(c, uri, &networkAdapter)
+	return common.GetObject[NetworkAdapter](c, uri)
 }
 
 // ListReferencedNetworkAdapter gets the collection of Chassis from a provided reference.
 func ListReferencedNetworkAdapter(c common.Client, link string) ([]*NetworkAdapter, error) {
-	var result []*NetworkAdapter
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *NetworkAdapter
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		networkadapter, err := GetNetworkAdapter(c, link)
-		ch <- GetResult{Item: networkadapter, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[NetworkAdapter](c, link)
 }
 
 // Assembly gets this adapter's assembly.

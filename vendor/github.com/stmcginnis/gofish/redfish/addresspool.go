@@ -35,7 +35,7 @@ type AddressPool struct {
 	GenZ APGenZ
 	// Status shall contain any status or health properties of the resource.
 	Status common.Status
-	// endpoints is a colleection of URIs for connected endpoints.
+	// endpoints is a collection of URIs for connected endpoints.
 	endpoints []string
 	// EndpointsCount is the number of connected endpoints.
 	EndpointsCount int
@@ -79,106 +79,23 @@ func (addresspool *AddressPool) UnmarshalJSON(b []byte) error {
 
 // GetAddressPool will get a AddressPool instance from the service.
 func GetAddressPool(c common.Client, uri string) (*AddressPool, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var addresspool AddressPool
-	err = json.NewDecoder(resp.Body).Decode(&addresspool)
-	if err != nil {
-		return nil, err
-	}
-
-	addresspool.SetClient(c)
-	return &addresspool, nil
+	return common.GetObject[AddressPool](c, uri)
 }
 
 // ListReferencedAddressPools gets the collection of AddressPool from
 // a provided reference.
 func ListReferencedAddressPools(c common.Client, link string) ([]*AddressPool, error) {
-	var result []*AddressPool
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *AddressPool
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		addresspool, err := GetAddressPool(c, link)
-		ch <- GetResult{Item: addresspool, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[AddressPool](c, link)
 }
 
 // Endpoints gets the endpoints connected to this address pool.
 func (addresspool *AddressPool) Endpoints() ([]*Endpoint, error) {
-	var result []*Endpoint
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range addresspool.endpoints {
-		endpoint, err := GetEndpoint(addresspool.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, endpoint)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Endpoint](addresspool.GetClient(), addresspool.endpoints)
 }
 
 // Zones gets the zones associated with this address pool.
 func (addresspool *AddressPool) Zones() ([]*Zone, error) {
-	var result []*Zone
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range addresspool.zones {
-		endpoint, err := GetZone(addresspool.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, endpoint)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Zone](addresspool.GetClient(), addresspool.zones)
 }
 
 // BFDSingleHopOnly shall contain the BFD-related properties for an Ethernet fabric that uses Bidirectional

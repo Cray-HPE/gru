@@ -206,50 +206,11 @@ func (memorymetrics *MemoryMetrics) ClearCurrentPeriod() error {
 
 // GetMemoryMetrics will get a MemoryMetrics instance from the service.
 func GetMemoryMetrics(c common.Client, uri string) (*MemoryMetrics, error) {
-	var memoryMetrics MemoryMetrics
-	return &memoryMetrics, memoryMetrics.Get(c, uri, &memoryMetrics)
+	return common.GetObject[MemoryMetrics](c, uri)
 }
 
 // ListReferencedMemoryMetricss gets the collection of MemoryMetrics from
 // a provided reference.
 func ListReferencedMemoryMetricss(c common.Client, link string) ([]*MemoryMetrics, error) {
-	var result []*MemoryMetrics
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *MemoryMetrics
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		memorymetrics, err := GetMemoryMetrics(c, link)
-		ch <- GetResult{Item: memorymetrics, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[MemoryMetrics](c, link)
 }

@@ -380,132 +380,36 @@ func (storagecontroller *StorageController) Ports() ([]*Port, error) {
 
 // // AttachedVolumes gets the volumes that are attached to this instance of storage controller.
 // func (storagecontroller *StorageController) AttachedVolumes() ([]*swordfish.Volume, error) {
-// 	var result []*swordfish.Volume
-
-// 	collectionError := common.NewCollectionError()
-// 	for _, uri := range storagecontroller.attachedVolumes {
-// 		endpoint, err := swordfish.GetVolume(storagecontroller.GetClient(), uri)
-// 		if err != nil {
-// 			collectionError.Failures[uri] = err
-// 		} else {
-// 			result = append(result, endpoint)
-// 		}
-// 	}
-
-// 	if collectionError.Empty() {
-// 		return result, nil
-// 	}
-
-// 	return result, collectionError
+//  	return common.GetObjects[Volume](storagecontroller.GetClient(), storagecontroller.attachedVolumes)
 // }
 
 // Batteries gets the batteries that provide power to this storage controller during a power-loss event,
 // such as with battery-backed RAID controllers. This property shall not be present if the batteries
 // power the containing chassis as a whole rather than the individual storage controller.
 func (storagecontroller *StorageController) Batteries() ([]*Battery, error) {
-	var result []*Battery
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range storagecontroller.batteries {
-		endpoint, err := GetBattery(storagecontroller.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, endpoint)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Battery](storagecontroller.GetClient(), storagecontroller.batteries)
 }
 
 // Endpoints gets the storage controller's endpoints.
 func (storagecontroller *StorageController) Endpoints() ([]*Endpoint, error) {
-	var result []*Endpoint
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range storagecontroller.endpoints {
-		endpoint, err := GetEndpoint(storagecontroller.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, endpoint)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Endpoint](storagecontroller.GetClient(), storagecontroller.endpoints)
 }
 
 // NVMeDiscoveredSubsystems gets the storage that represent the NVMe subsystems discovered by
 // this discovery controller. This property shall only be present if ControllerType in
 // NVMeControllerProperties contains 'Discovery'.
 func (storagecontroller *StorageController) NVMeDiscoveredSubsystems() ([]*Storage, error) {
-	var result []*Storage
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range storagecontroller.nvmeDiscoveredSubsystems {
-		item, err := GetStorage(storagecontroller.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Storage](storagecontroller.GetClient(), storagecontroller.nvmeDiscoveredSubsystems)
 }
 
 // NetworkDeviceFunctions the network device functions that provide connectivity to this controller.
 func (storagecontroller *StorageController) NetworkDeviceFunctions() ([]*NetworkDeviceFunction, error) {
-	var result []*NetworkDeviceFunction
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range storagecontroller.networkDeviceFunctions {
-		item, err := GetNetworkDeviceFunction(storagecontroller.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[NetworkDeviceFunction](storagecontroller.GetClient(), storagecontroller.networkDeviceFunctions)
 }
 
 // PCIeFunctions gets the the PCIe functions that the storage controller produces.
 func (storagecontroller *StorageController) PCIeFunctions() ([]*PCIeFunction, error) {
-	var result []*PCIeFunction
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range storagecontroller.pcieFunctions {
-		item, err := GetPCIeFunction(storagecontroller.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[PCIeFunction](storagecontroller.GetClient(), storagecontroller.pcieFunctions)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -530,50 +434,11 @@ func (storagecontroller *StorageController) Update() error {
 
 // GetStorageController will get a Storage controller instance from the service.
 func GetStorageController(c common.Client, uri string) (*StorageController, error) {
-	var storageController StorageController
-	return &storageController, storageController.Get(c, uri, &storageController)
+	return common.GetObject[StorageController](c, uri)
 }
 
 // ListReferencedStorageControllers gets the collection of StorageControllers
 // from a provided reference.
 func ListReferencedStorageControllers(c common.Client, link string) ([]*StorageController, error) {
-	var result []*StorageController
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *StorageController
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		storagecontroller, err := GetStorageController(c, link)
-		ch <- GetResult{Item: storagecontroller, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[StorageController](c, link)
 }
