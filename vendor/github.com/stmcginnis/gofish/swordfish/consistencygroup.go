@@ -264,23 +264,7 @@ func (consistencygroup *ConsistencyGroup) SuspendReplication(targetGroupURI stri
 
 // Volumes gets the volumes in this consistency group.
 func (consistencygroup *ConsistencyGroup) Volumes() ([]*Volume, error) {
-	var result []*Volume
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range consistencygroup.volumes {
-		sc, err := GetVolume(consistencygroup.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, sc)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Volume](consistencygroup.GetClient(), consistencygroup.volumes)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -304,62 +288,11 @@ func (consistencygroup *ConsistencyGroup) Update() error {
 
 // GetConsistencyGroup will get a ConsistencyGroup instance from the service.
 func GetConsistencyGroup(c common.Client, uri string) (*ConsistencyGroup, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var consistencygroup ConsistencyGroup
-	err = json.NewDecoder(resp.Body).Decode(&consistencygroup)
-	if err != nil {
-		return nil, err
-	}
-
-	consistencygroup.SetClient(c)
-	return &consistencygroup, nil
+	return common.GetObject[ConsistencyGroup](c, uri)
 }
 
 // ListReferencedConsistencyGroups gets the collection of ConsistencyGroup from
 // a provided reference.
 func ListReferencedConsistencyGroups(c common.Client, link string) ([]*ConsistencyGroup, error) {
-	var result []*ConsistencyGroup
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *ConsistencyGroup
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		consistencygroup, err := GetConsistencyGroup(c, link)
-		ch <- GetResult{Item: consistencygroup, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[ConsistencyGroup](c, link)
 }

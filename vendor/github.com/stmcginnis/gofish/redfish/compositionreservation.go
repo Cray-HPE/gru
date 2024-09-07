@@ -62,85 +62,20 @@ func (compositionreservation *CompositionReservation) UnmarshalJSON(b []byte) er
 
 // GetCompositionReservation will get a CompositionReservation instance from the service.
 func GetCompositionReservation(c common.Client, uri string) (*CompositionReservation, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var compositionreservation CompositionReservation
-	err = json.NewDecoder(resp.Body).Decode(&compositionreservation)
-	if err != nil {
-		return nil, err
-	}
-
-	compositionreservation.SetClient(c)
-	return &compositionreservation, nil
+	return common.GetObject[CompositionReservation](c, uri)
 }
 
 // ListReferencedCompositionReservations gets the collection of CompositionReservation from
 // a provided reference.
 func ListReferencedCompositionReservations(c common.Client, link string) ([]*CompositionReservation, error) {
-	var result []*CompositionReservation
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *CompositionReservation
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		compositionreservation, err := GetCompositionReservation(c, link)
-		ch <- GetResult{Item: compositionreservation, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[CompositionReservation](c, link)
 }
 
 // ReservedResourceBlocks gets reserved resource blocks for this reservation.
 // Upon deletion of the reservation or when the reservation is applied, the
 // Reserved property in the referenced resource blocks shall change to 'false'.
 func (compositionreservation *CompositionReservation) ReservedResourceBlocks() ([]*ResourceBlock, error) {
-	var result []*ResourceBlock
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range compositionreservation.reservedResourceBlocks {
-		rb, err := GetResourceBlock(compositionreservation.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, rb)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[ResourceBlock](
+		compositionreservation.GetClient(),
+		compositionreservation.reservedResourceBlocks)
 }

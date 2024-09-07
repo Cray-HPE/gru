@@ -115,52 +115,13 @@ func (redundancy *Redundancy) Update() error {
 
 // GetRedundancy will get a Redundancy instance from the service.
 func GetRedundancy(c common.Client, uri string) (*Redundancy, error) {
-	var redundancy Redundancy
-	return &redundancy, redundancy.Get(c, uri, &redundancy)
+	return common.GetObject[Redundancy](c, uri)
 }
 
 // ListReferencedRedundancies gets the collection of Redundancy from
 // a provided reference.
 func ListReferencedRedundancies(c common.Client, link string) ([]*Redundancy, error) {
-	var result []*Redundancy
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Redundancy
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		redundancy, err := GetRedundancy(c, link)
-		ch <- GetResult{Item: redundancy, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Redundancy](c, link)
 }
 
 // The redundancy mode of the group.

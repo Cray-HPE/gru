@@ -417,7 +417,7 @@ const (
 	IfAliasIDSubtype IDSubtype = "IfAlias"
 	// Interface name, based on the ifName MIB object.
 	IfNameIDSubtype IDSubtype = "IfName"
-	// Locally assigned, based on a alpha-numeric value locally assigned.
+	// Locally assigned, based on an alphanumeric value locally assigned.
 	LocalAssignIDSubtype IDSubtype = "LocalAssign"
 	// MAC address, based on an agent detected unicast source address as defined in IEEE standard 802.
 	MacAddrIDSubtype IDSubtype = "MacAddr"
@@ -888,191 +888,47 @@ func (port *Port) Metrics() (*PortMetrics, error) {
 
 // AssociatedEndpoints gets the endpoints at the other end of the link.
 func (port *Port) AssociatedEndpoints() ([]*Endpoint, error) {
-	var result []*Endpoint
-
-	collectionError := common.NewCollectionError()
-	for _, ethLink := range port.associatedEndpoints {
-		eth, err := GetEndpoint(port.GetClient(), ethLink)
-		if err != nil {
-			collectionError.Failures[ethLink] = err
-		} else {
-			result = append(result, eth)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Endpoint](port.GetClient(), port.associatedEndpoints)
 }
 
 // Cables gets the cables connected to this port.
 func (port *Port) Cables() ([]*Cable, error) {
-	var result []*Cable
-
-	collectionError := common.NewCollectionError()
-	for _, ethLink := range port.cables {
-		eth, err := GetCable(port.GetClient(), ethLink)
-		if err != nil {
-			collectionError.Failures[ethLink] = err
-		} else {
-			result = append(result, eth)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Cable](port.GetClient(), port.cables)
 }
 
 // ConnectedPorts gets the remote device ports connected to the other end of the link.
 func (port *Port) ConnectedPorts() ([]*Port, error) {
-	var result []*Port
-
-	collectionError := common.NewCollectionError()
-	for _, ethLink := range port.connectedPorts {
-		eth, err := GetPort(port.GetClient(), ethLink)
-		if err != nil {
-			collectionError.Failures[ethLink] = err
-		} else {
-			result = append(result, eth)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Port](port.GetClient(), port.connectedPorts)
 }
 
 // ConnectedSwitchPorts gets the switch ports connected to the other end of the link.
 func (port *Port) ConnectedSwitchPorts() ([]*Port, error) {
-	var result []*Port
-
-	collectionError := common.NewCollectionError()
-	for _, ethLink := range port.connectedSwitchPorts {
-		eth, err := GetPort(port.GetClient(), ethLink)
-		if err != nil {
-			collectionError.Failures[ethLink] = err
-		} else {
-			result = append(result, eth)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Port](port.GetClient(), port.connectedSwitchPorts)
 }
 
 // ConnectedSwitches gets the switches connected to the other end of the link.
 func (port *Port) ConnectedSwitches() ([]*Switch, error) {
-	var result []*Switch
-
-	collectionError := common.NewCollectionError()
-	for _, ethLink := range port.connectedSwitches {
-		eth, err := GetSwitch(port.GetClient(), ethLink)
-		if err != nil {
-			collectionError.Failures[ethLink] = err
-		} else {
-			result = append(result, eth)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Switch](port.GetClient(), port.connectedSwitches)
 }
 
 // EthernetInterfaces gets the Ethernet interfaces this port provides.
 func (port *Port) EthernetInterfaces() ([]*EthernetInterface, error) {
-	var result []*EthernetInterface
-
-	collectionError := common.NewCollectionError()
-	for _, ethLink := range port.ethernetInterfaces {
-		eth, err := GetEthernetInterface(port.GetClient(), ethLink)
-		if err != nil {
-			collectionError.Failures[ethLink] = err
-		} else {
-			result = append(result, eth)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[EthernetInterface](port.GetClient(), port.ethernetInterfaces)
 }
 
 // GenZLPRT gets the Gen-Z Core Specification-defined Linear Packet Relay Table for this port.
 func (port *Port) GenZLPRT() ([]*RouteEntry, error) {
-	var result []*RouteEntry
-
-	collectionError := common.NewCollectionError()
-	for _, ethLink := range port.genZLPRT {
-		eth, err := GetRouteEntry(port.GetClient(), ethLink)
-		if err != nil {
-			collectionError.Failures[ethLink] = err
-		} else {
-			result = append(result, eth)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[RouteEntry](port.GetClient(), port.genZLPRT)
 }
 
 // GenZMPRT gets the Gen-Z Core Specification-defined Multi-subnet Packet Relay Table for this port.
 func (port *Port) GenZMPRT() ([]*RouteEntry, error) {
-	var result []*RouteEntry
-
-	collectionError := common.NewCollectionError()
-	for _, ethLink := range port.genZMPRT {
-		eth, err := GetRouteEntry(port.GetClient(), ethLink)
-		if err != nil {
-			collectionError.Failures[ethLink] = err
-		} else {
-			result = append(result, eth)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[RouteEntry](port.GetClient(), port.genZMPRT)
 }
 
 // GenZVCAT gets the Gen-Z Virtual Channel Action Table for the port.
 func (port *Port) GenZVCAT() ([]*VCATEntry, error) {
-	var result []*VCATEntry
-
-	collectionError := common.NewCollectionError()
-	for _, ethLink := range port.genZVCAT {
-		eth, err := GetVCATEntry(port.GetClient(), ethLink)
-		if err != nil {
-			collectionError.Failures[ethLink] = err
-		} else {
-			result = append(result, eth)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[VCATEntry](port.GetClient(), port.genZVCAT)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -1127,52 +983,13 @@ func (port *Port) Update() error {
 
 // GetPort will get a Port instance from the service.
 func GetPort(c common.Client, uri string) (*Port, error) {
-	var port Port
-	return &port, port.Get(c, uri, &port)
+	return common.GetObject[Port](c, uri)
 }
 
 // ListReferencedPorts gets the collection of Port from
 // a provided reference.
 func ListReferencedPorts(c common.Client, link string) ([]*Port, error) {
-	var result []*Port
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Port
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		port, err := GetPort(c, link)
-		ch <- GetResult{Item: port, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Port](c, link)
 }
 
 // ResetPort resets this port.

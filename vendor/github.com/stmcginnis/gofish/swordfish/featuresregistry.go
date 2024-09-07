@@ -41,64 +41,13 @@ type FeaturesRegistry struct {
 
 // GetFeaturesRegistry will get a FeaturesRegistry instance from the service.
 func GetFeaturesRegistry(c common.Client, uri string) (*FeaturesRegistry, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var featuresregistry FeaturesRegistry
-	err = json.NewDecoder(resp.Body).Decode(&featuresregistry)
-	if err != nil {
-		return nil, err
-	}
-
-	featuresregistry.SetClient(c)
-	return &featuresregistry, nil
+	return common.GetObject[FeaturesRegistry](c, uri)
 }
 
 // ListReferencedFeaturesRegistrys gets the collection of FeaturesRegistry from
 // a provided reference.
 func ListReferencedFeaturesRegistrys(c common.Client, link string) ([]*FeaturesRegistry, error) {
-	var result []*FeaturesRegistry
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *FeaturesRegistry
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		featuresregistry, err := GetFeaturesRegistry(c, link)
-		ch <- GetResult{Item: featuresregistry, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[FeaturesRegistry](c, link)
 }
 
 // FeaturesRegistryProperty shall represent the suffix to be used in the Feature and shall be unique within this

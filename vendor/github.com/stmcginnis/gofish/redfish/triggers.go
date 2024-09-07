@@ -220,26 +220,7 @@ func (triggers *Triggers) UnmarshalJSON(b []byte) error {
 // MetricReportDefinitions gets the metric report definitions that generate new metric
 // reports when a trigger condition is met and when the TriggerActions property contains 'RedfishMetricReport'.
 func (triggers *Triggers) MetricReportDefinitions() ([]*MetricReportDefinition, error) {
-	var result []*MetricReportDefinition
-	if len(triggers.metricReportDefinitions) == 0 {
-		return result, nil
-	}
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range triggers.metricReportDefinitions {
-		rb, err := GetMetricReportDefinition(triggers.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, rb)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[MetricReportDefinition](triggers.GetClient(), triggers.metricReportDefinitions)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -265,62 +246,11 @@ func (triggers *Triggers) Update() error {
 
 // GetTriggers will get a Triggers instance from the service.
 func GetTriggers(c common.Client, uri string) (*Triggers, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var triggers Triggers
-	err = json.NewDecoder(resp.Body).Decode(&triggers)
-	if err != nil {
-		return nil, err
-	}
-
-	triggers.SetClient(c)
-	return &triggers, nil
+	return common.GetObject[Triggers](c, uri)
 }
 
 // ListReferencedTriggerss gets the collection of Triggers from
 // a provided reference.
 func ListReferencedTriggerss(c common.Client, link string) ([]*Triggers, error) {
-	var result []*Triggers
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Triggers
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		triggers, err := GetTriggers(c, link)
-		ch <- GetResult{Item: triggers, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Triggers](c, link)
 }

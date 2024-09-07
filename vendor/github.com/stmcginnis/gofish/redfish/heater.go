@@ -143,107 +143,27 @@ func (heater *Heater) Assembly() (*Assembly, error) {
 
 // Managers gets the managers for this heater.
 func (heater *Heater) Managers() ([]*Manager, error) {
-	var result []*Manager
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range heater.managers {
-		unit, err := GetManager(heater.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Manager](heater.GetClient(), heater.managers)
 }
 
 // Memory gets the memory associated with this heater.
 func (heater *Heater) Memory() ([]*Memory, error) {
-	var result []*Memory
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range heater.memory {
-		unit, err := GetMemory(heater.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Memory](heater.GetClient(), heater.memory)
 }
 
 // NetworkAdapters gets the network adapters associated with this heater.
 func (heater *Heater) NetworkAdapters() ([]*NetworkAdapter, error) {
-	var result []*NetworkAdapter
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range heater.networkAdapters {
-		unit, err := GetNetworkAdapter(heater.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[NetworkAdapter](heater.GetClient(), heater.networkAdapters)
 }
 
 // Processors gets this heater's processors.
 func (heater *Heater) Processors() ([]*Processor, error) {
-	var result []*Processor
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range heater.processors {
-		unit, err := GetProcessor(heater.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Processor](heater.GetClient(), heater.processors)
 }
 
 // StorageControllers gets the storage controllers associated with this heater.
 func (heater *Heater) StorageControllers() ([]*StorageController, error) {
-	var result []*StorageController
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range heater.storageControllers {
-		unit, err := GetStorageController(heater.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[StorageController](heater.GetClient(), heater.storageControllers)
 }
 
 // Metrics gets the heater metrics for this heater.
@@ -273,62 +193,11 @@ func (heater *Heater) Update() error {
 
 // GetHeater will get a Heater instance from the service.
 func GetHeater(c common.Client, uri string) (*Heater, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var heater Heater
-	err = json.NewDecoder(resp.Body).Decode(&heater)
-	if err != nil {
-		return nil, err
-	}
-
-	heater.SetClient(c)
-	return &heater, nil
+	return common.GetObject[Heater](c, uri)
 }
 
 // ListReferencedHeaters gets the collection of Heater from
 // a provided reference.
 func ListReferencedHeaters(c common.Client, link string) ([]*Heater, error) {
-	var result []*Heater
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Heater
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		heater, err := GetHeater(c, link)
-		ch <- GetResult{Item: heater, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Heater](c, link)
 }

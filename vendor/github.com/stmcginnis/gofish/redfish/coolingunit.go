@@ -187,64 +187,13 @@ func (coolingunit *CoolingUnit) Update() error {
 
 // GetCoolingUnit will get a CoolingUnit instance from the service.
 func GetCoolingUnit(c common.Client, uri string) (*CoolingUnit, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var coolingunit CoolingUnit
-	err = json.NewDecoder(resp.Body).Decode(&coolingunit)
-	if err != nil {
-		return nil, err
-	}
-
-	coolingunit.SetClient(c)
-	return &coolingunit, nil
+	return common.GetObject[CoolingUnit](c, uri)
 }
 
 // ListReferencedCoolingUnits gets the collection of CoolingUnit from
 // a provided reference.
 func ListReferencedCoolingUnits(c common.Client, link string) ([]*CoolingUnit, error) {
-	var result []*CoolingUnit
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *CoolingUnit
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		coolingunit, err := GetCoolingUnit(c, link)
-		ch <- GetResult{Item: coolingunit, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[CoolingUnit](c, link)
 }
 
 // TODO: Add functions to get linked objects

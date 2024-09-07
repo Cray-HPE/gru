@@ -68,64 +68,13 @@ type LeakDetector struct {
 
 // GetLeakDetector will get a LeakDetector instance from the service.
 func GetLeakDetector(c common.Client, uri string) (*LeakDetector, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var leakdetector LeakDetector
-	err = json.NewDecoder(resp.Body).Decode(&leakdetector)
-	if err != nil {
-		return nil, err
-	}
-
-	leakdetector.SetClient(c)
-	return &leakdetector, nil
+	return common.GetObject[LeakDetector](c, uri)
 }
 
 // ListReferencedLeakDetectors gets the collection of LeakDetector from
 // a provided reference.
 func ListReferencedLeakDetectors(c common.Client, link string) ([]*LeakDetector, error) {
-	var result []*LeakDetector
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *LeakDetector
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		leakdetector, err := GetLeakDetector(c, link)
-		ch <- GetResult{Item: leakdetector, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[LeakDetector](c, link)
 }
 
 // LeakDetectorArrayExcerpt shall represent a state-based or digital-value leak detector for a Redfish

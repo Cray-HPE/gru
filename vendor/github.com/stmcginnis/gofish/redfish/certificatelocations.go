@@ -58,83 +58,16 @@ func (certificatelocations *CertificateLocations) UnmarshalJSON(b []byte) error 
 
 // GetCertificateLocations will get a CertificateLocations instance from the service.
 func GetCertificateLocations(c common.Client, uri string) (*CertificateLocations, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var certificatelocations CertificateLocations
-	err = json.NewDecoder(resp.Body).Decode(&certificatelocations)
-	if err != nil {
-		return nil, err
-	}
-
-	certificatelocations.SetClient(c)
-	return &certificatelocations, nil
+	return common.GetObject[CertificateLocations](c, uri)
 }
 
 // ListReferencedCertificateLocationss gets the collection of CertificateLocations from
 // a provided reference.
 func ListReferencedCertificateLocations(c common.Client, link string) ([]*CertificateLocations, error) {
-	var result []*CertificateLocations
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *CertificateLocations
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		certificatelocations, err := GetCertificateLocations(c, link)
-		ch <- GetResult{Item: certificatelocations, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[CertificateLocations](c, link)
 }
 
 // Certificates retrieves a collection of the Certificates installed on the system.
 func (certificatelocations *CertificateLocations) Certificates() ([]*Certificate, error) {
-	var result []*Certificate
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range certificatelocations.certificates {
-		cert, err := GetCertificate(certificatelocations.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, cert)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Certificate](certificatelocations.GetClient(), certificatelocations.certificates)
 }

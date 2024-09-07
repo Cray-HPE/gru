@@ -70,64 +70,13 @@ func (certificateservice *CertificateService) CertificateLocations() (*Certifica
 
 // GetCertificateService will get a CertificateService instance from the service.
 func GetCertificateService(c common.Client, uri string) (*CertificateService, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var certificateservice CertificateService
-	err = json.NewDecoder(resp.Body).Decode(&certificateservice)
-	if err != nil {
-		return nil, err
-	}
-
-	certificateservice.SetClient(c)
-	return &certificateservice, nil
+	return common.GetObject[CertificateService](c, uri)
 }
 
 // ListReferencedCertificateServices gets the collection of CertificateService from
 // a provided reference.
 func ListReferencedCertificateServices(c common.Client, link string) ([]*CertificateService, error) {
-	var result []*CertificateService
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *CertificateService
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		certificateservice, err := GetCertificateService(c, link)
-		ch <- GetResult{Item: certificateservice, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[CertificateService](c, link)
 }
 
 // GenerateCSRResponse shall contain the properties found in the response body for the GenerateCSR action.

@@ -70,7 +70,7 @@ type HostInterface struct {
 	// CredentialBootstrapping shall contain settings for the Redfish Host Interface Specification-defined 'credential
 	// bootstrapping via IPMI commands' feature for this interface. This property shall be absent if credential
 	// bootstrapping is not supported by the service.
-	CredentialBootstrapping string
+	CredentialBootstrapping CredentialBootstrapping
 	// Description provides a description of this resource.
 	Description string
 	// ExternallyAccessible is used by external clients, and this property
@@ -209,73 +209,18 @@ func (hostinterface *HostInterface) Update() error {
 
 // GetHostInterface will get a HostInterface instance from the service.
 func GetHostInterface(c common.Client, uri string) (*HostInterface, error) {
-	var hostInterface HostInterface
-	return &hostInterface, hostInterface.Get(c, uri, &hostInterface)
+	return common.GetObject[HostInterface](c, uri)
 }
 
 // ListReferencedHostInterfaces gets the collection of HostInterface from
 // a provided reference.
 func ListReferencedHostInterfaces(c common.Client, link string) ([]*HostInterface, error) {
-	var result []*HostInterface
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *HostInterface
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		hostinterface, err := GetHostInterface(c, link)
-		ch <- GetResult{Item: hostinterface, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[HostInterface](c, link)
 }
 
 // ComputerSystems references the ComputerSystems that this host interface is associated with.
 func (hostinterface *HostInterface) ComputerSystems() ([]*ComputerSystem, error) {
-	var result []*ComputerSystem
-
-	collectionError := common.NewCollectionError()
-	for _, computerSystemLink := range hostinterface.computerSystems {
-		computerSystem, err := GetComputerSystem(hostinterface.GetClient(), computerSystemLink)
-		if err != nil {
-			collectionError.Failures[computerSystemLink] = err
-		} else {
-			result = append(result, computerSystem)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[ComputerSystem](hostinterface.GetClient(), hostinterface.computerSystems)
 }
 
 // HostEthernetInterfaces gets the network interface controllers or cards (NICs)

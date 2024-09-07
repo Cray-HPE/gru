@@ -81,62 +81,11 @@ func (routesetentry *RouteSetEntry) Update() error {
 
 // GetRouteSetEntry will get a RouteSetEntry instance from the service.
 func GetRouteSetEntry(c common.Client, uri string) (*RouteSetEntry, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var routesetentry RouteSetEntry
-	err = json.NewDecoder(resp.Body).Decode(&routesetentry)
-	if err != nil {
-		return nil, err
-	}
-
-	routesetentry.SetClient(c)
-	return &routesetentry, nil
+	return common.GetObject[RouteSetEntry](c, uri)
 }
 
 // ListReferencedRouteSetEntrys gets the collection of RouteSetEntry from
 // a provided reference.
 func ListReferencedRouteSetEntrys(c common.Client, link string) ([]*RouteSetEntry, error) {
-	var result []*RouteSetEntry
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *RouteSetEntry
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		routesetentry, err := GetRouteSetEntry(c, link)
-		ch <- GetResult{Item: routesetentry, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[RouteSetEntry](c, link)
 }

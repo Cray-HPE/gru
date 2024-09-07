@@ -139,62 +139,11 @@ func (environmentmetrics *EnvironmentMetrics) Update() error {
 
 // GetEnvironmentMetrics will get a EnvironmentMetrics instance from the service.
 func GetEnvironmentMetrics(c common.Client, uri string) (*EnvironmentMetrics, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var environmentmetrics EnvironmentMetrics
-	err = json.NewDecoder(resp.Body).Decode(&environmentmetrics)
-	if err != nil {
-		return nil, err
-	}
-
-	environmentmetrics.SetClient(c)
-	return &environmentmetrics, nil
+	return common.GetObject[EnvironmentMetrics](c, uri)
 }
 
 // ListReferencedEnvironmentMetricss gets the collection of EnvironmentMetrics from
 // a provided reference.
 func ListReferencedEnvironmentMetricss(c common.Client, link string) ([]*EnvironmentMetrics, error) {
-	var result []*EnvironmentMetrics
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *EnvironmentMetrics
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		environmentmetrics, err := GetEnvironmentMetrics(c, link)
-		ch <- GetResult{Item: environmentmetrics, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[EnvironmentMetrics](c, link)
 }

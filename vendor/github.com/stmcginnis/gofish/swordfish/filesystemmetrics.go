@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 //
 
-//nolint:dupl
 package swordfish
 
 import (
@@ -31,62 +30,11 @@ type FileSystemMetrics struct {
 
 // GetFileSystemMetrics will get a FileSystemMetrics instance from the service.
 func GetFileSystemMetrics(c common.Client, uri string) (*FileSystemMetrics, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var filesystemmetrics FileSystemMetrics
-	err = json.NewDecoder(resp.Body).Decode(&filesystemmetrics)
-	if err != nil {
-		return nil, err
-	}
-
-	filesystemmetrics.SetClient(c)
-	return &filesystemmetrics, nil
+	return common.GetObject[FileSystemMetrics](c, uri)
 }
 
-// ListReferencedFileSystemMetricss gets the collection of FileSystemMetrics from
+// ListReferencedFileSystemMetricses gets the collection of FileSystemMetrics from
 // a provided reference.
-func ListReferencedFileSystemMetricss(c common.Client, link string) ([]*FileSystemMetrics, error) {
-	var result []*FileSystemMetrics
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *FileSystemMetrics
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		filesystemmetrics, err := GetFileSystemMetrics(c, link)
-		ch <- GetResult{Item: filesystemmetrics, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+func ListReferencedFileSystemMetricses(c common.Client, link string) ([]*FileSystemMetrics, error) {
+	return common.GetCollectionObjects[FileSystemMetrics](c, link)
 }

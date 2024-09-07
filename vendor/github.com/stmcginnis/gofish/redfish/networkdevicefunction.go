@@ -435,67 +435,19 @@ func (networkdevicefunction *NetworkDeviceFunction) UnmarshalJSON(b []byte) erro
 
 // Endpoints gets the endpoints that are associated with this network device function.
 func (networkdevicefunction *NetworkDeviceFunction) Endpoints() ([]*Endpoint, error) {
-	var result []*Endpoint
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range networkdevicefunction.endpoints {
-		unit, err := GetEndpoint(networkdevicefunction.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Endpoint](networkdevicefunction.GetClient(), networkdevicefunction.endpoints)
 }
 
 // EthernetInterfaces gets the virtual interfaces that were created when one of the network device function VLANs is
 // represented as a virtual NIC for the purpose of showing the IP address associated with that VLAN.
 func (networkdevicefunction *NetworkDeviceFunction) EthernetInterfaces() ([]*EthernetInterface, error) {
-	var result []*EthernetInterface
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range networkdevicefunction.ethernetInterfaces {
-		unit, err := GetEthernetInterface(networkdevicefunction.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[EthernetInterface](networkdevicefunction.GetClient(), networkdevicefunction.ethernetInterfaces)
 }
 
 // OffloadProcessors gets the processors that performs offload computation for this network function, such as
 // with a SmartNIC. This property shall not be present if OffloadSystem is present.
 func (networkdevicefunction *NetworkDeviceFunction) OffloadProcessors() ([]*Processor, error) {
-	var result []*Processor
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range networkdevicefunction.offloadProcessors {
-		unit, err := GetProcessor(networkdevicefunction.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Processor](networkdevicefunction.GetClient(), networkdevicefunction.offloadProcessors)
 }
 
 // OffloadSystem shall contain a link to a resource of type ComputerSystem that represents the system that performs
@@ -559,52 +511,13 @@ func (networkdevicefunction *NetworkDeviceFunction) Update() error {
 
 // GetNetworkDeviceFunction will get a NetworkDeviceFunction instance from the service.
 func GetNetworkDeviceFunction(c common.Client, uri string) (*NetworkDeviceFunction, error) {
-	var networkDeviceFunction NetworkDeviceFunction
-	return &networkDeviceFunction, networkDeviceFunction.Get(c, uri, &networkDeviceFunction)
+	return common.GetObject[NetworkDeviceFunction](c, uri)
 }
 
 // ListReferencedNetworkDeviceFunctions gets the collection of NetworkDeviceFunction from
 // a provided reference.
 func ListReferencedNetworkDeviceFunctions(c common.Client, link string) ([]*NetworkDeviceFunction, error) {
-	var result []*NetworkDeviceFunction
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *NetworkDeviceFunction
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		networkdevicefunction, err := GetNetworkDeviceFunction(c, link)
-		ch <- GetResult{Item: networkdevicefunction, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[NetworkDeviceFunction](c, link)
 }
 
 // ISCSIBoot shall describe the iSCSI boot capabilities, status, and

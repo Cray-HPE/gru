@@ -149,86 +149,22 @@ func (fabricadapter *FabricAdapter) Ports() ([]*Port, error) {
 
 // Endpoints gets the endpoints connected to this interface.
 func (fabricadapter *FabricAdapter) Endpoints() ([]*Endpoint, error) {
-	var result []*Endpoint
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range fabricadapter.endpoints {
-		endpoint, err := GetEndpoint(fabricadapter.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, endpoint)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Endpoint](fabricadapter.GetClient(), fabricadapter.endpoints)
 }
 
 // MemoryDomains gets the MemoryDomains associated to this interface.
 func (fabricadapter *FabricAdapter) MemoryDomains() ([]*MemoryDomain, error) {
-	var result []*MemoryDomain
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range fabricadapter.memoryDomains {
-		endpoint, err := GetMemoryDomain(fabricadapter.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, endpoint)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[MemoryDomain](fabricadapter.GetClient(), fabricadapter.memoryDomains)
 }
 
 // PCIeDevices gets the PCIe devices associated to this interface.
 func (fabricadapter *FabricAdapter) PCIeDevices() ([]*PCIeDevice, error) {
-	var result []*PCIeDevice
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range fabricadapter.pcieDevices {
-		endpoint, err := GetPCIeDevice(fabricadapter.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, endpoint)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[PCIeDevice](fabricadapter.GetClient(), fabricadapter.pcieDevices)
 }
 
 // Processors gets the processors associated to this interface.
 func (fabricadapter *FabricAdapter) Processors() ([]*Processor, error) {
-	var result []*Processor
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range fabricadapter.processors {
-		endpoint, err := GetProcessor(fabricadapter.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, endpoint)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Processor](fabricadapter.GetClient(), fabricadapter.processors)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -251,64 +187,13 @@ func (fabricadapter *FabricAdapter) Update() error {
 
 // GetFabricAdapter will get a FabricAdapter instance from the service.
 func GetFabricAdapter(c common.Client, uri string) (*FabricAdapter, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var fabricadapter FabricAdapter
-	err = json.NewDecoder(resp.Body).Decode(&fabricadapter)
-	if err != nil {
-		return nil, err
-	}
-
-	fabricadapter.SetClient(c)
-	return &fabricadapter, nil
+	return common.GetObject[FabricAdapter](c, uri)
 }
 
 // ListReferencedFabricAdapters gets the collection of FabricAdapter from
 // a provided reference.
 func ListReferencedFabricAdapters(c common.Client, link string) ([]*FabricAdapter, error) {
-	var result []*FabricAdapter
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *FabricAdapter
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		fabricadapter, err := GetFabricAdapter(c, link)
-		ch <- GetResult{Item: fabricadapter, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[FabricAdapter](c, link)
 }
 
 // FabricAdapterGenZ shall contain Gen-Z related properties for a fabric adapter.

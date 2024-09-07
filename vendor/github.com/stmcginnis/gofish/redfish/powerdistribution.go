@@ -251,8 +251,7 @@ func (powerDistribution *PowerDistribution) UnmarshalJSON(b []byte) error {
 
 // GetPowerDistribution will get a PowerDistribution instance from the Redfish service.
 func GetPowerDistribution(c common.Client, uri string) (*PowerDistribution, error) {
-	var powerDistribution PowerDistribution
-	return &powerDistribution, powerDistribution.Get(c, uri, &powerDistribution)
+	return common.GetObject[PowerDistribution](c, uri)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -305,45 +304,7 @@ func (powerDistribution *PowerDistribution) TransferControl() error {
 // ListReferencedPowerDistribution gets the collection of PowerDistribution from
 // a provided reference.
 func ListReferencedPowerDistributionUnits(c common.Client, link string) ([]*PowerDistribution, error) {
-	var result []*PowerDistribution
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *PowerDistribution
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		powerDistribution, err := GetPowerDistribution(c, link)
-		ch <- GetResult{Item: powerDistribution, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[PowerDistribution](c, link)
 }
 
 // Deprecated: (v1.3) in favor of the Sensors link in the Chassis resource.
@@ -358,44 +319,12 @@ func (powerDistribution *PowerDistribution) PowerSupplies() ([]*PowerSupplyUnit,
 
 // ManagedBy gets the collection of managers for this equipment.
 func (powerDistribution *PowerDistribution) ManagedBy() ([]*Manager, error) {
-	var result []*Manager
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range powerDistribution.managedBy {
-		manager, err := GetManager(powerDistribution.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, manager)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Manager](powerDistribution.GetClient(), powerDistribution.managedBy)
 }
 
 // Chassis gets the collection of chassis for this equipment.
 func (powerDistribution *PowerDistribution) Chassis() ([]*Chassis, error) {
-	var result []*Chassis
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range powerDistribution.chassis {
-		chassis, err := GetChassis(powerDistribution.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, chassis)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Chassis](powerDistribution.GetClient(), powerDistribution.chassis)
 }
 
 // Branches gets the collection that contains the branch circuits for this equipment.

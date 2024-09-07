@@ -133,25 +133,9 @@ func (outletgroup *OutletGroup) ResetMetrics() error {
 	return outletgroup.Post(outletgroup.resetMetricsTarget, nil)
 }
 
-// Outlets get the outlets that are in this outlet gruop.
+// Outlets get the outlets that are in this outlet group.
 func (outletgroup *OutletGroup) Outlets() ([]*Outlet, error) {
-	var result []*Outlet
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range outletgroup.outlets {
-		unit, err := GetOutlet(outletgroup.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Outlet](outletgroup.GetClient(), outletgroup.outlets)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -180,62 +164,11 @@ func (outletgroup *OutletGroup) Update() error {
 
 // GetOutletGroup will get a OutletGroup instance from the service.
 func GetOutletGroup(c common.Client, uri string) (*OutletGroup, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var outletgroup OutletGroup
-	err = json.NewDecoder(resp.Body).Decode(&outletgroup)
-	if err != nil {
-		return nil, err
-	}
-
-	outletgroup.SetClient(c)
-	return &outletgroup, nil
+	return common.GetObject[OutletGroup](c, uri)
 }
 
 // ListReferencedOutletGroups gets the collection of OutletGroup from
 // a provided reference.
 func ListReferencedOutletGroups(c common.Client, link string) ([]*OutletGroup, error) {
-	var result []*OutletGroup
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *OutletGroup
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		outletgroup, err := GetOutletGroup(c, link)
-		ch <- GetResult{Item: outletgroup, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[OutletGroup](c, link)
 }

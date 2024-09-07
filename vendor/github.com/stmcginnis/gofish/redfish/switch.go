@@ -204,44 +204,12 @@ func (sw *Switch) Chassis() (*Chassis, error) {
 
 // Endpoints gets any endpoints associated with this fabric.
 func (sw *Switch) Endpoints() ([]*Endpoint, error) {
-	var result []*Endpoint
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range sw.endpoints {
-		cl, err := GetEndpoint(sw.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, cl)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Endpoint](sw.GetClient(), sw.endpoints)
 }
 
 // ManagedBy gets the managers of this fabric.
 func (sw *Switch) ManagedBy() ([]*Manager, error) {
-	var result []*Manager
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range sw.managedBy {
-		cl, err := GetManager(sw.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, cl)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Manager](sw.GetClient(), sw.managedBy)
 }
 
 // PCIeDevice gets the PCIe device providing this switch.
@@ -285,64 +253,13 @@ func (sw *Switch) Update() error {
 
 // GetSwitch will get a Switch instance from the service.
 func GetSwitch(c common.Client, uri string) (*Switch, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var sw Switch
-	err = json.NewDecoder(resp.Body).Decode(&sw)
-	if err != nil {
-		return nil, err
-	}
-
-	sw.SetClient(c)
-	return &sw, nil
+	return common.GetObject[Switch](c, uri)
 }
 
 // ListReferencedSwitches gets the collection of Switch from
 // a provided reference.
 func ListReferencedSwitches(c common.Client, link string) ([]*Switch, error) {
-	var result []*Switch
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Switch
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		sw, err := GetSwitch(c, link)
-		ch <- GetResult{Item: sw, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Switch](c, link)
 }
 
 // VCSSwitch shall contain Virtual CXL Switch (VCS) properties for a switch.

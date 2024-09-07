@@ -285,64 +285,13 @@ func (resourceblock *ResourceBlock) Update() error {
 
 // GetResourceBlock will get a ResourceBlock instance from the service.
 func GetResourceBlock(c common.Client, uri string) (*ResourceBlock, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var resourceblock ResourceBlock
-	err = json.NewDecoder(resp.Body).Decode(&resourceblock)
-	if err != nil {
-		return nil, err
-	}
-
-	resourceblock.SetClient(c)
-	return &resourceblock, nil
+	return common.GetObject[ResourceBlock](c, uri)
 }
 
 // ListReferencedResourceBlocks gets the collection of ResourceBlock from
 // a provided reference.
 func ListReferencedResourceBlocks(c common.Client, link string) ([]*ResourceBlock, error) {
-	var result []*ResourceBlock
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *ResourceBlock
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		resourceblock, err := GetResourceBlock(c, link)
-		ch <- GetResult{Item: resourceblock, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[ResourceBlock](c, link)
 }
 
 // ResourceBlockLimits shall specify the allowable quantities of types of resource blocks for a given composition

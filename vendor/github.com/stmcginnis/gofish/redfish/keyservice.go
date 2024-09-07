@@ -69,62 +69,11 @@ func (keyservice *KeyService) NVMeoFSecrets() ([]*Key, error) {
 
 // GetKeyService will get a KeyService instance from the service.
 func GetKeyService(c common.Client, uri string) (*KeyService, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var keyservice KeyService
-	err = json.NewDecoder(resp.Body).Decode(&keyservice)
-	if err != nil {
-		return nil, err
-	}
-
-	keyservice.SetClient(c)
-	return &keyservice, nil
+	return common.GetObject[KeyService](c, uri)
 }
 
 // ListReferencedKeyServices gets the collection of KeyService from
 // a provided reference.
 func ListReferencedKeyServices(c common.Client, link string) ([]*KeyService, error) {
-	var result []*KeyService
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *KeyService
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		keyservice, err := GetKeyService(c, link)
-		ch <- GetResult{Item: keyservice, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[KeyService](c, link)
 }

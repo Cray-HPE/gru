@@ -109,64 +109,13 @@ func (manager *Manager) ResetMetrics() error {
 
 // GetManagerDiagnosticData will get a ManagerDiagnosticData instance from the service.
 func GetManagerDiagnosticData(c common.Client, uri string) (*ManagerDiagnosticData, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var managerdiagnosticdata ManagerDiagnosticData
-	err = json.NewDecoder(resp.Body).Decode(&managerdiagnosticdata)
-	if err != nil {
-		return nil, err
-	}
-
-	managerdiagnosticdata.SetClient(c)
-	return &managerdiagnosticdata, nil
+	return common.GetObject[ManagerDiagnosticData](c, uri)
 }
 
 // ListReferencedManagerDiagnosticDatas gets the collection of ManagerDiagnosticData from
 // a provided reference.
 func ListReferencedManagerDiagnosticDatas(c common.Client, link string) ([]*ManagerDiagnosticData, error) {
-	var result []*ManagerDiagnosticData
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *ManagerDiagnosticData
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		managerdiagnosticdata, err := GetManagerDiagnosticData(c, link)
-		ch <- GetResult{Item: managerdiagnosticdata, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[ManagerDiagnosticData](c, link)
 }
 
 // MemoryECCStatistics shall contain the memory ECC statistics of a manager.
