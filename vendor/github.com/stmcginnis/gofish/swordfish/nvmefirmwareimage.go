@@ -49,62 +49,11 @@ type NVMeFirmwareImage struct {
 
 // GetNVMeFirmwareImage will get a NVMeFirmwareImage instance from the service.
 func GetNVMeFirmwareImage(c common.Client, uri string) (*NVMeFirmwareImage, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var nvmefirmwareimage NVMeFirmwareImage
-	err = json.NewDecoder(resp.Body).Decode(&nvmefirmwareimage)
-	if err != nil {
-		return nil, err
-	}
-
-	nvmefirmwareimage.SetClient(c)
-	return &nvmefirmwareimage, nil
+	return common.GetObject[NVMeFirmwareImage](c, uri)
 }
 
 // ListReferencedNVMeFirmwareImages gets the collection of NVMeFirmwareImage from
 // a provided reference.
 func ListReferencedNVMeFirmwareImages(c common.Client, link string) ([]*NVMeFirmwareImage, error) {
-	var result []*NVMeFirmwareImage
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *NVMeFirmwareImage
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		nvmefirmwareimage, err := GetNVMeFirmwareImage(c, link)
-		ch <- GetResult{Item: nvmefirmwareimage, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[NVMeFirmwareImage](c, link)
 }

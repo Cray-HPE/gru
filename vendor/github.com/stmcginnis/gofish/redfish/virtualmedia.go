@@ -221,45 +221,13 @@ func (virtualmedia *VirtualMedia) UnmarshalJSON(b []byte) error {
 // services may perform additional verification based on other factors, such as the
 // configuration of the SecurityPolicy resource.
 func (virtualmedia *VirtualMedia) Certificates() ([]*Certificate, error) {
-	var result []*Certificate
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range virtualmedia.certificates {
-		item, err := GetCertificate(virtualmedia.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Certificate](virtualmedia.GetClient(), virtualmedia.certificates)
 }
 
 // ClientCertificates gets the client identity certificates that are provided to
 // the server referenced by the Image property as part of TLS handshaking.
 func (virtualmedia *VirtualMedia) ClientCertificates() ([]*Certificate, error) {
-	var result []*Certificate
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range virtualmedia.clientCertificates {
-		item, err := GetCertificate(virtualmedia.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Certificate](virtualmedia.GetClient(), virtualmedia.clientCertificates)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -342,50 +310,11 @@ func (virtualmedia *VirtualMedia) InsertMediaConfig(config VirtualMediaConfig) e
 
 // GetVirtualMedia will get a VirtualMedia instance from the service.
 func GetVirtualMedia(c common.Client, uri string) (*VirtualMedia, error) {
-	var virtualMedia VirtualMedia
-	return &virtualMedia, virtualMedia.Get(c, uri, &virtualMedia)
+	return common.GetObject[VirtualMedia](c, uri)
 }
 
 // ListReferencedVirtualMedias gets the collection of VirtualMedia from
 // a provided reference.
 func ListReferencedVirtualMedias(c common.Client, link string) ([]*VirtualMedia, error) {
-	var result []*VirtualMedia
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *VirtualMedia
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		virtualmedia, err := GetVirtualMedia(c, link)
-		ch <- GetResult{Item: virtualmedia, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[VirtualMedia](c, link)
 }

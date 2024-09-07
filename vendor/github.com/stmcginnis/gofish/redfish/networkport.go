@@ -274,52 +274,13 @@ func (networkport *NetworkPort) Update() error {
 
 // GetNetworkPort will get a NetworkPort instance from the service.
 func GetNetworkPort(c common.Client, uri string) (*NetworkPort, error) {
-	var networkPort NetworkPort
-	return &networkPort, networkPort.Get(c, uri, &networkPort)
+	return common.GetObject[NetworkPort](c, uri)
 }
 
 // ListReferencedNetworkPorts gets the collection of NetworkPort from
 // a provided reference.
 func ListReferencedNetworkPorts(c common.Client, link string) ([]*NetworkPort, error) {
-	var result []*NetworkPort
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *NetworkPort
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		networkport, err := GetNetworkPort(c, link)
-		ch <- GetResult{Item: networkport, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[NetworkPort](c, link)
 }
 
 // SupportedLinkCapabilities shall describe the static capabilities of an

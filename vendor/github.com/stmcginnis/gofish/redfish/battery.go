@@ -188,64 +188,13 @@ func (battery *Battery) Update() error {
 
 // GetBattery will get a Battery instance from the service.
 func GetBattery(c common.Client, uri string) (*Battery, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var battery Battery
-	err = json.NewDecoder(resp.Body).Decode(&battery)
-	if err != nil {
-		return nil, err
-	}
-
-	battery.SetClient(c)
-	return &battery, nil
+	return common.GetObject[Battery](c, uri)
 }
 
 // ListReferencedBatterys gets the collection of Battery from
 // a provided reference.
 func ListReferencedBatterys(c common.Client, link string) ([]*Battery, error) {
-	var result []*Battery
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Battery
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		battery, err := GetBattery(c, link)
-		ch <- GetResult{Item: battery, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Battery](c, link)
 }
 
 // Assembly get the containing assembly of this battery.
@@ -266,44 +215,12 @@ func (battery *Battery) BatteryMetrics() (*BatteryMetrics, error) {
 
 // Memory returns a collection of Memory devices associated with this Battery.
 func (battery *Battery) Memory() ([]*Memory, error) {
-	var result []*Memory
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range battery.memory {
-		memory, err := GetMemory(battery.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, memory)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Memory](battery.GetClient(), battery.memory)
 }
 
 // StorageControllers returns a collection of StorageControllers associated with this Battery.
 func (battery *Battery) StorageControllers() ([]*StorageController, error) {
-	var result []*StorageController
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range battery.storageControllers {
-		sc, err := GetStorageController(battery.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, sc)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[StorageController](battery.GetClient(), battery.storageControllers)
 }
 
 // Calibrate performs a self-calibration, or learn cycle, of the battery.

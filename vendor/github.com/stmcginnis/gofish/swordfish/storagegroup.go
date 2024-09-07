@@ -219,94 +219,23 @@ func (storagegroup *StorageGroup) Update() error {
 
 // GetStorageGroup will get a StorageGroup instance from the service.
 func GetStorageGroup(c common.Client, uri string) (*StorageGroup, error) {
-	var storageGroup StorageGroup
-	return &storageGroup, storageGroup.Get(c, uri, &storageGroup)
+	return common.GetObject[StorageGroup](c, uri)
 }
 
 // ListReferencedStorageGroups gets the collection of StorageGroup from
 // a provided reference.
 func ListReferencedStorageGroups(c common.Client, link string) ([]*StorageGroup, error) {
-	var result []*StorageGroup
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *StorageGroup
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		storagegroup, err := GetStorageGroup(c, link)
-		ch <- GetResult{Item: storagegroup, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[StorageGroup](c, link)
 }
 
 // ChildStorageGroups gets child groups of this group.
 func (storagegroup *StorageGroup) ChildStorageGroups() ([]*StorageGroup, error) {
-	var result []*StorageGroup
-
-	collectionError := common.NewCollectionError()
-	for _, sgLink := range storagegroup.childStorageGroups {
-		sg, err := GetStorageGroup(storagegroup.GetClient(), sgLink)
-		if err != nil {
-			collectionError.Failures[sgLink] = err
-		} else {
-			result = append(result, sg)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[StorageGroup](storagegroup.GetClient(), storagegroup.childStorageGroups)
 }
 
 // ParentStorageGroups gets parent groups of this group.
 func (storagegroup *StorageGroup) ParentStorageGroups() ([]*StorageGroup, error) {
-	var result []*StorageGroup
-
-	collectionError := common.NewCollectionError()
-	for _, sgLink := range storagegroup.parentStorageGroups {
-		sg, err := GetStorageGroup(storagegroup.GetClient(), sgLink)
-		if err != nil {
-			collectionError.Failures[sgLink] = err
-		} else {
-			result = append(result, sg)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[StorageGroup](storagegroup.GetClient(), storagegroup.parentStorageGroups)
 }
 
 // ClassOfService gets the ClassOfService that all storage in this StorageGroup

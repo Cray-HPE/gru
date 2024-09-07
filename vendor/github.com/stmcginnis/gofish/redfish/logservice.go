@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/stmcginnis/gofish/common"
 )
@@ -179,51 +180,12 @@ func (logservice *LogService) Update() error {
 
 // GetLogService will get a LogService instance from the service.
 func GetLogService(c common.Client, uri string) (*LogService, error) {
-	var logService LogService
-	return &logService, logService.Get(c, uri, &logService)
+	return common.GetObject[LogService](c, uri)
 }
 
 // ListReferencedLogServices gets the collection of LogService from a provided reference.
 func ListReferencedLogServices(c common.Client, link string) ([]*LogService, error) {
-	var result []*LogService
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *LogService
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		logservice, err := GetLogService(c, link)
-		ch <- GetResult{Item: logservice, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[LogService](c, link)
 }
 
 // Entries gets the log entries of this service.
@@ -241,6 +203,29 @@ func (logservice *LogService) FilteredEntries(options ...common.FilterOption) ([
 // ClearLog shall delete all entries found in the Entries collection for this
 // Log Service.
 func (logservice *LogService) ClearLog() error {
+	err := logservice.Post(logservice.clearLogTarget, struct{}{})
+	if err == nil {
+		return nil
+	}
+
+	// As of LogService 1.3.0, need to pass the LogEntryCollection etag. If our first attempt failed, try that.
+	entryCollection := &struct {
+		ETag string `json:"@odata.etag"`
+	}{}
+
+	retryErr := logservice.Get(logservice.GetClient(), logservice.entries, entryCollection)
+	if retryErr == nil {
+		payload := struct {
+			LogEntriesETag string
+		}{LogEntriesETag: strings.Trim(entryCollection.ETag, "\"")}
+
+		retryErr = logservice.Post(logservice.clearLogTarget, payload)
+		if retryErr == nil {
+			return nil
+		}
+	}
+
+	// Fall back to broken implementation to workaround vendor bug
 	t := struct {
 		Action string
 	}{

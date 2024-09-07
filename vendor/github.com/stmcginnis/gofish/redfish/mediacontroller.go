@@ -132,104 +132,21 @@ func (mediacontroller *MediaController) Ports() ([]*Port, error) {
 
 // Endpoints get the Endpoints with which this media controller is associated.
 func (mediacontroller *MediaController) Endpoints() ([]*Endpoint, error) {
-	var result []*Endpoint
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range mediacontroller.endpoints {
-		unit, err := GetEndpoint(mediacontroller.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Endpoint](mediacontroller.GetClient(), mediacontroller.endpoints)
 }
 
 // MemoryDomains get the memory domains associated with this memory controller.
 func (mediacontroller *MediaController) MemoryDomains() ([]*MemoryDomain, error) {
-	var result []*MemoryDomain
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range mediacontroller.memoryDomains {
-		unit, err := GetMemoryDomain(mediacontroller.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[MemoryDomain](mediacontroller.GetClient(), mediacontroller.memoryDomains)
 }
 
 // GetMediaController will get a MediaController instance from the service.
 func GetMediaController(c common.Client, uri string) (*MediaController, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var mediacontroller MediaController
-	err = json.NewDecoder(resp.Body).Decode(&mediacontroller)
-	if err != nil {
-		return nil, err
-	}
-
-	mediacontroller.SetClient(c)
-	return &mediacontroller, nil
+	return common.GetObject[MediaController](c, uri)
 }
 
 // ListReferencedMediaControllers gets the collection of MediaController from
 // a provided reference.
 func ListReferencedMediaControllers(c common.Client, link string) ([]*MediaController, error) {
-	var result []*MediaController
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *MediaController
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		mediacontroller, err := GetMediaController(c, link)
-		ch <- GetResult{Item: mediacontroller, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[MediaController](c, link)
 }

@@ -139,62 +139,11 @@ func (schedule *Schedule) Update() error {
 
 // GetSchedule will get a Schedule instance from the service.
 func GetSchedule(c common.Client, uri string) (*Schedule, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var schedule Schedule
-	err = json.NewDecoder(resp.Body).Decode(&schedule)
-	if err != nil {
-		return nil, err
-	}
-
-	schedule.SetClient(c)
-	return &schedule, nil
+	return common.GetObject[Schedule](c, uri)
 }
 
 // ListReferencedSchedules gets the collection of Schedule from
 // a provided reference.
 func ListReferencedSchedules(c common.Client, link string) ([]*Schedule, error) {
-	var result []*Schedule
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Schedule
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		schedule, err := GetSchedule(c, link)
-		ch <- GetResult{Item: schedule, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Schedule](c, link)
 }

@@ -86,83 +86,16 @@ func (containerimage *ContainerImage) UnmarshalJSON(b []byte) error {
 
 // GetContainerImage will get a ContainerImage instance from the service.
 func GetContainerImage(c common.Client, uri string) (*ContainerImage, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var containerimage ContainerImage
-	err = json.NewDecoder(resp.Body).Decode(&containerimage)
-	if err != nil {
-		return nil, err
-	}
-
-	containerimage.SetClient(c)
-	return &containerimage, nil
+	return common.GetObject[ContainerImage](c, uri)
 }
 
 // ListReferencedContainerImages gets the collection of ContainerImage from
 // a provided reference.
 func ListReferencedContainerImages(c common.Client, link string) ([]*ContainerImage, error) {
-	var result []*ContainerImage
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *ContainerImage
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		containerimage, err := GetContainerImage(c, link)
-		ch <- GetResult{Item: containerimage, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[ContainerImage](c, link)
 }
 
 // Containers get the container instances using this container image.
 func (containerimage *ContainerImage) Containers() ([]*Container, error) {
-	var result []*Container
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range containerimage.containers {
-		rb, err := GetContainer(containerimage.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, rb)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Container](containerimage.GetClient(), containerimage.containers)
 }

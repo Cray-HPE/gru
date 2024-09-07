@@ -379,6 +379,8 @@ type Manager struct {
 	modifyRedundancySetTarget string
 	// resetTarget is the internal URL to send reset targets to.
 	resetTarget string
+	// resetInfo contains URI for an ActionInfo Resource that describes this action.
+	actionInfo string
 	// SupportedResetTypes, if provided, is the reset types this system supports.
 	SupportedResetTypes   []ResetType
 	resetToDefaultsTarget string
@@ -393,6 +395,7 @@ func (manager *Manager) UnmarshalJSON(b []byte) error {
 		ForceFailover       common.ActionTarget `json:"#Manager.ForceFailover"`
 		ModifyRedundancySet common.ActionTarget `json:"#Manager.ModifyRedundancySet"`
 		Reset               struct {
+			ActionInfo        string      `json:"@Redfish.ActionInfo"`
 			AllowedResetTypes []ResetType `json:"ResetType@Redfish.AllowableValues"`
 			Target            string
 		} `json:"#Manager.Reset"`
@@ -479,6 +482,7 @@ func (manager *Manager) UnmarshalJSON(b []byte) error {
 	manager.SupportedResetTypes = t.Actions.Reset.AllowedResetTypes
 	manager.resetTarget = t.Actions.Reset.Target
 	manager.resetToDefaultsTarget = t.Actions.ResetToDefaults.Target
+	manager.actionInfo = t.Actions.Reset.ActionInfo
 
 	// This is a read/write object, so we need to save the raw object data for later
 	manager.rawData = b
@@ -513,51 +517,12 @@ func (manager *Manager) Update() error {
 
 // GetManager will get a Manager instance from the Swordfish service.
 func GetManager(c common.Client, uri string) (*Manager, error) {
-	var manager Manager
-	return &manager, manager.Get(c, uri, &manager)
+	return common.GetObject[Manager](c, uri)
 }
 
 // ListReferencedManagers gets the collection of Managers
 func ListReferencedManagers(c common.Client, link string) ([]*Manager, error) {
-	var result []*Manager
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Manager
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		manager, err := GetManager(c, link)
-		ch <- GetResult{Item: manager, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Manager](c, link)
 }
 
 // ForceFailover forces a failover to the specified manager.
@@ -584,6 +549,14 @@ func (manager *Manager) ModifyRedundancySet(addManagers, removeManagers []*Manag
 // Reset shall perform a reset of the manager.
 func (manager *Manager) Reset(resetType ResetType) error {
 	if len(manager.SupportedResetTypes) == 0 {
+		if manager.actionInfo != "" {
+			// reset without confirming the type is supported by the manager.
+			// done to minimize overhead though technically not as correct as first checking the supported reset types
+			t := struct {
+				ResetType ResetType
+			}{ResetType: resetType}
+			return manager.Post(manager.resetTarget, t)
+		}
 		// reset directly without reset type. HPE server has the behavior
 		return manager.Post(manager.resetTarget, struct{}{})
 	}
@@ -682,107 +655,27 @@ func (manager *Manager) ActiveSoftwareImage() (*SoftwareInventory, error) {
 
 // ManagedBy gets the managers responsible for managing this manager.
 func (manager *Manager) ManagedBy() ([]*Manager, error) {
-	var result []*Manager
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range manager.managedBy {
-		mgr, err := GetManager(manager.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, mgr)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Manager](manager.GetClient(), manager.managedBy)
 }
 
 // ManagedForChassis gets the the chassis this manager controls.
 func (manager *Manager) ManagedForChassis() ([]*Chassis, error) {
-	var result []*Chassis
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range manager.managerForChassis {
-		chassis, err := GetChassis(manager.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, chassis)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Chassis](manager.GetClient(), manager.managerForChassis)
 }
 
 // ManagerForManagers gets the managers that are managed by this manager.
 func (manager *Manager) ManagerForManagers() ([]*Manager, error) {
-	var result []*Manager
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range manager.managerForManagers {
-		mgr, err := GetManager(manager.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, mgr)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Manager](manager.GetClient(), manager.managerForManagers)
 }
 
 // ManagerForServers gets the systems that this manager controls.
 func (manager *Manager) ManagerForServers() ([]*ComputerSystem, error) {
-	var result []*ComputerSystem
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range manager.managerForServers {
-		mgr, err := GetComputerSystem(manager.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, mgr)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[ComputerSystem](manager.GetClient(), manager.managerForServers)
 }
 
 // ManagerForSwitches gets the switches that this manager controls.
 func (manager *Manager) ManagerForSwitches() ([]*Switch, error) {
-	var result []*Switch
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range manager.managerForSwitches {
-		mgr, err := GetSwitch(manager.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, mgr)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Switch](manager.GetClient(), manager.managerForSwitches)
 }
 
 // SelectedNetworkPort gets the current network port used by this manager.
@@ -795,21 +688,5 @@ func (manager *Manager) SelectedNetworkPort() (*Port, error) {
 
 // SoftwareImages gets the firmware images that apply to this manager.
 func (manager *Manager) SoftwareImages() ([]*SoftwareInventory, error) {
-	var result []*SoftwareInventory
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range manager.softwareImages {
-		mgr, err := GetSoftwareInventory(manager.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, mgr)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[SoftwareInventory](manager.GetClient(), manager.softwareImages)
 }

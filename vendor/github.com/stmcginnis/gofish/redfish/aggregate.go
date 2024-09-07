@@ -70,23 +70,7 @@ func (aggregate *Aggregate) UnmarshalJSON(b []byte) error {
 
 // Elements get the elements of this aggregate.
 func (aggregate *Aggregate) Elements() ([]*Resource, error) {
-	var result []*Resource
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range aggregate.elements {
-		endpoint, err := GetResource(aggregate.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, endpoint)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Resource](aggregate.GetClient(), aggregate.elements)
 }
 
 // AddElements adds one or more resources to the aggregate.
@@ -134,62 +118,11 @@ func (aggregate *Aggregate) SetDefaultBootOrder() error {
 
 // GetAggregate will get a Aggregate instance from the service.
 func GetAggregate(c common.Client, uri string) (*Aggregate, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var aggregate Aggregate
-	err = json.NewDecoder(resp.Body).Decode(&aggregate)
-	if err != nil {
-		return nil, err
-	}
-
-	aggregate.SetClient(c)
-	return &aggregate, nil
+	return common.GetObject[Aggregate](c, uri)
 }
 
 // ListReferencedAggregates gets the collection of Aggregate from
 // a provided reference.
 func ListReferencedAggregates(c common.Client, link string) ([]*Aggregate, error) {
-	var result []*Aggregate
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Aggregate
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		aggregate, err := GetAggregate(c, link)
-		ch <- GetResult{Item: aggregate, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Aggregate](c, link)
 }

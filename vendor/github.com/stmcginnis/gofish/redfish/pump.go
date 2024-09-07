@@ -121,23 +121,7 @@ func (pump *Pump) Assembly() (*Assembly, error) {
 
 // Filters gets a collection of filters.
 func (pump *Pump) Filters() ([]*Filter, error) {
-	var result []*Filter
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range pump.filters {
-		item, err := GetFilter(pump.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Filter](pump.GetClient(), pump.filters)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -162,62 +146,11 @@ func (pump *Pump) Update() error {
 
 // GetPump will get a Pump instance from the service.
 func GetPump(c common.Client, uri string) (*Pump, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var pump Pump
-	err = json.NewDecoder(resp.Body).Decode(&pump)
-	if err != nil {
-		return nil, err
-	}
-
-	pump.SetClient(c)
-	return &pump, nil
+	return common.GetObject[Pump](c, uri)
 }
 
 // ListReferencedPumps gets the collection of Pump from
 // a provided reference.
 func ListReferencedPumps(c common.Client, link string) ([]*Pump, error) {
-	var result []*Pump
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Pump
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		pump, err := GetPump(c, link)
-		ch <- GetResult{Item: pump, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Pump](c, link)
 }

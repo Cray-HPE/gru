@@ -197,51 +197,12 @@ func (certificate *Certificate) UnmarshalJSON(b []byte) error {
 
 // GetCertificate will get a Certificate instance from the Redfish service.
 func GetCertificate(c common.Client, uri string) (*Certificate, error) {
-	var certificate Certificate
-	return &certificate, certificate.Get(c, uri, &certificate)
+	return common.GetObject[Certificate](c, uri)
 }
 
 // ListReferencedCertificates gets the Certificates collection.
 func ListReferencedCertificates(c common.Client, link string) ([]*Certificate, error) {
-	var result []*Certificate
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Certificate
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		certificate, err := GetCertificate(c, link)
-		ch <- GetResult{Item: certificate, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Certificate](c, link)
 }
 
 func (certificate *Certificate) RekeyCertificate(challengePassword, keyCurveID, keyPairAlgorithm string, keyBitLength int) error {

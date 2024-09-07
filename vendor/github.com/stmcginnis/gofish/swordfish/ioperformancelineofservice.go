@@ -96,50 +96,11 @@ func (ioperformancelineofservice *IOPerformanceLineOfService) Update() error {
 
 // GetIOPerformanceLineOfService will get a IOPerformanceLineOfService instance from the service.
 func GetIOPerformanceLineOfService(c common.Client, uri string) (*IOPerformanceLineOfService, error) {
-	var ioPerformanceLineOfService IOPerformanceLineOfService
-	return &ioPerformanceLineOfService, ioPerformanceLineOfService.Get(c, uri, &ioPerformanceLineOfService)
+	return common.GetObject[IOPerformanceLineOfService](c, uri)
 }
 
 // ListReferencedIOPerformanceLineOfServices gets the collection of IOPerformanceLineOfService from
 // a provided reference.
 func ListReferencedIOPerformanceLineOfServices(c common.Client, link string) ([]*IOPerformanceLineOfService, error) {
-	var result []*IOPerformanceLineOfService
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *IOPerformanceLineOfService
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		ioperformancelineofservice, err := GetIOPerformanceLineOfService(c, link)
-		ch <- GetResult{Item: ioperformancelineofservice, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[IOPerformanceLineOfService](c, link)
 }

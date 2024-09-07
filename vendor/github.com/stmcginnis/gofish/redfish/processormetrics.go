@@ -226,62 +226,11 @@ func (processormetrics *ProcessorMetrics) ClearCurrentPeriod() error {
 
 // GetProcessorMetrics will get a ProcessorMetrics instance from the service.
 func GetProcessorMetrics(c common.Client, uri string) (*ProcessorMetrics, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var processormetrics ProcessorMetrics
-	err = json.NewDecoder(resp.Body).Decode(&processormetrics)
-	if err != nil {
-		return nil, err
-	}
-
-	processormetrics.SetClient(c)
-	return &processormetrics, nil
+	return common.GetObject[ProcessorMetrics](c, uri)
 }
 
 // ListReferencedProcessorMetricss gets the collection of ProcessorMetrics from
 // a provided reference.
 func ListReferencedProcessorMetricss(c common.Client, link string) ([]*ProcessorMetrics, error) {
-	var result []*ProcessorMetrics
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *ProcessorMetrics
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		processormetrics, err := GetProcessorMetrics(c, link)
-		ch <- GetResult{Item: processormetrics, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[ProcessorMetrics](c, link)
 }

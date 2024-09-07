@@ -70,64 +70,13 @@ type PrivilegeRegistry struct {
 
 // GetPrivilegeRegistry will get a PrivilegeRegistry instance from the service.
 func GetPrivilegeRegistry(c common.Client, uri string) (*PrivilegeRegistry, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var privilegeregistry PrivilegeRegistry
-	err = json.NewDecoder(resp.Body).Decode(&privilegeregistry)
-	if err != nil {
-		return nil, err
-	}
-
-	privilegeregistry.SetClient(c)
-	return &privilegeregistry, nil
+	return common.GetObject[PrivilegeRegistry](c, uri)
 }
 
 // ListReferencedPrivilegeRegistrys gets the collection of PrivilegeRegistry from
 // a provided reference.
 func ListReferencedPrivilegeRegistrys(c common.Client, link string) ([]*PrivilegeRegistry, error) {
-	var result []*PrivilegeRegistry
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *PrivilegeRegistry
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		privilegeregistry, err := GetPrivilegeRegistry(c, link)
-		ch <- GetResult{Item: privilegeregistry, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[PrivilegeRegistry](c, link)
 }
 
 // TargetPrivilegeMap shall describe a mapping between one or more targets and the HTTP operations associated with

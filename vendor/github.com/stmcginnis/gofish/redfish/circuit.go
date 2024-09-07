@@ -441,8 +441,7 @@ func (circuit *Circuit) UnmarshalJSON(b []byte) error {
 
 // GetCircuit will get a Circuit instance from the Redfish service.
 func GetCircuit(c common.Client, uri string) (*Circuit, error) {
-	var circuit Circuit
-	return &circuit, circuit.Get(c, uri, &circuit)
+	return common.GetObject[Circuit](c, uri)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -516,45 +515,7 @@ func (circuit *Circuit) ResetMetrics() error {
 // ListReferencedCircuits gets the collection of Circuits from
 // a provided reference.
 func ListReferencedCircuits(c common.Client, link string) ([]*Circuit, error) {
-	var result []*Circuit
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Circuit
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		circuit, err := GetCircuit(c, link)
-		ch <- GetResult{Item: circuit, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Circuit](c, link)
 }
 
 // BranchCircuit gets a resource that represents the branch circuit associated with this circuit.
@@ -569,23 +530,7 @@ func (circuit *Circuit) SourceCircuit() (*Circuit, error) {
 
 // DistributionCircuits gets the collection that contains the circuits powered by this circuit.
 func (circuit *Circuit) DistributionCircuits() ([]*Circuit, error) {
-	var result []*Circuit
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range circuit.distributionCircuits {
-		ct, err := GetCircuit(circuit.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, ct)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Circuit](circuit.GetClient(), circuit.distributionCircuits)
 }
 
 // TODO: outlets, power outlet

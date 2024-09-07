@@ -248,9 +248,9 @@ func (outlet *Outlet) UnmarshalJSON(b []byte) error {
 }
 
 // PowerControl controls the power state of the outlet.
-func (outlet *Outlet) PowerControl(powerState PowerState) error {
+func (outlet *Outlet) PowerControl(powerState ActionPowerState) error {
 	params := struct {
-		PowerState PowerState
+		PowerState ActionPowerState
 	}{
 		PowerState: powerState,
 	}
@@ -272,65 +272,17 @@ func (outlet *Outlet) BranchCircuit() (*Circuit, error) {
 
 // Chassis gets the chassis connected to this outlet.
 func (outlet *Outlet) Chassis() ([]*Chassis, error) {
-	var result []*Chassis
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range outlet.chassis {
-		unit, err := GetChassis(outlet.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Chassis](outlet.GetClient(), outlet.chassis)
 }
 
 // DistributionCircuits gets the circuits powered by this outlet.
 func (outlet *Outlet) DistributionCircuits() ([]*Circuit, error) {
-	var result []*Circuit
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range outlet.distributionCircuits {
-		unit, err := GetCircuit(outlet.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Circuit](outlet.GetClient(), outlet.distributionCircuits)
 }
 
 // PowerSupplies gets the power supplies connected to this outlet.
 func (outlet *Outlet) PowerSupplies() ([]*PowerSupply, error) {
-	var result []*PowerSupply
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range outlet.powerSupplies {
-		unit, err := GetPowerSupply(outlet.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[PowerSupply](outlet.GetClient(), outlet.powerSupplies)
 }
 
 // Update commits updates to this object's properties to the running system.
@@ -361,64 +313,13 @@ func (outlet *Outlet) Update() error {
 
 // GetOutlet will get a Outlet instance from the service.
 func GetOutlet(c common.Client, uri string) (*Outlet, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var outlet Outlet
-	err = json.NewDecoder(resp.Body).Decode(&outlet)
-	if err != nil {
-		return nil, err
-	}
-
-	outlet.SetClient(c)
-	return &outlet, nil
+	return common.GetObject[Outlet](c, uri)
 }
 
 // ListReferencedOutlets gets the collection of Outlet from
 // a provided reference.
 func ListReferencedOutlets(c common.Client, link string) ([]*Outlet, error) {
-	var result []*Outlet
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *Outlet
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		outlet, err := GetOutlet(c, link)
-		ch <- GetResult{Item: outlet, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[Outlet](c, link)
 }
 
 // VoltageSensors shall contain properties that describe voltage sensor readings for an outlet.

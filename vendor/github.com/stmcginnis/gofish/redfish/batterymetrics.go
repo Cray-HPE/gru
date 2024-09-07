@@ -5,8 +5,6 @@
 package redfish
 
 import (
-	"encoding/json"
-
 	"github.com/stmcginnis/gofish/common"
 )
 
@@ -72,62 +70,11 @@ type BatteryMetrics struct {
 
 // GetBatteryMetrics will get a BatteryMetrics instance from the service.
 func GetBatteryMetrics(c common.Client, uri string) (*BatteryMetrics, error) {
-	resp, err := c.Get(uri)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var batterymetrics BatteryMetrics
-	err = json.NewDecoder(resp.Body).Decode(&batterymetrics)
-	if err != nil {
-		return nil, err
-	}
-
-	batterymetrics.SetClient(c)
-	return &batterymetrics, nil
+	return common.GetObject[BatteryMetrics](c, uri)
 }
 
 // ListReferencedBatteryMetricss gets the collection of BatteryMetrics from
 // a provided reference.
 func ListReferencedBatteryMetricss(c common.Client, link string) ([]*BatteryMetrics, error) {
-	var result []*BatteryMetrics
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *BatteryMetrics
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		batterymetrics, err := GetBatteryMetrics(c, link)
-		ch <- GetResult{Item: batterymetrics, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[BatteryMetrics](c, link)
 }

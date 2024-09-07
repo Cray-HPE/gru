@@ -464,50 +464,11 @@ type StorageReplicaInfo struct {
 
 // GetStorageReplicaInfo will get a StorageReplicaInfo instance from the service.
 func GetStorageReplicaInfo(c common.Client, uri string) (*StorageReplicaInfo, error) {
-	var storageReplicaInfo StorageReplicaInfo
-	return &storageReplicaInfo, storageReplicaInfo.Get(c, uri, &storageReplicaInfo)
+	return common.GetObject[StorageReplicaInfo](c, uri)
 }
 
 // ListReferencedStorageReplicaInfos gets the collection of StorageReplicaInfo from
 // a provided reference.
 func ListReferencedStorageReplicaInfos(c common.Client, link string) ([]*StorageReplicaInfo, error) {
-	var result []*StorageReplicaInfo
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *StorageReplicaInfo
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		storagereplicainfo, err := GetStorageReplicaInfo(c, link)
-		ch <- GetResult{Item: storagereplicainfo, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[StorageReplicaInfo](c, link)
 }

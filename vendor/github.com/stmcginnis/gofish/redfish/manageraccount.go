@@ -173,44 +173,12 @@ func (manageraccount *ManagerAccount) Role() (*Role, error) {
 
 // Certificates gets the user identity certificates for this account.
 func (manageraccount *ManagerAccount) Certificates() ([]*Certificate, error) {
-	var result []*Certificate
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range manageraccount.certificates {
-		unit, err := GetCertificate(manageraccount.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Certificate](manageraccount.GetClient(), manageraccount.certificates)
 }
 
 // Keys gets the keys that can be used to authenticate this account.
 func (manageraccount *ManagerAccount) Keys() ([]*Key, error) {
-	var result []*Key
-
-	collectionError := common.NewCollectionError()
-	for _, uri := range manageraccount.keys {
-		unit, err := GetKey(manageraccount.GetClient(), uri)
-		if err != nil {
-			collectionError.Failures[uri] = err
-		} else {
-			result = append(result, unit)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetObjects[Key](manageraccount.GetClient(), manageraccount.keys)
 }
 
 // ChangePassword changes the account password while requiring password for the current session.
@@ -269,52 +237,13 @@ func (manageraccount *ManagerAccount) Update() error {
 
 // GetManagerAccount will get a ManagerAccount instance from the service.
 func GetManagerAccount(c common.Client, uri string) (*ManagerAccount, error) {
-	var managerAccount ManagerAccount
-	return &managerAccount, managerAccount.Get(c, uri, &managerAccount)
+	return common.GetObject[ManagerAccount](c, uri)
 }
 
 // ListReferencedManagerAccounts gets the collection of ManagerAccount from
 // a provided reference.
 func ListReferencedManagerAccounts(c common.Client, link string) ([]*ManagerAccount, error) {
-	var result []*ManagerAccount
-	if link == "" {
-		return result, nil
-	}
-
-	type GetResult struct {
-		Item  *ManagerAccount
-		Link  string
-		Error error
-	}
-
-	ch := make(chan GetResult)
-	collectionError := common.NewCollectionError()
-	get := func(link string) {
-		manageraccount, err := GetManagerAccount(c, link)
-		ch <- GetResult{Item: manageraccount, Link: link, Error: err}
-	}
-
-	go func() {
-		err := common.CollectList(get, c, link)
-		if err != nil {
-			collectionError.Failures[link] = err
-		}
-		close(ch)
-	}()
-
-	for r := range ch {
-		if r.Error != nil {
-			collectionError.Failures[r.Link] = r.Error
-		} else {
-			result = append(result, r.Item)
-		}
-	}
-
-	if collectionError.Empty() {
-		return result, nil
-	}
-
-	return result, collectionError
+	return common.GetCollectionObjects[ManagerAccount](c, link)
 }
 
 // SNMPUserInfo is shall contain the SNMP settings for an account.
