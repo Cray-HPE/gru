@@ -25,7 +25,7 @@
 //
 module github.com/Cray-HPE/gru
 
-go 1.20
+go 1.22
 
 require (
 	github.com/spf13/cobra v1.8.1
