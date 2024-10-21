@@ -299,6 +299,8 @@ type Drive struct {
 	// WriteCacheEnabled shall indicate whether the drive
 	// write cache is enabled.
 	WriteCacheEnabled bool
+	// Oem is all the available OEM information for the drive
+	Oem json.RawMessage
 
 	// ActiveSoftwareImage shall contain a link a resource of type SoftwareInventory that represents the active drive
 	// firmware image.
@@ -331,8 +333,9 @@ type Drive struct {
 	StoragePoolsCount int
 	// secureEraseTarget is the URL for SecureErase actions.
 	secureEraseTarget string
-	// rawData holds the original serialized JSON so we can compare updates.
-	rawData []byte
+	// RawData holds the original serialized JSON so we can compare updates
+	// as well as access Oem values in the oem package.
+	RawData []byte
 }
 
 // UnmarshalJSON unmarshals a Drive object from the raw JSON.
@@ -391,6 +394,7 @@ func (drive *Drive) UnmarshalJSON(b []byte) error {
 	drive.EndpointsCount = t.Links.EndpointCount
 	drive.networkDeviceFunctions = t.Links.NetworkDeviceFunctions.ToStrings()
 	drive.NetworkDeviceFunctionsCount = t.Links.NetworkDeviceFunctionsCount
+	drive.Oem = t.Oem
 	drive.pcieFunctions = t.Links.PCIeFunctions.ToStrings()
 	drive.PCIeFunctionCount = t.Links.PCIeFunctionsCount
 	drive.softwareImages = t.Links.SoftwareImages.ToStrings()
@@ -404,7 +408,7 @@ func (drive *Drive) UnmarshalJSON(b []byte) error {
 	drive.secureEraseTarget = t.Actions.SecureErase.Target
 
 	// This is a read/write object, so we need to save the raw object data for later
-	drive.rawData = b
+	drive.RawData = b
 
 	return nil
 }
@@ -414,7 +418,7 @@ func (drive *Drive) Update() error {
 	// Get a representation of the object's original state so we can find what
 	// to update.
 	original := new(Drive)
-	err := original.UnmarshalJSON(drive.rawData)
+	err := original.UnmarshalJSON(drive.RawData)
 	if err != nil {
 		return err
 	}
@@ -467,6 +471,17 @@ func (drive *Drive) Chassis() (*Chassis, error) {
 // Endpoints references the Endpoints that this drive is associated with.
 func (drive *Drive) Endpoints() ([]*Endpoint, error) {
 	return common.GetObjects[Endpoint](drive.GetClient(), drive.endpoints)
+}
+
+// EnvironmentMetrics gets the environment metrics for this drive.
+// If no metrics are available the EnvironmentMetrics reference will be nil but
+// no error will be returned unless it was due to a problem fetching the data.
+func (drive *Drive) EnvironmentMetrics() (*EnvironmentMetrics, error) {
+	if drive.environmentMetrics == "" {
+		return nil, nil
+	}
+
+	return GetEnvironmentMetrics(drive.GetClient(), drive.environmentMetrics)
 }
 
 // Volumes references the Volumes that this drive is associated with.
