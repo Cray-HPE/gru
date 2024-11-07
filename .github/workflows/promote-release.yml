@@ -5,18 +5,33 @@ on:
       - 'v?[0-9]+.[0-9]+.[0-9]+'
   workflow_dispatch:
 
+env:
+  LATEST: false
 jobs:
   make-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
+      - name: Get Branch
+        run: |
+          mapfile -t branches < <(git branch -r --contains ${{ github.ref }} | awk '{print $1}')
+          echo "${branches[@]}"
+          for branch in "${branches[@]}"; do
+            branch_name="${branch/origin\/}"
+            echo "${branch_name}"
+            if [ "${branch_name}" = 'main' ]; then
+              echo LATEST=true >> $GITHUB_ENV
+              break
+            fi
+          done
+
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true # if the job is re-ran to catch missed artifacts, allow updates
           generateReleaseNotes: true
           prerelease: false
-          makeLatest: true
+          makeLatest: ${{ fromJSON(env.LATEST) }}
 
   build-and-promote:
     needs: make-release
