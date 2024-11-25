@@ -67,8 +67,8 @@ github.com/spf13/viper/internal/encoding/json
 github.com/spf13/viper/internal/encoding/toml
 github.com/spf13/viper/internal/encoding/yaml
 github.com/spf13/viper/internal/features
-# github.com/stmcginnis/gofish v0.19.0
-## explicit; go 1.18
+# github.com/stmcginnis/gofish v0.20.0
+## explicit; go 1.21
 github.com/stmcginnis/gofish
 github.com/stmcginnis/gofish/common
 github.com/stmcginnis/gofish/redfish
