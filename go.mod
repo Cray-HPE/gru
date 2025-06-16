@@ -28,7 +28,7 @@ module github.com/Cray-HPE/gru
 go 1.22
 
 require (
-	github.com/spf13/cobra v1.8.1
+	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1
 	github.com/stmcginnis/gofish v0.20.0
 	gopkg.in/yaml.v3 v3.0.1
