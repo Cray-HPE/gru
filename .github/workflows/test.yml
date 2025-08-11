@@ -9,7 +9,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Set up Go
       uses: actions/setup-go@v5
@@ -17,7 +17,7 @@ jobs:
         go-version: ${{ env.GO_VERSION }}
 
     - name: checkout rie
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         path: csm-redfish-interface-emulator
         repository: Cray-HPE/csm-redfish-interface-emulator
@@ -25,7 +25,7 @@ jobs:
         fetch-depth: 0
       
     - name: checkout shellspec
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         path: shellspec
         ref: c209cb49a60b2a7727632373caf37e98649104f7 # pins at a specific commit for stability
